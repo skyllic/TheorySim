@@ -2,8 +2,8 @@ import java.math.BigDecimal;
 
 public class Theory {
 
-    public static Variable[] _variables;
-
+    public Variable[] variables;
+   
 
 
     public static void main(String[] args){

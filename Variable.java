@@ -20,20 +20,44 @@ public class Variable {
         
     }
 
+    public Variable(double costScaling, double costBase, double valueScaling, double valueBase, 
+                    boolean isDoubling, boolean isExponential, boolean isLinear, boolean isFirst, boolean isOffset) {
+        this.costScaling = costScaling;
+        this.costBase = costBase;
+        this.valueScaling = valueScaling;
+        this.valueBase = valueBase;
+        this.isDoubling = isDoubling;
+        this.isExponential = isExponential;
+        this.isLinear = isLinear;
+        this.isFirst = isFirst;
+        this.isOffset = isOffset;
+    }
+
+    public void initialiseLevel(int level) {
+        this.level = level;
+        this.calculateValueFromLevel();
+        this.calculateCostFromLevel(); //placeholder method not made yet;
+    }
+
     public void calculateValueFromLevel() {
         if(isExponential) {
             if(!isDoubling) {
                 if(!isOffset) {
                     this.value = this.subtract(Math.log10(10+this.level % 10) + 
                     Math.log10(2) * Math.floor(this.level/10), Math.log10(10));
+                } else {
+                    this.value = this.subtract(Math.log10(11+this.level % 10) + 
+                    Math.log10(2) * Math.floor((1+this.level)/10), Math.log10(10));
                 }
+            } else {
+                this.value = Math.log10(this.valueBase) + this.level * Math.log10(this.valueScaling);    
             }
         }
         return;
 
     }
 
-    public double add(double value1, double value2) {
+    public static double add(double value1, double value2) {
         double fractionalPart1 = Math.pow(10, value1 % 1);
         double wholePart1 = value1 - fractionalPart1;
         double fractionalPart2 = Math.pow(10, value2 % 1);
@@ -157,15 +181,6 @@ public class Variable {
         
     }
 
-    self.variableValue[0] = self.subtract(math.log10((10 + self.variableLevel[0] % 10)) + \
-            math.log10(2) *math.floor((self.variableLevel[0]/10)) , math.log10(10))
-        self.variableValue[1] = self.subtract(math.log10((10 + (self.variableLevel[1]+1) % 10)) + \
-            math.log10(2) *math.floor(((self.variableLevel[1]+1)/10)) , math.log10(10))
-        self.variableValue[2] = math.log10(2) * self.variableLevel[2]
-        self.variableValue[3] = math.log10(2) * self.variableLevel[3]
-        self.variableValue[4] = math.log10(2) * self.variableLevel[4]
-        self.variableValue[5] = math.log10(2) * self.variableLevel[5]
-        self.variableValue[6] = math.log10(2) * self.variableLevel[6]
-    
+
     
 }
