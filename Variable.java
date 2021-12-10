@@ -53,8 +53,31 @@ public class Variable {
                 this.value = Math.log10(this.valueBase) + this.level * Math.log10(this.valueScaling);    
             }
         }
+
+        if(this.value < -9999) {
+            this.value = -9999;
+        }
         return;
 
+    }
+
+    public void calculateCostFromLevel() {
+        if(isExponential) {
+            if(!isFirst) {
+                this.cost = Math.log10(this.costBase) + this.level * Math.log10(this.costScaling);
+            } else {
+                if(this.level <= 1) {
+                    this.cost = -9999; //close enough to 0
+                } else {
+                    this.cost = Math.log10(this.costBase) + (this.level - 1) * Math.log10(this.costScaling);
+                }
+            }
+        }
+    }
+
+    public void update() {
+        this.calculateValueFromLevel();
+        this.calculateCostFromLevel();
     }
 
     public static double add(double value1, double value2) {
