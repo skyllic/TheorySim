@@ -36,8 +36,8 @@ public class Theory6 extends Theory {
 
     public void moveTick() {
         this.rho = Variable.add(this.rho, this.rhodot);
-        this.q += Variable.add(this.q, this.qdot);
-        this.r += Variable.add(this.r, this.rdot);
+        this.q = Variable.add(this.q, this.qdot);
+        this.r = Variable.add(this.r, this.rdot);
 
         this.qdot = this.variables[0].value + this.variables[1].value + Math.log10(tickSpeed);
         this.rdot = this.variables[2].value + this.variables[3].value - 3 + Math.log10(tickSpeed);
@@ -47,14 +47,14 @@ public class Theory6 extends Theory {
         double rhodot2 = this.variables[6].value + 
         Variable.add(this.q + this.qdot +this.r, 2 * this.q + Math.log10(0.5) + this.rdot);
         double rhodot3 = this.variables[7].value + 
-        Variable.add(2 * this.q + this.qdot + this.r, 3 * this.q + Math.log10(1/3) + this.rdot);
+        Variable.add(2 * this.q + this.qdot + this.r, 3 * this.q + Math.log10(1/3.0) + this.rdot);
         double rhodot4 = this.variables[8].value + 
-        Variable.add(Math.log10(1/2) + this.qdot + 2 * this.r, this.q + this.r + this.rdot);
+        Variable.add(Math.log10(1/2.0) + this.qdot + 2 * this.r, this.q + this.r + this.rdot);
 
         this.rhodot = Variable.add(rhodot4, Variable.add(rhodot3, Variable.add(rhodot1, rhodot2))) +
             this.totalMultiplier + Math.log10(tickSpeed);
         
-        System.out.println(rhodot1 + "\t" + rhodot2 + "\t" + rhodot3 + "\t" + rhodot4);
+        //System.out.println(rhodot1 + "\t" + rhodot2 + "\t" + rhodot3 + "\t" + rhodot4);
     }
 
 

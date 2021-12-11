@@ -82,14 +82,14 @@ public class Variable {
 
     public static double add(double value1, double value2) {
         double fractionalPart1 = Math.pow(10, value1 % 1);
-        double wholePart1 = value1 - fractionalPart1;
+        double wholePart1 = Math.floor(value1);
         double fractionalPart2 = Math.pow(10, value2 % 1);
-        double wholePart2 = value2 - fractionalPart2;
+        double wholePart2 = Math.floor(value2);
 
         double fractionalPart;
         double wholePart;
         //if the powers are the same
-        if(wholePart1 - wholePart2 < 0.01) {
+        if(Math.abs(wholePart1 - wholePart2) < 0.01) {
             if(fractionalPart1 + fractionalPart2 >= 10) {
                 wholePart = wholePart1 + 1;
                 fractionalPart = (fractionalPart1 + fractionalPart2)/10.0;
