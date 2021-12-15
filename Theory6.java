@@ -1,4 +1,5 @@
 
+/**An implementation of Theory 6 (Integral Calculus) from the game Exponential Idle. */
 public class Theory6 extends Theory {
 
     public double r;

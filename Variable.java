@@ -1,5 +1,6 @@
 import java.math.*;
 
+/** */
 public class Variable {
 
     public double costScaling;
@@ -16,10 +17,29 @@ public class Variable {
     public boolean isFirst;
     public boolean isOffset;
 
+
+
     public Variable() {
         
     }
 
+    /**Represents a buyable variable in a theory or lemma.
+     * 
+     * @param costScaling - the cost multiplier for each level. e.g. costScaling of 3 dictates the cost 
+     * triples each time the variable is bought
+     * @param costBase - the initial cost of the variable. For an 'offset' variable, this is the cost of the 
+     * first non-free cost
+     * @param valueScaling - how much the value increases with each level. For a standard stepwise non-doubling variable, 
+     * the value is 2^0.1.
+     * @param valueBase - the initial value of the variable
+     * @param isDoubling - whether the variable is a doubling. A standard stepwise variable is not considered a doubling
+     * @param isExponential - whether the variable's value scales exponentially with level. Both doublings and standard
+     * non-doubling variables are considered exponentials (standard non-doublings double every 10 levels)
+     * @param isLinear - whether the variable's value scales linearly. Theories 1-8 don't have this. However some lemmas do
+     * @param isFirst - Whether the first level of the variable is buyable for free
+     * @param isOffset - If the variable is a standard non-doubling, whether its value starts at 1 instead of 0.
+     * If the variable is a doubling, this parameter should be false.
+     */
     public Variable(double costScaling, double costBase, double valueScaling, double valueBase, 
                     boolean isDoubling, boolean isExponential, boolean isLinear, boolean isFirst, boolean isOffset) {
         this.costScaling = costScaling;
@@ -33,12 +53,19 @@ public class Variable {
         this.isOffset = isOffset;
     }
 
+    /** Calculate and fill in the variable value and cost given an input variable level.
+     * 
+     * @param level - the level of the variable
+     */
     public void initialiseLevel(int level) {
         this.level = level;
         this.calculateValueFromLevel();
         this.calculateCostFromLevel(); //placeholder method not made yet;
     }
 
+    /**Helper method for the initialiseLevel method. Calculates the value of the variable.
+     * Assumes that the variable level field has already been filled in.
+     */
     public void calculateValueFromLevel() {
         if(isExponential) {
             if(!isDoubling) {
@@ -61,6 +88,10 @@ public class Variable {
 
     }
 
+    /**Helper method for the initialiseLevel method. Calculates the current cost of the variable
+     * (not cost of the next level). In the game screen, the cost calculated from this method will be the
+     * 1 level LOWER than the cost shown in the screen (as the cost shown in the game screen is for the next variable level)
+     */
     public void calculateCostFromLevel() {
         if(isExponential) {
             if(!isFirst) {
@@ -75,11 +106,21 @@ public class Variable {
         }
     }
 
+    /**Updates the value and cost of the variable. Uses the variable level in the field column */
     public void update() {
         this.calculateValueFromLevel();
         this.calculateCostFromLevel();
     }
 
+    /**
+     * Calculates the sum of 2 numbers in log format. e.g. an input of 320.5 is meant to represent 10^320.5.
+     * 
+     * If the 2 inputs differ by more than 10^8 magnitude, return the higher of the 2 numbers.
+     * 
+     * @param value1 - the first value in log format
+     * @param value2 - the second value in log format
+     * @return - the sum (in log format) of the 2 input values
+     */
     public static double add(double value1, double value2) {
         double fractionalPart1 = Math.pow(10, value1 % 1);
         double wholePart1 = Math.floor(value1);
@@ -140,6 +181,15 @@ public class Variable {
         
     }
 
+     /**
+     * Calculates the difference of 2 numbers in log format. e.g. an input of 320.5 is meant to represent 10^320.5.
+     * 
+     * If the 2 inputs differ by more than 10^8 magnitude, return the higher of the 2 numbers.
+     * 
+     * @param value1 - the first value in log format
+     * @param value2 - the second value in log format
+     * @return - the difference (in log format) of the 2 input values
+     */
     public double subtract(double value1, double value2) {
         double fractionalPart1 = Math.pow(10, value1 % 1);
         double wholePart1 = value1 - fractionalPart1;

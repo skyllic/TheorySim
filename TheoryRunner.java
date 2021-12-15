@@ -1,3 +1,4 @@
+/**A TheoryRunner class containing the main method used to run to theory simulator */
 public class TheoryRunner {
 
     
