@@ -1,5 +1,9 @@
-import junit.framework.*;
-import org.junit.runner
+import static org.junit.Assert.assertEquals;
+
+import org.junit.Test;
+
+
+
 
 
 
@@ -7,9 +11,13 @@ import org.junit.runner
 
 public class VariableTest {
 
+    
+
     @Test
     public void testVariable() {
-        assert.
+        double result = Variable.add(20, 20);
+        assertEquals(20.30103, result, 0.01);
+    
     }
 
 }

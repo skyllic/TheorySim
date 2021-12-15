@@ -25,6 +25,24 @@ public class Theory implements Simmable {
     public Theory() {
         
     }
+
+    @Override
+    public void moveTick() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void buyVariable(int variableNumber) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void copy() {
+        // TODO Auto-generated method stub
+        
+    }
    
 
 
