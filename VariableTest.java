@@ -30,6 +30,11 @@ public class VariableTest {
         result = Variable.add(400, 395);
         assertEquals(400.00000434, result, 0.00001);
 
+        result = Variable.add(-Double.MAX_VALUE, -0.8239087409443188);
+        assertEquals(Math.log10(1.5*0.1), result, 0.00001);
+
+
+
     }
 
     @Test

@@ -122,13 +122,15 @@ public class Variable {
      * @return - the sum (in log format) of the 2 input values
      */
     public static double add(double value1, double value2) {
-        double fractionalPart1 = Math.pow(10, value1 % 1);
         double wholePart1 = Math.floor(value1);
-        double fractionalPart2 = Math.pow(10, value2 % 1);
+        double fractionalPart1 = Math.pow(10, value1 - wholePart1);
         double wholePart2 = Math.floor(value2);
+        double fractionalPart2 = Math.pow(10, value2 - wholePart2);
 
         double fractionalPart;
         double wholePart;
+
+       
         //if the powers are the same
         if(Math.abs(wholePart1 - wholePart2) < 0.01) {
             if(fractionalPart1 + fractionalPart2 >= 10) {
@@ -191,15 +193,20 @@ public class Variable {
      * @return - the difference (in log format) of the 2 input values
      */
     public static double subtract(double value1, double value2) {
-        double fractionalPart1 = Math.pow(10, value1 % 1);
         double wholePart1 = Math.floor(value1);
-        double fractionalPart2 = Math.pow(10, value2 % 1);
+        double fractionalPart1 = Math.pow(10, value1 - wholePart1);
         double wholePart2 = Math.floor(value2);
+        double fractionalPart2 = Math.pow(10, value2 - wholePart2);
 
         double fractionalPart;
         double wholePart;
         if(value1 == value2) {
             return -Double.MAX_VALUE;
+        }
+        if(value1 == -Double.MAX_VALUE) {
+            return value2;
+        } else if(value2 == -Double.MAX_VALUE) {
+            return value1;
         }
         //if the powers are the same
         if(wholePart1 - wholePart2 < 0.01) {

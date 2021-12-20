@@ -11,11 +11,12 @@ public class TheoryRunner {
         double result = Variable.add(1, 1);
         System.out.println(result);
         System.out.println(T6.variables[0].value);
-        /** 
-        for(int i = 0; i < 100; i++) {
+        result = Variable.add(-Double.MAX_VALUE, -0.8239087409443188);
+        
+        for(int i = 0; i < 1000; i++) {
             System.out.println(T6.rho + "\t" + T6.r + "\t" + T6.q + "\t" + T6.qdot + "\t" + T6.rdot);
             T6.moveTick();
             
-        }*/
+        }
     }
 }

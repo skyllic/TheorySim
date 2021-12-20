@@ -24,6 +24,8 @@ public class Theory6 extends Theory {
         this.publicationMark = pubMark;
         this.totalMultiplier = this.research9Level * (Math.log10(this.studentNumber) - Math.log10(20)) 
             + 0.196 * this.publicationMark - Math.log10(50);
+        this.qdot = -Double.MAX_VALUE;
+        this.rdot = -Double.MAX_VALUE;
         this.variables = new Variable[9];
         //this.variables = new Variable(costScaling, costBase, valueScaling, valueBase,
         //isDoubling, isExponential, isLinear, isFirst, isOffset)
@@ -39,24 +41,19 @@ public class Theory6 extends Theory {
     }
 
     public void moveTick() {
-        this.rho = Variable.add(this.rho, this.rhodot);
+
+        double rhoTerm1 = this.variables[4].value * 1.15 + this.variables[5].value + this.q + this.r;
+        double rhoTerm2 = this.variables[6].value + 2 * this.q + Math.log10(0.5);
+        double rhoTerm3 = this.variables[7].value + this.r + 3 * this.q + Math.log10(1/3.0);
+        double rhoTerm4 = this.variables[8].value + this.q + 2 * this.r + Math.log10(1/2.0);
+
+        this.rho = Variable.add(rhoTerm4, Variable.add(rhoTerm3, Variable.add(rhoTerm1, rhoTerm2))) +
+            this.totalMultiplier;
+
+        this.qdot = this.variables[0].value + this.variables[1].value + Math.log10(tickSpeed) + Math.log10(this.adBonus);
+        this.rdot = this.variables[2].value + this.variables[3].value - 3 + Math.log10(tickSpeed) + Math.log10(this.adBonus);
         this.q = Variable.add(this.q, this.qdot);
         this.r = Variable.add(this.r, this.rdot);
-
-        this.qdot = this.variables[0].value + this.variables[1].value + Math.log10(tickSpeed);
-        this.rdot = this.variables[2].value + this.variables[3].value - 3 + Math.log10(tickSpeed);
-
-        double rhodot1 = this.variables[4].value * 1.15 + this.variables[5].value + 
-        Variable.add(this.r + this.qdot, this.rdot + this.q);
-        double rhodot2 = this.variables[6].value + 
-        Variable.add(this.q + this.qdot +this.r, 2 * this.q + Math.log10(0.5) + this.rdot);
-        double rhodot3 = this.variables[7].value + 
-        Variable.add(2 * this.q + this.qdot + this.r, 3 * this.q + Math.log10(1/3.0) + this.rdot);
-        double rhodot4 = this.variables[8].value + 
-        Variable.add(Math.log10(1/2.0) + this.qdot + 2 * this.r, this.q + this.r + this.rdot);
-
-        this.rhodot = Variable.add(rhodot4, Variable.add(rhodot3, Variable.add(rhodot1, rhodot2))) +
-            this.totalMultiplier + Math.log10(tickSpeed);
         
         //System.out.println(rhodot1 + "\t" + rhodot2 + "\t" + rhodot3 + "\t" + rhodot4);
     }
