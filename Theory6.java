@@ -10,13 +10,16 @@ public class Theory6 extends Theory {
     public double tickSpeed; //second per tick
 
     public Theory6(double pubMark) {
+        super();
+
         this.tickSpeed = 0.1;
         this.q = Math.log10(1);
         this.r = Math.log10(1);
         this.tickNumber = 0;
         this.rho = 0;
         this.rhodot = 0;
-        this.research9Level = 3;
+        this.research9Level = 3; //default 3R9
+        this.adBonus = 1.5; //default on
         this.studentNumber = 288;
         this.publicationMark = pubMark;
         this.totalMultiplier = this.research9Level * (Math.log10(this.studentNumber) - Math.log10(20)) 

@@ -21,6 +21,7 @@ public class Theory implements Simmable {
     public double publicationMark; // Rho at which you can publish e.g. 2.75e965 etc
     public int research9Level;
     public int studentNumber;
+    public double adBonus;
 
     public Theory() {
         

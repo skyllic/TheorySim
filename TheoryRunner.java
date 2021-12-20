@@ -10,8 +10,9 @@ public class TheoryRunner {
       
         double result = Variable.add(1, 1);
         System.out.println(result);
-        
-        /**for(int i = 0; i < 100; i++) {
+        System.out.println(T6.variables[0].value);
+        /** 
+        for(int i = 0; i < 100; i++) {
             System.out.println(T6.rho + "\t" + T6.r + "\t" + T6.q + "\t" + T6.qdot + "\t" + T6.rdot);
             T6.moveTick();
             

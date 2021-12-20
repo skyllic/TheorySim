@@ -70,10 +70,10 @@ public class Variable {
         if(isExponential) {
             if(!isDoubling) {
                 if(!isOffset) {
-                    this.value = this.subtract(Math.log10(10+this.level % 10) + 
+                    this.value = Variable.subtract(Math.log10(10+this.level % 10) + 
                     Math.log10(2) * Math.floor(this.level/10), Math.log10(10));
                 } else {
-                    this.value = this.subtract(Math.log10(11+this.level % 10) + 
+                    this.value = Variable.subtract(Math.log10(11+this.level % 10) + 
                     Math.log10(2) * Math.floor((1+this.level)/10), Math.log10(10));
                 }
             } else {
@@ -190,14 +190,17 @@ public class Variable {
      * @param value2 - the second value in log format
      * @return - the difference (in log format) of the 2 input values
      */
-    public double subtract(double value1, double value2) {
+    public static double subtract(double value1, double value2) {
         double fractionalPart1 = Math.pow(10, value1 % 1);
-        double wholePart1 = value1 - fractionalPart1;
+        double wholePart1 = Math.floor(value1);
         double fractionalPart2 = Math.pow(10, value2 % 1);
-        double wholePart2 = value2 - fractionalPart2;
+        double wholePart2 = Math.floor(value2);
 
         double fractionalPart;
         double wholePart;
+        if(value1 == value2) {
+            return -Double.MAX_VALUE;
+        }
         //if the powers are the same
         if(wholePart1 - wholePart2 < 0.01) {
             if(fractionalPart1 - fractionalPart2 <= 1) {
@@ -223,7 +226,7 @@ public class Variable {
                 wholePart2 = wholePart1;
                 if(fractionalPart1 - fractionalPart2 <= 1) {
                     wholePart = wholePart1 - 1;
-                    fractionalPart = (fractionalPart1 - fractionalPart2)/10.0;
+                    fractionalPart = (fractionalPart1 - fractionalPart2)*10.0;
                 } else {
                     wholePart = wholePart1;
                     fractionalPart = fractionalPart1 - fractionalPart2;
@@ -234,7 +237,7 @@ public class Variable {
                 wholePart1 = wholePart2;
                 if(fractionalPart1 - fractionalPart2 <= 1) {
                     wholePart = wholePart2 - 1;
-                    fractionalPart = (fractionalPart1 - fractionalPart2)/10.0;
+                    fractionalPart = (fractionalPart1 - fractionalPart2)*10.0;
                 } else {
                     wholePart = wholePart2;
                     fractionalPart = fractionalPart1 - fractionalPart2;
