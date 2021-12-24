@@ -17,6 +17,9 @@ public class Variable {
     public boolean isFirst;
     public boolean isOffset;
 
+    public double nextCost;
+    public double nextValue;
+
 
 
     public Variable() {
@@ -60,7 +63,34 @@ public class Variable {
     public void initialiseLevel(int level) {
         this.level = level;
         this.calculateValueFromLevel();
-        this.calculateCostFromLevel(); //placeholder method not made yet;
+        this.calculateCostFromLevel(); 
+        calculateNextCostAndValue();
+    }
+
+    public void calculateNextCostAndValue() {
+        this.level += 1;
+        this.calculateCostFromLevel();
+        this.calculateValueFromLevel();
+        this.nextCost = this.cost;
+        this.nextValue = this.value;
+        this.level -= 1;
+        this.calculateCostFromLevel();
+        this.calculateValueFromLevel();
+
+    }
+    /**Displays either the current cost or the current value of the variable in scientific notation
+     * @param category - A string "cost" or "value" dictating whether to display the current cost or current value
+     */
+    public void displayInScientific(String category) {
+        if(category.equalsIgnoreCase("cost")) {
+            double wholePart1 = Math.floor(this.cost);
+            double fractionalPart1 = Math.pow(10, this.cost - wholePart1);
+            System.out.println(String.format("%.2f", fractionalPart1) + "e" + String.format("%.0f", wholePart1));
+        } else if(category.equalsIgnoreCase("value")) {
+            double wholePart1 = Math.floor(this.value);
+            double fractionalPart1 = Math.pow(10, this.cost - wholePart1);
+            System.out.println(String.format("%.2f", fractionalPart1) + "e" + String.format("%.0f", wholePart1));
+        }
     }
 
     /**Helper method for the initialiseLevel method. Calculates the value of the variable.
@@ -95,12 +125,16 @@ public class Variable {
     public void calculateCostFromLevel() {
         if(isExponential) {
             if(!isFirst) {
-                this.cost = Math.log10(this.costBase) + this.level * Math.log10(this.costScaling);
-            } else {
-                if(this.level <= 1) {
-                    this.cost = -9999; //close enough to 0
+                if(this.level <= 0) {
+                    this.cost = -Double.MAX_VALUE;
                 } else {
                     this.cost = Math.log10(this.costBase) + (this.level - 1) * Math.log10(this.costScaling);
+                }
+            } else {
+                if(this.level <= 1) {
+                    this.cost = -Double.MAX_VALUE; //close enough to 0
+                } else {
+                    this.cost = Math.log10(this.costBase) + (this.level - 2) * Math.log10(this.costScaling);
                 }
             }
         }
@@ -110,6 +144,7 @@ public class Variable {
     public void update() {
         this.calculateValueFromLevel();
         this.calculateCostFromLevel();
+        this.calculateNextCostAndValue();
     }
 
     /**

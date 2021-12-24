@@ -56,4 +56,14 @@ public class VariableTest {
 
     }
 
+    @Test
+    public void testVariableInitialisation() {
+        Variable testVariable = new Variable(1000, 10000, 2, 1,
+         true, true, false, false, false);
+         testVariable.level = 249;
+         testVariable.update();
+         assertEquals(748, testVariable.cost, 0.01);
+         assertEquals(751, testVariable.nextCost, 0.01);
+    }
+
 }
