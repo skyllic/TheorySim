@@ -102,7 +102,7 @@ public class Theory implements Simmable {
     public void runStrategy(String name, String type) {
         this.strategy = new Strategy(name, type);
 
-        while(this.seconds < 60 * 60 * 41) {
+        while(this.seconds < 60 * 60 * 32) {
             this.runStrategyOneLoop();
         }
 

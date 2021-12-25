@@ -232,12 +232,13 @@ public class Variable {
         double fractionalPart1 = Math.pow(10, value1 - wholePart1);
         double wholePart2 = Math.floor(value2);
         double fractionalPart2 = Math.pow(10, value2 - wholePart2);
-
+        
         double fractionalPart;
         double wholePart;
-        if(value1 == value2) {
+        if(Math.abs(value1 - value2) < 0.001) {
             return -Double.MAX_VALUE;
         }
+        double g = Math.abs(value1 - value2);
         if(value1 == -Double.MAX_VALUE) {
             return value2;
         } else if(value2 == -Double.MAX_VALUE) {

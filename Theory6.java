@@ -6,6 +6,8 @@ public class Theory6 extends Theory {
     public double q;
     public double rdot;
     public double qdot;
+    public double c; //Minus C at end of Integral
+    public double usedMoney;
 
     public double tickFrequency; //second per tick
 
@@ -29,6 +31,8 @@ public class Theory6 extends Theory {
         this.rdot = -Double.MAX_VALUE;
         this.variables = new Variable[9];
         this.strategy = new Strategy("", ""); 
+        this.usedMoney = -Double.MAX_VALUE;
+        this.c = -Double.MAX_VALUE;
 
         //Order of variable is q1, q2, r1, r2, c1, c2, c3, c4, c5 (same as in game when read top to bottom)
         this.variables[0] = new Variable(3, 15, Math.pow(2, 0.1), 0, false, true, false, true, false);
@@ -70,11 +74,46 @@ public class Theory6 extends Theory {
 
         this.rho = Variable.add(rhoTerm4, Variable.add(rhoTerm3, Variable.add(rhoTerm1, rhoTerm2))) +
             this.totalMultiplier;
+        this.rho = Variable.subtract(this.rho, this.c);
 
         this.qdot = this.variables[0].value + this.variables[1].value + Math.log10(tickFrequency) + Math.log10(this.adBonus);
         this.rdot = this.variables[2].value + this.variables[3].value - 3 + Math.log10(tickFrequency) + Math.log10(this.adBonus);
         this.q = Variable.add(this.q, this.qdot);
         this.r = Variable.add(this.r, this.rdot);
+    }
+
+     /**Buys 1 level of the variable according to the variableNumber input. For example, an input of 3
+     * means buy 1 level of variable[3] (the 4th variable in the array).
+     * @param variableNumber - the variable number to buy. Note that the variable number starts at 0, not 1.
+     */
+    @Override
+    public void buyVariable(int variableNumber) {
+        double variableCost = this.variables[variableNumber].nextCost;
+        if(this.rho >= variableCost) {
+            this.variables[variableNumber].level += 1;
+            this.variables[variableNumber].update();
+            this.rho = Variable.subtract(this.rho, variableCost);
+
+           
+
+            this.usedMoney = Variable.add(this.usedMoney, variableCost);
+            this.c = Variable.subtract(this.getIntegral(), this.rho);
+            //System.out.println(this.getIntegral() + "\t" + this.c);
+         
+        } else {
+            //too poor to buy stuff feelsbadman
+        }
+        
+    }
+
+    protected double getIntegral() {
+        double rhoTerm1 = this.variables[4].value * 1.15 + this.variables[5].value + this.q + this.r;
+        double rhoTerm2 = this.variables[6].value + 2 * this.q + Math.log10(0.5);
+        double rhoTerm3 = this.variables[7].value + this.r + 3 * this.q + Math.log10(1/3.0);
+        double rhoTerm4 = this.variables[8].value + this.q + 2 * this.r + Math.log10(1/2.0);
+
+        return Variable.add(rhoTerm4, Variable.add(rhoTerm3, Variable.add(rhoTerm1, rhoTerm2))) +
+            this.totalMultiplier;
     }
     
     @Override

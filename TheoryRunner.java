@@ -6,7 +6,7 @@ public class TheoryRunner {
 
 
     public static void main(String[] args) {
-        Theory6 T6 = new Theory6(Math.log10(1) + 1058);
+        Theory6 T6 = new Theory6(Math.log10(1) + 1064);
       
         double result = Variable.add(1, 1);
         System.out.println(result);
