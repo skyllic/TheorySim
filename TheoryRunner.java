@@ -16,7 +16,11 @@ public class TheoryRunner {
         T6.variables[3].update();
         T6.variables[3].displayInScientific("cost");
 
-        T6.runStrategy("T6c5", "idle");
+        //T6.runStrategy("T6c5", "idle");
+        for(int i = 0; i < 10000; i++) {
+            T6.runStrategyAI();
+        }
+        
 
         
         

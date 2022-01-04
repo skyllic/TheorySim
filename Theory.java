@@ -18,12 +18,12 @@ public class Theory implements Simmable {
     public double maxRho;
     public double seconds; // elapsed time in seconds
     public int tickCount; // the number of elapsed ticks
-    public double totalMultiplier; //e.g. for T6 = T6^0.196 / 50
+    public final double totalMultiplier; //e.g. for T6 = T6^0.196 / 50
     public double publicationMultiplier; // current multiplier. e.g. for T6 usually publishes at about 10-30 multi
-    public double publicationMark; // Rho at which you can publish e.g. 2.75e965 etc
-    public int research9Level;
-    public int studentNumber;
-    public double adBonus;
+    public final double publicationMark; // Rho at which you can publish e.g. 2.75e965 etc
+    public final static int research9Level = 3;
+    public final static int studentNumber = 270;
+    public final static double adBonus = 1.5;
     public static int theoryNumber;
     public double tauEfficiency; // Defined as maxRho divided by tickNumber
 
@@ -31,8 +31,14 @@ public class Theory implements Simmable {
 
 
     public Theory(int theoryNumber, double pubMark) {
-       
-        
+       this.publicationMark = pubMark;
+       Theory.theoryNumber = theoryNumber;
+       if(Theory.theoryNumber == 6) {
+           this.totalMultiplier = Theory.research9Level * (Math.log10(Theory.studentNumber) - Math.log10(20)) 
+            + 0.196 * this.publicationMark - Math.log10(50);
+       } else {
+           this.totalMultiplier = 1;
+       }
     }
 
     public static <SpecificTheory extends Theory> SpecificTheory createTheory(int theoryNumber, double pubMark) {
@@ -67,6 +73,7 @@ public class Theory implements Simmable {
     
     /**Buys 1 level of the variable according to the variableNumber input. For example, an input of 3
      * means buy 1 level of variable[3] (the 4th variable in the array).
+     * Both the values of the variables and rho are updated in this method.
      * @param variableNumber - the variable number to buy. Note that the variable number starts at 0, not 1.
      */
     public void buyVariable(int variableNumber) {
@@ -91,6 +98,12 @@ public class Theory implements Simmable {
      */
     public void waitUntilPublish() {
         double efficiency = this.tauEfficiency;
+        int counter = 0;
+        while(counter < 5) {
+            efficiency = this.tauEfficiency;
+            moveTick();
+            counter++;
+        }
        
         while(this.tauEfficiency >= efficiency) {
             efficiency = this.tauEfficiency;
@@ -99,14 +112,26 @@ public class Theory implements Simmable {
         return; // publish
     }
 
+    /**Runs the corresponding strategy attached with the theory.
+     * 
+     * @param name
+     * @param type
+     */
     public void runStrategy(String name, String type) {
         this.strategy = new Strategy(name, type);
 
-        while(this.seconds < 60 * 60 * 32) {
+        while(this.seconds < 60 * 60 * 24 * 30) {
             this.runStrategyOneLoop();
         }
 
         
+    }
+    
+    public void runStrategyAI() {
+        this.strategy = new Strategy("T" + Theory.theoryNumber, "AI");
+        for(Variable variable : this.variables) {
+
+        }
     }
     /**Idles  */
     protected void runStrategyOneLoop() {
@@ -125,7 +150,7 @@ public class Theory implements Simmable {
 
         while(this.rho < leastExpensiveCost) {
             this.moveTick();
-            if(this.tickCount % (10 * 60) == 0) {
+            if(this.tickCount % (10 * 60 * 60) == 0) {
                 this.display();
             }
         }

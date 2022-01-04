@@ -1,4 +1,4 @@
-import java.math.*;
+
 
 /** */
 public class Variable {
@@ -56,6 +56,20 @@ public class Variable {
         this.isOffset = isOffset;
     }
 
+    public Variable getClone() {
+        Variable cloneVariable = new Variable(this.costScaling, this.costBase, this.valueScaling, this.valueBase,
+            this.isDoubling, this.isExponential, this.isLinear, this.isFirst, this.isOffset);
+
+        cloneVariable.cost = this.cost;
+        cloneVariable.value = this.value;
+        cloneVariable.level = this.level;
+        cloneVariable.nextCost = this.nextCost;
+        cloneVariable.nextValue = this.nextValue;
+
+    return cloneVariable;
+  
+        
+    }
     /** Calculate and fill in the variable value and cost given an input variable level.
      * 
      * @param level - the level of the variable
@@ -238,7 +252,7 @@ public class Variable {
         if(Math.abs(value1 - value2) < 0.001) {
             return -Double.MAX_VALUE;
         }
-        double g = Math.abs(value1 - value2);
+        
         if(value1 == -Double.MAX_VALUE) {
             return value2;
         } else if(value2 == -Double.MAX_VALUE) {

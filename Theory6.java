@@ -11,22 +11,19 @@ public class Theory6 extends Theory {
 
     public double tickFrequency; //second per tick
 
+    public Theory6[] t6Clones = new Theory6[9];
+    
+
     public Theory6(double pubMark) {
         super(6, pubMark);
 
-        this.tickFrequency = 0.1; // seconds per tick
+        this.tickFrequency = 1.0; // seconds per tick
         this.q = Math.log10(1);
         this.r = Math.log10(1);
         this.seconds = 0;
         this.tickCount = 0;
         this.rho = 0;
         this.rhodot = 0;
-        this.research9Level = 3; //default 3R9
-        this.adBonus = 1.5; //default on
-        this.studentNumber = 288;
-        this.publicationMark = pubMark;
-        this.totalMultiplier = this.research9Level * (Math.log10(this.studentNumber) - Math.log10(20)) 
-            + 0.196 * this.publicationMark - Math.log10(50);
         this.qdot = -Double.MAX_VALUE;
         this.rdot = -Double.MAX_VALUE;
         this.variables = new Variable[9];
@@ -59,9 +56,9 @@ public class Theory6 extends Theory {
             this.maxRho = this.rho;
         }
         if(this.rho > this.publicationMark) {
-            this.tauEfficiency = (this.maxRho - this.publicationMark) / this.seconds;
+            this.tauEfficiency = (this.rho - this.publicationMark) / this.seconds;
         } else {
-            this.tauEfficiency = this.seconds / (this.maxRho - this.publicationMark);
+            this.tauEfficiency = 1 / (this.seconds * (this.publicationMark - this.rho));
         }
     }
 
@@ -76,8 +73,8 @@ public class Theory6 extends Theory {
             this.totalMultiplier;
         this.rho = Variable.subtract(this.rho, this.c);
 
-        this.qdot = this.variables[0].value + this.variables[1].value + Math.log10(tickFrequency) + Math.log10(this.adBonus);
-        this.rdot = this.variables[2].value + this.variables[3].value - 3 + Math.log10(tickFrequency) + Math.log10(this.adBonus);
+        this.qdot = this.variables[0].value + this.variables[1].value + Math.log10(tickFrequency) + Math.log10(Theory6.adBonus);
+        this.rdot = this.variables[2].value + this.variables[3].value - 3 + Math.log10(tickFrequency) + Math.log10(Theory6.adBonus);
         this.q = Variable.add(this.q, this.qdot);
         this.r = Variable.add(this.r, this.rdot);
     }
@@ -106,6 +103,91 @@ public class Theory6 extends Theory {
         
     }
 
+    /**Performs a deep copy of Theory6 object.
+     * All the relevant fields and references of this object and the copied object should be independent
+     * @return clone - The deep copied clone of this object
+     */
+    public Theory6 cloneTheory6() {
+        Theory6 t6Clone = new Theory6(this.publicationMark);
+
+        t6Clone.tickFrequency = 0.1; // seconds per tick
+        t6Clone.q = this.q;
+        t6Clone.r = this.r;
+        t6Clone.seconds = this.seconds;
+        t6Clone.tickCount = this.tickCount;
+        t6Clone.rho = this.rho;
+        t6Clone.rhodot = this.rhodot;
+        t6Clone.qdot = this.qdot;
+        t6Clone.rdot = this.rdot;
+        t6Clone.variables = new Variable[9];
+        for(int i = 0; i < this.variables.length; i++) {
+            t6Clone.variables[i] = this.variables[i].getClone();
+        }
+        
+        this.strategy = new Strategy("T6AI", "AI"); 
+        t6Clone.usedMoney = this.usedMoney;
+        t6Clone.c = this.c;
+
+        return t6Clone;
+    }
+
+    @Override
+    public void runStrategyAI() {
+        for(int i = 0; i < this.variables.length; i++) {
+            while(this.variables[i].nextCost < this.publicationMark * 0.8) {
+                this.variables[i].level += 1;
+                this.variables[i].update();
+            }
+            
+        }
+        
+
+        this.strategy = new Strategy("T" + Theory.theoryNumber, "AI");
+        double bestEfficiency = -Double.MAX_VALUE;
+        int bestVariableIndex = -1;
+
+        Theory6 t6IdleClone = this.cloneTheory6();
+        t6IdleClone.waitUntilPublish();
+        if(t6IdleClone.tauEfficiency > bestEfficiency) {
+            bestEfficiency = t6IdleClone.tauEfficiency;
+            bestVariableIndex = -1;
+        }
+
+        for(int i = 0; i < this.variables.length; i++) {
+            t6Clones[i] = this.cloneTheory6();
+            t6Clones[i].idleUntil(t6Clones[i], t6Clones[i].variables[i].nextCost);
+            while(t6Clones[i].variables[i].nextCost < t6Clones[i].rho) {
+                t6Clones[i].buyVariable(i);
+            }
+            t6Clones[i].waitUntilPublish();
+
+            if(t6Clones[i].tauEfficiency > bestEfficiency) {
+                bestEfficiency = t6Clones[i].tauEfficiency;
+                bestVariableIndex = i;
+            }
+
+        }
+        if(bestVariableIndex != -1) {
+            this.idleUntil(this, this.variables[bestVariableIndex].nextCost);
+            this.buyVariable(bestVariableIndex);
+        } else {
+            this.waitUntilPublish();
+        }
+        
+        this.display();
+            
+
+    }
+
+    
+
+    /**Idles the input theory until its rho exceeds the input rho */
+    public void idleUntil(Theory6 theory6, double variableCost) {
+        while(theory6.rho < variableCost) {
+            theory6.moveTick();
+        }
+    }
+
     protected double getIntegral() {
         double rhoTerm1 = this.variables[4].value * 1.15 + this.variables[5].value + this.q + this.r;
         double rhoTerm2 = this.variables[6].value + 2 * this.q + Math.log10(0.5);
@@ -119,7 +201,7 @@ public class Theory6 extends Theory {
     @Override
     public void display() {
         //System.out.println(this.rho + "\t" + this.q + "\t" + this.r + "\t" + this.tickNumber);
-        System.out.print(this.seconds / 3600 + "\t");
+        System.out.print(this.seconds / 60 + "\t");
         for(int i = 0; i < this.variables.length; i++) {
             System.out.print(this.variables[i].level + "\t");
         }
