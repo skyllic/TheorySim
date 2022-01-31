@@ -22,7 +22,7 @@ public class Theory implements Simmable {
     public double publicationMultiplier; // current multiplier. e.g. for T6 usually publishes at about 10-30 multi
     public final double publicationMark; // Rho at which you can publish e.g. 2.75e965 etc
     public final static int research9Level = 3;
-    public final static int studentNumber = 270;
+    public final static int studentNumber = 265;
     public final static double adBonus = 1.5;
     public static int theoryNumber;
     public double tauEfficiency; // Defined as maxRho divided by tickNumber
@@ -36,6 +36,9 @@ public class Theory implements Simmable {
        if(Theory.theoryNumber == 6) {
            this.totalMultiplier = Theory.research9Level * (Math.log10(Theory.studentNumber) - Math.log10(20)) 
             + 0.196 * this.publicationMark - Math.log10(50);
+       } else if(Theory.theoryNumber == 2){
+        this.totalMultiplier = Theory.research9Level * (Math.log10(Theory.studentNumber) - Math.log10(20)) 
+        + 0.198 * this.publicationMark - Math.log10(100);
        } else {
            this.totalMultiplier = 1;
        }
@@ -47,7 +50,7 @@ public class Theory implements Simmable {
             case 1:
                 //To be implemented
             case 2:
-                //To be implemented
+            return (SpecificTheory) new Theory2(pubMark);
             case 3:
                 //To be implemented
             case 4:
@@ -127,11 +130,13 @@ public class Theory implements Simmable {
         
     }
     
-    public void runStrategyAI() {
+    public int runStrategyAI() {
         this.strategy = new Strategy("T" + Theory.theoryNumber, "AI");
         for(Variable variable : this.variables) {
 
         }
+        return 1;
+        
     }
     /**Idles  */
     protected void runStrategyOneLoop() {

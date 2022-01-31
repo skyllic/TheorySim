@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 /**An implementation of Theory 6 (Integral Calculus) from the game Exponential Idle. */
 public class Theory6 extends Theory {
@@ -11,13 +14,15 @@ public class Theory6 extends Theory {
 
     public double tickFrequency; //second per tick
 
+    public double[] variableWeights = {11,10.0,10.5,9.8,11,10,1000,1000,10};
+
     public Theory6[] t6Clones = new Theory6[9];
     
 
     public Theory6(double pubMark) {
         super(6, pubMark);
 
-        this.tickFrequency = 1.0; // seconds per tick
+        this.tickFrequency = 0.1; // seconds per tick
         this.q = Math.log10(1);
         this.r = Math.log10(1);
         this.seconds = 0;
@@ -30,6 +35,7 @@ public class Theory6 extends Theory {
         this.strategy = new Strategy("", ""); 
         this.usedMoney = -Double.MAX_VALUE;
         this.c = -Double.MAX_VALUE;
+        
 
         //Order of variable is q1, q2, r1, r2, c1, c2, c3, c4, c5 (same as in game when read top to bottom)
         this.variables[0] = new Variable(3, 15, Math.pow(2, 0.1), 0, false, true, false, true, false);
@@ -55,11 +61,8 @@ public class Theory6 extends Theory {
         if(this.rho > this.maxRho) {
             this.maxRho = this.rho;
         }
-        if(this.rho > this.publicationMark) {
-            this.tauEfficiency = (this.rho - this.publicationMark) / this.seconds;
-        } else {
-            this.tauEfficiency = 1 / (this.seconds * (this.publicationMark - this.rho));
-        }
+        this.publicationMultiplier = Math.pow(10, 0.196*(this.maxRho-this.publicationMark));
+       
     }
 
     /**Part of the moveTick() method. Updates equation values such as rho, rhodot, q, qdot etc. */
@@ -69,12 +72,13 @@ public class Theory6 extends Theory {
         double rhoTerm3 = this.variables[7].value + this.r + 3 * this.q + Math.log10(1/3.0);
         double rhoTerm4 = this.variables[8].value + this.q + 2 * this.r + Math.log10(1/2.0);
 
+        
         this.rho = Variable.add(rhoTerm4, Variable.add(rhoTerm3, Variable.add(rhoTerm1, rhoTerm2))) +
             this.totalMultiplier;
         this.rho = Variable.subtract(this.rho, this.c);
 
-        this.qdot = this.variables[0].value + this.variables[1].value + Math.log10(tickFrequency) + Math.log10(Theory6.adBonus);
-        this.rdot = this.variables[2].value + this.variables[3].value - 3 + Math.log10(tickFrequency) + Math.log10(Theory6.adBonus);
+        this.qdot = this.variables[0].value + this.variables[1].value + Math.log10(Theory6.adBonus)+Math.log10(this.tickFrequency);
+        this.rdot = this.variables[2].value + this.variables[3].value - 3 + Math.log10(Theory6.adBonus)+Math.log10(this.tickFrequency);
         this.q = Variable.add(this.q, this.qdot);
         this.r = Variable.add(this.r, this.rdot);
     }
@@ -110,7 +114,7 @@ public class Theory6 extends Theory {
     public Theory6 cloneTheory6() {
         Theory6 t6Clone = new Theory6(this.publicationMark);
 
-        t6Clone.tickFrequency = 0.1; // seconds per tick
+        t6Clone.tickFrequency = 1; // seconds per tick
         t6Clone.q = this.q;
         t6Clone.r = this.r;
         t6Clone.seconds = this.seconds;
@@ -131,55 +135,111 @@ public class Theory6 extends Theory {
         return t6Clone;
     }
 
+    public void runStrategyAILoop() {
+        for(int i = 0; i < this.variables.length; i++) {
+            this.variables[i].update();
+        }
+        this.c = Variable.subtract(this.getIntegral(), this.rho);
+        for(int i = 0; i < 10; i++) {
+            int bestVarIndex = this.runStrategyAI();
+            this.idleUntil(this, this.variables[bestVarIndex].nextCost);
+            this.buyVariable(bestVarIndex);
+            this.display();
+        }
+    }
+
+
     @Override
-    public void runStrategyAI() {
+    public int runStrategyAI() {
         for(int i = 0; i < this.variables.length; i++) {
-            while(this.variables[i].nextCost < this.publicationMark * 0.8) {
-                this.variables[i].level += 1;
-                this.variables[i].update();
+            this.variables[i].update();
+            if(this.variables[i].isActive == 1) {
+                while(this.variables[i].cost < this.publicationMark * 0.8) {
+                    this.variables[i].level += 1;
+                    this.variables[i].update();
+                
+                }
             }
             
         }
         
-
-        this.strategy = new Strategy("T" + Theory.theoryNumber, "AI");
-        double bestEfficiency = -Double.MAX_VALUE;
-        int bestVariableIndex = -1;
-
-        Theory6 t6IdleClone = this.cloneTheory6();
-        t6IdleClone.waitUntilPublish();
-        if(t6IdleClone.tauEfficiency > bestEfficiency) {
-            bestEfficiency = t6IdleClone.tauEfficiency;
-            bestVariableIndex = -1;
-        }
-
-        for(int i = 0; i < this.variables.length; i++) {
-            t6Clones[i] = this.cloneTheory6();
-            t6Clones[i].idleUntil(t6Clones[i], t6Clones[i].variables[i].nextCost);
-            while(t6Clones[i].variables[i].nextCost < t6Clones[i].rho) {
-                t6Clones[i].buyVariable(i);
-            }
-            t6Clones[i].waitUntilPublish();
-
-            if(t6Clones[i].tauEfficiency > bestEfficiency) {
-                bestEfficiency = t6Clones[i].tauEfficiency;
-                bestVariableIndex = i;
-            }
-
-        }
-        if(bestVariableIndex != -1) {
-            this.idleUntil(this, this.variables[bestVariableIndex].nextCost);
-            this.buyVariable(bestVariableIndex);
-        } else {
-            this.waitUntilPublish();
-        }
+        ArrayList<Double> temp = new ArrayList<>();
         
-        this.display();
+        for(int i = 0; i < this.variables.length; i++) {
+            if(this.variables[i].isActive == 1) {
+                this.adjustWeightings(i);
+                temp.add(Math.round(this.variables[i].nextCost*1000)/1000.0+(this.variableWeights[i]));
+                //Adjust weightings, current best is 157.443 at 15.0392282
+                //current best is 155.283 at 15.039224
+            } else {
+                temp.add(10000.0);
+            }
             
+        }
+        int bestVarIndex = temp.lastIndexOf(Collections.min(temp));
+        
+        
+        return bestVarIndex;
+
 
     }
 
+    public void adjustWeightings(int i) {
     
+            if(this.variables[i].isActive == 1) {
+                double rhoTerm1 = this.variables[4].value * 1.15 + this.variables[5].value + this.q + this.r;
+                double rhoTerm2 = this.variables[6].value + 2 * this.q + Math.log10(0.5);
+                double rhoTerm3 = this.variables[7].value + this.r + 3 * this.q + Math.log10(1/3.0);
+                double rhoTerm4 = this.variables[8].value + this.q + 2 * this.r + Math.log10(1/2.0);
+
+                
+               if(this.maxRho < this.publicationMark * 0.981) {
+                    this.variableWeights[4] = 11;
+                    this.variableWeights[5] = 10;
+                    this.variableWeights[8] = 10000;
+               } else if(this.maxRho < this.publicationMark * 0.988) {
+                    this.variableWeights[4] = 11;
+                    this.variableWeights[5] = 10;
+                    this.variableWeights[8] = 10;
+               } else {
+                    this.variableWeights[4] = 10000;
+                    this.variableWeights[5] = 10000;
+                    this.variableWeights[8] = 10;
+               }
+               //current best is 155.147 at 15.039224
+               this.variableWeights[0] = 11 + (0.018*(this.variables[0].level % 10) - 0.11);
+               
+               if(this.publicationMultiplier > 10) {
+                    this.variableWeights[1] = 11;
+                    this.variableWeights[0] = 12;
+               }
+              
+
+
+
+            } else {
+                this.variableWeights[i] = 10000;
+            }
+        
+    }
+
+    public double getRhodot() {
+        this.qdot = this.variables[0].value + this.variables[1].value + Math.log10(adBonus) + Math.log10(this.tickFrequency);
+        this.rdot = this.variables[2].value + this.variables[3].value - 3 + Math.log10(adBonus) + Math.log10(this.tickFrequency);
+        double term1 = this.variables[4].value * 1.15 + this.variables[5].value + 
+                        Variable.add(this.qdot + this.r, this.q + this.rdot);
+        double term2 = Math.log10(0.5) + this.variables[6].value + 
+                        Variable.add(Math.log10(2) + this.q + this.qdot + this.r, 2*this.q + this.rdot);
+        double term3 = Math.log10(1/3.0) + this.variables[7].value + 
+                        Variable.add(Math.log10(3) + 2+this.q + this.qdot + this.r, 3*this.q + this.rdot);
+        double term4 = Math.log10(1/2.0) + this.variables[8].value + 
+                        Variable.add(this.qdot + 2*this.r, Math.log10(2) + this.q + this.r + this.rdot);
+
+        double total = Variable.add(term1, Variable.add(term2, Variable.add(term3, term4)));
+
+        return total;
+    }
+
 
     /**Idles the input theory until its rho exceeds the input rho */
     public void idleUntil(Theory6 theory6, double variableCost) {
@@ -201,12 +261,14 @@ public class Theory6 extends Theory {
     @Override
     public void display() {
         //System.out.println(this.rho + "\t" + this.q + "\t" + this.r + "\t" + this.tickNumber);
-        System.out.print(this.seconds / 60 + "\t");
+        System.out.print(String.format("%.3f",this.seconds / 60.0 / 60.0 / 24.0) + "\t");
         for(int i = 0; i < this.variables.length; i++) {
             System.out.print(this.variables[i].level + "\t");
         }
-        System.out.print(this.rho + "\t" + this.q + "\t" + this.r);
+        System.out.print(String.format("%.2f", this.maxRho) + "\t" + 
+        String.format("%.2f", this.q) + "\t" + String.format("%.2f", this.r) + "\t" + this.publicationMultiplier);
         System.out.println("");
+        //System.out.println(Arrays.toString(this.variableWeights));
     }
 
 

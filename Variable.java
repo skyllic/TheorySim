@@ -20,6 +20,8 @@ public class Variable {
     public double nextCost;
     public double nextValue;
 
+    public int isActive;
+
 
 
     public Variable() {
@@ -54,6 +56,7 @@ public class Variable {
         this.isLinear = isLinear;
         this.isFirst = isFirst;
         this.isOffset = isOffset;
+        this.isActive = 1;
     }
 
     public Variable getClone() {
@@ -88,9 +91,16 @@ public class Variable {
         this.nextCost = this.cost;
         this.nextValue = this.value;
         this.level -= 1;
-        this.calculateCostFromLevel();
-        this.calculateValueFromLevel();
+        
+        
 
+    }
+
+    public void deactivate() {
+        this.isActive = 0;
+    }
+    public void activate() {
+        this.isActive = 1;
     }
     /**Displays either the current cost or the current value of the variable in scientific notation
      * @param category - A string "cost" or "value" dictating whether to display the current cost or current value
@@ -110,25 +120,31 @@ public class Variable {
     /**Helper method for the initialiseLevel method. Calculates the value of the variable.
      * Assumes that the variable level field has already been filled in.
      */
-    public void calculateValueFromLevel() {
+    public double calculateValueFromLevel() {
+        double value = 0;
+
+        if(isLinear) {
+            value = Math.log10(Variable.add(this.level+this.valueScaling, this.valueBase));
+            return value;
+        }
         if(isExponential) {
             if(!isDoubling) {
                 if(!isOffset) {
-                    this.value = Variable.subtract(Math.log10(10+this.level % 10) + 
-                    Math.log10(2) * Math.floor(this.level/10), Math.log10(10));
+                    value = (Variable.subtract(Math.log10(10+this.level % 10) + 
+                    Math.log10(2) * Math.floor(this.level/10), Math.log10(10)))*this.isActive;
                 } else {
-                    this.value = Variable.subtract(Math.log10(11+this.level % 10) + 
-                    Math.log10(2) * Math.floor((1+this.level)/10), Math.log10(10));
+                    value = (Variable.subtract(Math.log10(11+this.level % 10) + 
+                    Math.log10(2) * Math.floor((1+this.level)/10), Math.log10(10)))*this.isActive;
                 }
             } else {
-                this.value = Math.log10(this.valueBase) + this.level * Math.log10(this.valueScaling);    
+                value = (Math.log10(this.valueBase) + this.level * Math.log10(this.valueScaling))*this.isActive;    
             }
         }
 
-        if(this.value < -9999) {
-            this.value = -9999;
+        if(value < -9999) {
+            value = -9999;
         }
-        return;
+        return value;
 
     }
 
@@ -136,29 +152,46 @@ public class Variable {
      * (not cost of the next level). In the game screen, the cost calculated from this method will be the
      * 1 level LOWER than the cost shown in the screen (as the cost shown in the game screen is for the next variable level)
      */
-    public void calculateCostFromLevel() {
+    public double calculateCostFromLevel() {
+        double cost = 0;
+        if(isLinear) {
+            if(this.level <= 0) {
+                cost = Math.log10(this.costBase);
+                return cost;
+            } else {
+                cost = Math.log10(this.costBase) + (this.level - 1) * Math.log10(this.costScaling);
+                return cost;
+            }
+        }
         if(isExponential) {
             if(!isFirst) {
                 if(this.level <= 0) {
-                    this.cost = -Double.MAX_VALUE;
+                    cost = -Double.MAX_VALUE;
                 } else {
-                    this.cost = Math.log10(this.costBase) + (this.level - 1) * Math.log10(this.costScaling);
+                    cost = Math.log10(this.costBase) + (this.level - 1) * Math.log10(this.costScaling);
                 }
             } else {
                 if(this.level <= 1) {
-                    this.cost = -Double.MAX_VALUE; //close enough to 0
+                    cost = -Double.MAX_VALUE; //close enough to 0
                 } else {
-                    this.cost = Math.log10(this.costBase) + (this.level - 2) * Math.log10(this.costScaling);
+                    cost = Math.log10(this.costBase) + (this.level - 2) * Math.log10(this.costScaling);
                 }
             }
         }
+        return cost;
     }
 
     /**Updates the value and cost of the variable. Uses the variable level in the field column */
     public void update() {
-        this.calculateValueFromLevel();
-        this.calculateCostFromLevel();
-        this.calculateNextCostAndValue();
+        this.value = this.calculateValueFromLevel();
+        this.cost = this.calculateCostFromLevel();
+        
+        
+        this.level ++;
+        this.nextCost = this.calculateCostFromLevel();
+        this.nextValue = this.calculateValueFromLevel();
+        this.level --;
+        
     }
 
     /**
@@ -190,7 +223,7 @@ public class Variable {
                 fractionalPart = fractionalPart1 + fractionalPart2;
             }
         // if the powers are vastly different
-        } else if(Math.abs(wholePart1 - wholePart2) > 8) {
+        } else if(Math.abs(wholePart1 - wholePart2) > 12) {
             if(wholePart1 > wholePart2) {
                 wholePart = wholePart1;
                 fractionalPart = fractionalPart1;
@@ -242,6 +275,9 @@ public class Variable {
      * @return - the difference (in log format) of the 2 input values
      */
     public static double subtract(double value1, double value2) {
+        if(value1 == 0 && (value2 - 4.984661) < 0.01) {
+            int a = 0;
+        }
         double wholePart1 = Math.floor(value1);
         double fractionalPart1 = Math.pow(10, value1 - wholePart1);
         double wholePart2 = Math.floor(value2);
@@ -249,7 +285,7 @@ public class Variable {
         
         double fractionalPart;
         double wholePart;
-        if(Math.abs(value1 - value2) < 0.001) {
+        if((value1 - value2) < 0.000001) {
             return -Double.MAX_VALUE;
         }
         
@@ -268,7 +304,7 @@ public class Variable {
                 fractionalPart = fractionalPart1 - fractionalPart2;
             }
         // if the powers are vastly different
-        } else if(Math.abs(wholePart1 - wholePart2) > 8) {
+        } else if(Math.abs(wholePart1 - wholePart2) > 12) {
             if(wholePart1 > wholePart2) {
                 wholePart = wholePart1;
                 fractionalPart = fractionalPart1;
