@@ -1,5 +1,5 @@
 import java.util.ArrayList;
-import java.util.Arrays;
+
 import java.util.Collections;
 
 /**An implementation of Theory 6 (Integral Calculus) from the game Exponential Idle. */
@@ -14,7 +14,8 @@ public class Theory2 extends Theory {
     public double r3;
     public double r4;
 
-
+    public String name = "Differential Calculus";
+    public double tauPerHour;
 
     public double rdot;
     public double qdot;
@@ -32,7 +33,7 @@ public class Theory2 extends Theory {
     public Theory2(double pubMark) {
         super(2, pubMark);
 
-        this.tickFrequency = 1.0; // seconds per tick
+        this.tickFrequency = 1000000.0; // seconds per tick
        
 
         this.q1 = 0;
@@ -57,14 +58,14 @@ public class Theory2 extends Theory {
         
 
         //Order of variable is q1, q2, r1, r2, c1, c2, c3, c4, c5 (same as in game when read top to bottom)
-        this.variables[0] = new Variable(2, 10, Math.pow(2, 0.1), 0, false, true, false, true, false);
-        this.variables[1] = new Variable(2, 5000, Math.pow(2, 0.1), 0, false, true, false, false, false);
-        this.variables[2] = new Variable(3, 3*Math.pow(10, 25), Math.pow(2, 0.1), 0, false, true, false, false, false);
-        this.variables[3] = new Variable(4, 8*Math.pow(10, 50), Math.pow(2, 0.1), 0, false, true, false, false, false);
-        this.variables[4] = new Variable(2, 2*Math.pow(10, 6), Math.pow(2, 0.1), 0, false, true, false, false, false);
-        this.variables[5] = new Variable(2, 3*Math.pow(10,9), Math.pow(2, 0.1), 0, false, true, false, false, false);
-        this.variables[6] = new Variable(3, 4*Math.pow(10, 25), Math.pow(2, 0.1), 0, false, true, false, false, false);
-        this.variables[7] = new Variable(4, 5*Math.pow(10, 50), Math.pow(2, 0.1), 0, false, true, false, false, false);
+        this.variables[0] = new Variable(2, 10, Math.pow(2, 0.1), 0, false, true, false, true, false, new double[2]);
+        this.variables[1] = new Variable(2, 5000, Math.pow(2, 0.1), 0, false, true, false, false, false, new double[2]);
+        this.variables[2] = new Variable(3, 3*Math.pow(10, 25), Math.pow(2, 0.1), 0, false, true, false, false, false, new double[2]);
+        this.variables[3] = new Variable(4, 8*Math.pow(10, 50), Math.pow(2, 0.1), 0, false, true, false, false, false, new double[2]);
+        this.variables[4] = new Variable(2, 2*Math.pow(10, 6), Math.pow(2, 0.1), 0, false, true, false, false, false, new double[2]);
+        this.variables[5] = new Variable(2, 3*Math.pow(10,9), Math.pow(2, 0.1), 0, false, true, false, false, false, new double[2]);
+        this.variables[6] = new Variable(3, 4*Math.pow(10, 25), Math.pow(2, 0.1), 0, false, true, false, false, false, new double[2]);
+        this.variables[7] = new Variable(4, 5*Math.pow(10, 50), Math.pow(2, 0.1), 0, false, true, false, false, false, new double[2]);
         
     }
     /**Moves the theory by 1 tick (default is 0.1 seconds). Also updates auxillary variables such as q, r, 
@@ -146,9 +147,9 @@ public class Theory2 extends Theory {
                 this.buyVariable(bestVarIndex);
                 this.display();
             } else {//is coasting, stop buying any variable.
-                this.idleUntil(this, this.publicationMark + Math.log(660 *2.25 ) / Math.log(10) / 0.198);
-                this.display();
-                System.out.println(60*60*Math.log(this.publicationMultiplier) / Math.log(10) / 0.198 / this.seconds);
+                this.coastUntilPublish();
+                this.printSummary();
+                
                 this.publicationMultiplier = 500000000.0;
                 return;
             }
@@ -179,7 +180,7 @@ public class Theory2 extends Theory {
                   temp.add(Math.round(this.variables[i].nextCost*1000)/1000.0+(this.variableWeights[i]));
                 }
                 catch(Exception e) {
-                  int f = 0;
+                  
                 }
                   //Adjust weightings, current best is 157.443 at 15.0392282
                 //current best is 155.283 at 15.039224
@@ -188,9 +189,7 @@ public class Theory2 extends Theory {
             }
             
         }
-        if(this.publicationMultiplier > 500) {
-            int k = 0;
-        }
+      
         int bestVarIndex = temp.lastIndexOf(Collections.min(temp));
         
         
@@ -266,12 +265,23 @@ public class Theory2 extends Theory {
         }
     }
 
+    public void coastUntilPublish() {
+        double tauRate = 60*60*Math.log(this.publicationMultiplier) / Math.log(10) / 0.198 / this.seconds;
+        while(this.tauPerHour <= tauRate) {
+            
+            this.tauPerHour = tauRate;
+            this.moveTick();
+            tauRate = 60*60*Math.log(this.publicationMultiplier) / Math.log(10) / 0.198 / this.seconds;
+            
+        }
+    }
+
     
     
     @Override
     public void display() {
         //System.out.println(this.rho + "\t" + this.q + "\t" + this.r + "\t" + this.tickNumber);
-        System.out.print(String.format("%.3f",this.seconds / 60.0 / 60.0) + "\t");
+        System.out.print(String.format("%.3f",this.seconds / 60.0 / 60.0 / 24.0) + "\t");
         for(int i = 0; i < this.variables.length; i++) {
             System.out.print(this.variables[i].level + "\t");
         }
@@ -281,6 +291,18 @@ public class Theory2 extends Theory {
         //System.out.println(Arrays.toString(this.variableWeights));
     }
 
+
+    public void printSummary() {
+        System.out.println(this.name + " at e" + String.format("%.0f", this.publicationMark) + " rho with " + Theory.studentNumber + " students");
+        System.out.print("Tau/d\t" + "PubMulti\t" + "Strategy\t" + "PubTime\t" + "TauGain\n");
+        System.out.print(String.format("%.4f", 60*60*Math.log(this.publicationMultiplier) / Math.log(10) / 0.198 / this.seconds * 24));
+        System.out.print("\t" + String.format("%.4f", this.publicationMultiplier) + "\t");
+        System.out.print("\tT2\t\t");
+        System.out.print(String.format("%.4f", this.seconds / 3600.0));
+        System.out.print("\t" + String.format("%.4f", this.maxRho - this.publicationMark));
+        System.out.println("\n");
+
+    }
 
 
 }

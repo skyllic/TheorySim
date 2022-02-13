@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 
 /**An implementation of Theory 6 (Integral Calculus) from the game Exponential Idle. */
@@ -15,6 +14,7 @@ public class Theory6 extends Theory {
     public double tickFrequency; //second per tick
 
     public double[] variableWeights = {11,10.0,10.5,9.8,11,10,1000,1000,10};
+    //public double[] variableWeights = {10,10.0,10.0,10,10,10,1000,1000,10};
 
     public Theory6[] t6Clones = new Theory6[9];
     
@@ -38,15 +38,15 @@ public class Theory6 extends Theory {
         
 
         //Order of variable is q1, q2, r1, r2, c1, c2, c3, c4, c5 (same as in game when read top to bottom)
-        this.variables[0] = new Variable(3, 15, Math.pow(2, 0.1), 0, false, true, false, true, false);
-        this.variables[1] = new Variable(100, 500, 2, 1, true, true, false, false, false);
-        this.variables[2] = new Variable(100000, Math.pow(10, 25), Math.pow(2, 0.1), 0, false, true, false, false, false);
-        this.variables[3] = new Variable(Math.pow(10, 10), Math.pow(10, 30), 2, 1, true, true, false, false, false);
-        this.variables[4] = new Variable(2, 10, Math.pow(2, 0.1), 1, false, true, false, false, true);
-        this.variables[5] = new Variable(5, 100, 2, 1, true, true, false, false, false);
-        this.variables[6] = new Variable(1.255, Math.pow(10, 7), Math.pow(2, 0.1), 0, false, true, false, false, false);
-        this.variables[7] = new Variable(500000, Math.pow(10, 25), 2, 1, true, true, false, false, false);
-        this.variables[8] = new Variable(3.9, 15, 2, 1, true, true, false, false, false);
+        this.variables[0] = new Variable(3, 15, Math.pow(2, 0.1), 0, false, true, false, true, false, new double[2]);
+        this.variables[1] = new Variable(100, 500, 2, 1, true, true, false, false, false, new double[2]);
+        this.variables[2] = new Variable(100000, Math.pow(10, 25), Math.pow(2, 0.1), 0, false, true, false, false, false, new double[2]);
+        this.variables[3] = new Variable(Math.pow(10, 10), Math.pow(10, 30), 2, 1, true, true, false, false, false, new double[2]);
+        this.variables[4] = new Variable(2, 10, Math.pow(2, 0.1), 1, false, true, false, false, true, new double[2]);
+        this.variables[5] = new Variable(5, 100, 2, 1, true, true, false, false, false, new double[2]);
+        this.variables[6] = new Variable(1.255, Math.pow(10, 7), Math.pow(2, 0.1), 0, false, true, false, false, false, new double[2]);
+        this.variables[7] = new Variable(500000, Math.pow(10, 25), 2, 1, true, true, false, false, false, new double[2]);
+        this.variables[8] = new Variable(3.9, 15, 2, 1, true, true, false, false, false, new double[2]);
     }
     /**Moves the theory by 1 tick (default is 0.1 seconds). Also updates auxillary variables such as q, r, 
      * qdot, rdot and rho.
@@ -187,10 +187,7 @@ public class Theory6 extends Theory {
     public void adjustWeightings(int i) {
     
             if(this.variables[i].isActive == 1) {
-                double rhoTerm1 = this.variables[4].value * 1.15 + this.variables[5].value + this.q + this.r;
-                double rhoTerm2 = this.variables[6].value + 2 * this.q + Math.log10(0.5);
-                double rhoTerm3 = this.variables[7].value + this.r + 3 * this.q + Math.log10(1/3.0);
-                double rhoTerm4 = this.variables[8].value + this.q + 2 * this.r + Math.log10(1/2.0);
+                
 
                 
                if(this.maxRho < this.publicationMark * 0.981) {
@@ -261,7 +258,18 @@ public class Theory6 extends Theory {
     @Override
     public void display() {
         //System.out.println(this.rho + "\t" + this.q + "\t" + this.r + "\t" + this.tickNumber);
-        System.out.print(String.format("%.3f",this.seconds / 60.0 / 60.0 / 24.0) + "\t");
+        double duration = this.seconds;
+        int day = (int) Math.floor(this.seconds / 60.0 / 60.0 / 24.0);
+        duration = duration - day * 60 * 60 * 24;
+        int hour = (int) Math.floor(duration / 60.0 / 60.0);
+        duration = duration - hour * 60 * 60;
+        int minute = (int) Math.floor(duration / 60.0);
+        duration = duration - minute * 60;
+        int second = (int) Math.floor(duration);
+
+        System.out.print(day + "d" + hour + "h" + minute + "m" + second + "s" + "\t");
+
+        //System.out.print(String.format("%.3f",this.seconds / 60.0 / 60.0 / 24.0) + "\t");
         for(int i = 0; i < this.variables.length; i++) {
             System.out.print(this.variables[i].level + "\t");
         }

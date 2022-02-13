@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 
 /**An implementation of Theory 6 (Integral Calculus) from the game Exponential Idle. */
@@ -40,11 +39,11 @@ public class WeierStrass extends Theory {
         
 
         //Order of variable is q1, q2, r1, r2, c1, c2, c3, c4, c5 (same as in game when read top to bottom)
-        this.variables[0] = new Variable(Math.pow(2, 3.38/4), 10, Math.pow(2, 0.1), 0, false, true, false, true, false);
-        this.variables[1] = new Variable(Math.pow(2, 3.38*4), 1000, 2, 1, true, true, false, false, false);
-        this.variables[2] = new Variable(Math.pow(2, 3.38), 20, 1, 1, false, false, true, false, false);
-        this.variables[3] = new Variable(Math.pow(2, 3.38/1.5), 50, Math.pow(2, 1/50.0), 1, true, true, false, false, true);
-        this.variables[4] = new Variable(Math.pow(2, 3.38*10), Math.pow(10, 10), 2, 1, true, true, false, false, false);
+        this.variables[0] = new Variable(Math.pow(2, 3.38/4), 10, Math.pow(2, 0.1), 0, false, true, false, true, false, new double[2]);
+        this.variables[1] = new Variable(Math.pow(2, 3.38*4), 1000, 2, 1, true, true, false, false, false, new double[2]);
+        this.variables[2] = new Variable(Math.pow(2, 3.38), 20, 1, 1, false, false, true, false, false, new double[2]);
+        this.variables[3] = new Variable(Math.pow(2, 3.38/1.5), 50, Math.pow(2, 1/50.0), 1, true, true, false, false, true, new double[2]);
+        this.variables[4] = new Variable(Math.pow(2, 3.38*10), Math.pow(10, 10), 2, 1, true, true, false, false, false, new double[2]);
         
     }
     /**Moves the theory by 1 tick (default is 0.1 seconds). Also updates auxillary variables such as q, r, 

@@ -20,6 +20,8 @@ public class Variable {
     public double nextCost;
     public double nextValue;
 
+    public double[] stepwiseParam;
+
     public int isActive;
 
 
@@ -46,7 +48,7 @@ public class Variable {
      * If the variable is a doubling, this parameter should be false.
      */
     public Variable(double costScaling, double costBase, double valueScaling, double valueBase, 
-                    boolean isDoubling, boolean isExponential, boolean isLinear, boolean isFirst, boolean isOffset) {
+                    boolean isDoubling, boolean isExponential, boolean isLinear, boolean isFirst, boolean isOffset, double[] stepWiseParam) {
         this.costScaling = costScaling;
         this.costBase = costBase;
         this.valueScaling = valueScaling;
@@ -57,11 +59,12 @@ public class Variable {
         this.isFirst = isFirst;
         this.isOffset = isOffset;
         this.isActive = 1;
+        this.stepwiseParam = stepWiseParam;
     }
 
     public Variable getClone() {
         Variable cloneVariable = new Variable(this.costScaling, this.costBase, this.valueScaling, this.valueBase,
-            this.isDoubling, this.isExponential, this.isLinear, this.isFirst, this.isOffset);
+            this.isDoubling, this.isExponential, this.isLinear, this.isFirst, this.isOffset, this.stepwiseParam);
 
         cloneVariable.cost = this.cost;
         cloneVariable.value = this.value;
@@ -130,14 +133,23 @@ public class Variable {
         if(isExponential) {
             if(!isDoubling) {
                 if(!isOffset) {
+
+                    if(this.stepwiseParam[0] > 0) { // for more exotic stepwise variables (such as ones in sequential limit)
+                        value = Variable.subtract(Math.log10(this.stepwiseParam[1] / (this.stepwiseParam[0] - 1) + this.level % this.stepwiseParam[1]) + 
+                            Math.log10(this.stepwiseParam[0]) * Math.floor(this.level / this.stepwiseParam[1]), 
+                            Math.log10(this.stepwiseParam[1] / (this.stepwiseParam[0] - 1)));
+                        return value;
+                    }
+
+
                     value = (Variable.subtract(Math.log10(10+this.level % 10) + 
-                    Math.log10(2) * Math.floor(this.level/10), Math.log10(10)))*this.isActive;
+                    Math.log10(2) * Math.floor(this.level/10), Math.log10(10)));
                 } else {
                     value = (Variable.subtract(Math.log10(11+this.level % 10) + 
-                    Math.log10(2) * Math.floor((1+this.level)/10), Math.log10(10)))*this.isActive;
+                    Math.log10(2) * Math.floor((1+this.level)/10), Math.log10(10)));
                 }
             } else {
-                value = (Math.log10(this.valueBase) + this.level * Math.log10(this.valueScaling))*this.isActive;    
+                value = (Math.log10(this.valueBase) + this.level * Math.log10(this.valueScaling));    
             }
         }
 
@@ -275,9 +287,7 @@ public class Variable {
      * @return - the difference (in log format) of the 2 input values
      */
     public static double subtract(double value1, double value2) {
-        if(value1 == 0 && (value2 - 4.984661) < 0.01) {
-            int a = 0;
-        }
+     
         double wholePart1 = Math.floor(value1);
         double fractionalPart1 = Math.pow(10, value1 - wholePart1);
         double wholePart2 = Math.floor(value2);
