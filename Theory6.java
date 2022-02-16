@@ -99,7 +99,7 @@ public class Theory6 extends Theory {
 
             this.usedMoney = Variable.add(this.usedMoney, variableCost);
             this.c = Variable.subtract(this.getIntegral(), this.rho);
-            //System.out.println(this.getIntegral() + "\t" + this.c);
+            
          
         } else {
             //too poor to buy stuff feelsbadman

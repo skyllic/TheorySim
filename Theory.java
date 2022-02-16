@@ -22,7 +22,7 @@ public class Theory implements Simmable {
     public double publicationMultiplier; // current multiplier. e.g. for T6 usually publishes at about 10-30 multi
     public final double publicationMark; // Rho at which you can publish e.g. 2.75e965 etc
     public final static int research9Level = 3;
-    public final static int studentNumber = 300;
+    public final static int studentNumber = 3000;
     public final static double adBonus = 1.5;
     public static int theoryNumber;
     public double tauEfficiency; // Defined as maxRho divided by tickNumber
@@ -36,31 +36,30 @@ public class Theory implements Simmable {
        if(Theory.theoryNumber == 1) {
             this.totalMultiplier = Theory.research9Level * (Math.log10(Theory.studentNumber) - Math.log10(20)) 
             + 0.164 * this.publicationMark - Math.log10(3);
+        } else if(Theory.theoryNumber == 2){
+            this.totalMultiplier = Theory.research9Level * (Math.log10(Theory.studentNumber) - Math.log10(20)) 
+                + 0.198 * this.publicationMark - Math.log10(100);
+        } else if(Theory.theoryNumber == 3) {
+            this.totalMultiplier = Theory.research9Level * (Math.log10(Theory.studentNumber) - Math.log10(20)) 
+                + 0.147 * this.publicationMark + Math.log10(3);
+        } else if(Theory.theoryNumber == 4) {
+            this.totalMultiplier = Theory.research9Level * (Math.log10(Theory.studentNumber) - Math.log10(20)) 
+                + 0.165 * this.publicationMark - Math.log10(4);
         } else if(Theory.theoryNumber == 6) {
            this.totalMultiplier = Theory.research9Level * (Math.log10(Theory.studentNumber) - Math.log10(20)) 
             + 0.196 * this.publicationMark - Math.log10(50);
-       } else if(Theory.theoryNumber == 2){
-        this.totalMultiplier = Theory.research9Level * (Math.log10(Theory.studentNumber) - Math.log10(20)) 
-        + 0.198 * this.publicationMark - Math.log10(100);
-       } else if(Theory.theoryNumber == 4) {
-            this.totalMultiplier = Theory.research9Level * (Math.log10(Theory.studentNumber) - Math.log10(20)) 
-                + 0.165 * this.publicationMark - Math.log10(4);
-       }
-        else if(Theory.theoryNumber == 7) {
+        } else if(Theory.theoryNumber == 7) {
             this.totalMultiplier = Theory.research9Level * (Math.log10(Theory.studentNumber) - Math.log10(20)) 
                 + 0.152 * this.publicationMark;
-        }
-        else if(Theory.theoryNumber == 8) {
+        } else if(Theory.theoryNumber == 8) {
             this.totalMultiplier = Theory.research9Level * (Math.log10(Theory.studentNumber) - Math.log10(20)) 
                 + 0.15 * this.publicationMark;
         }
-        else if(Theory.theoryNumber == 3) {
-            this.totalMultiplier = Theory.research9Level * (Math.log10(Theory.studentNumber) - Math.log10(20)) 
-                + 0.147 * this.publicationMark + Math.log10(3);
+        else if(Theory.theoryNumber == 10) {
+            this.totalMultiplier = 0.15 * this.publicationMark;
         }
         else if(Theory.theoryNumber == 11) {
-            this.totalMultiplier = Theory.research9Level * (Math.log10(Theory.studentNumber) - Math.log10(20)) 
-                + 0.15 * this.publicationMark;
+            this.totalMultiplier = 0.15 * this.publicationMark;
         }
        else {
            this.totalMultiplier = 1;

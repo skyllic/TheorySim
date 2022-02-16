@@ -32,7 +32,7 @@ public class StrategyTest {
 
     @Test
     public void testFindStrategyStrengthT2() {
-        double pubMark = 1500+Math.log10(1);
+        double pubMark = 577+Math.log10(3.14);
         Theory2 t2 = new Theory2(pubMark);
 
       
@@ -146,7 +146,7 @@ public class StrategyTest {
 
         @Test
     public void testFindStrategyStrengthWeierStrass() {
-        double pubMark = 400+Math.log10(3);
+        double pubMark = 961+Math.log10(2.39);
         WeierStrass weierStrass = new WeierStrass(pubMark);
 
         /** 
@@ -163,10 +163,10 @@ public class StrategyTest {
        
 
         
-        System.out.println("hi");
+       
 
-        while(weierStrass.publicationMultiplier < 20) {
-            weierStrass.runStrategyAILoop();
+        while(weierStrass.publicationMultiplier < 15000.0) {
+            weierStrass.runStrategyAILoop(15000);
         }
       
         
@@ -186,7 +186,7 @@ public class StrategyTest {
         t4.variables[5].deactivate();*/
 
         
-        double pubMark = 800 + Math.log10(1);
+        double pubMark = 835 + Math.log10(1);
         Sequential_Limit tSL = new Sequential_Limit(pubMark);
 
         while(tSL.publicationMultiplier < 15000.0) {

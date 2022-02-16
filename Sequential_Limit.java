@@ -227,27 +227,27 @@ public class Sequential_Limit extends Theory {
             if(this.variables[i].isActive == 1) {
 
                 if(this.publicationMultiplier > 0.1) {
-                    a1Penalty = 0.05;
-                    a2Penalty = 0.05;
+                    a1Penalty = 0.00;
+                    a2Penalty = 0.00;
                     
                     
                 }
               
                 if(this.publicationMultiplier > 1) {
-                    a1Penalty = 0.1;
-                    a2Penalty = 0.1;
+                    a1Penalty = 0.00;
+                    a2Penalty = 0.00;
                     
                     
                 }
                 if(this.publicationMultiplier > 2) {
-                    a1Penalty = 0.10;
-                    a2Penalty = 0.10;
+                    a1Penalty = 0.00;
+                    a2Penalty = 0.00;
                     
                     
                 }
                 if(this.publicationMultiplier > 3) {
-                    a1Penalty = 0.20;
-                    a2Penalty = 0.20;
+                    a1Penalty = 0.00;
+                    a2Penalty = 0.00;
                     
                     
                 }
@@ -256,39 +256,39 @@ public class Sequential_Limit extends Theory {
                     //strongest
                     this.variableWeights[0] = 10.05 + a1Penalty;
                 } else if(this.variables[0].level % 3 == 1) {
-                    this.variableWeights[0] = 10.25 + a1Penalty;
+                    this.variableWeights[0] = 10.10 + a1Penalty;
                 } else if(this.variables[0].level % 3 == 2) {
                     //weakest
                     this.variableWeights[0] = 10.35 + a1Penalty;
                 }
-                this.variableWeights[1] = 10 + a2Penalty; 
+                this.variableWeights[1] = 9.95 + a2Penalty; 
 
                 if(this.variables[2].level % 4 == 0) {
                     //strongest
-                    this.variableWeights[2] = 9.9;
+                    this.variableWeights[2] = 9.90;
                 } else if(this.variables[2].level % 4 == 1) {
-                    this.variableWeights[2] = 10.1;
+                    this.variableWeights[2] = 10.10;
                 } else if(this.variables[2].level % 4 == 2) {
-                    this.variableWeights[2] = 10.3;
+                    this.variableWeights[2] = 10.25;
                 } else if(this.variables[2].level % 4 == 3) {
                     //weakest
-                    this.variableWeights[2] = 10.50;
+                    this.variableWeights[2] = 10.40;
                 }
-
+                this.variableWeights[3] = 10.00;
                 
-                if(this.publicationMultiplier > 4.0) {
+                if(this.publicationMultiplier > 4.5) {
                     this.variables[0].deactivate();
                     this.variables[1].deactivate();
                     
                 }
 
 
-                if(this.publicationMultiplier > 5.5) {
+                if(this.publicationMultiplier > 7.5) {
                     this.variables[2].deactivate();
                     this.variables[3].deactivate();
                 }
         
-               if(this.publicationMultiplier > 5.5) {
+               if(this.publicationMultiplier > 7.5) {
                     for(int j = 0; j < this.variables.length; j++) {
                         this.variables[j].deactivate(); //autobuy for the variable off.
                         this.isCoasting = true;

@@ -127,8 +127,11 @@ public class Variable {
         double value = 0;
 
         if(isLinear) {
-            value = Math.log10(Variable.add(this.level+this.valueScaling, this.valueBase));
+            value = (this.level * this.valueScaling + this.valueBase);
             return value;
+        }
+        if(this.costBase == 1000 && this.level == 253) {
+            double t = 3;
         }
         if(isExponential) {
             if(!isDoubling) {
