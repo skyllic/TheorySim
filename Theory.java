@@ -1,38 +1,82 @@
 
 
 /**A class representing a theory. 
- * @param rho - the current rho in log format
+ * @param rho - the current rho in log format.
  * @param rhodot - the current rhodot in log format. For theory with multiple rho types, this field represents the rho that contributes to tau directly
- * @param seconds - the current tick number. Default is 10 ticks/second. Resets on publish. Does not reset on variable bought
- * @param totalMultiplier - total multiplier. It's the number shown in the publication screen (in log format). This implicitly includes bonuses from students
- * @param publicationMultiplier - current publication multiplier for this publication
- * @param publicationMark - the rho at which publication multiplier = 1, represented in log format
- * @param research9Level - current research 9 level. Maximum in the game is 3R9, that is level 3
- * @param studentNumber - current number of students
+ * @param seconds - the current elapsed time in seconds. Resets on publish. Does not reset on variable bought. Is affected by adaptive ticks.
+ * @param tickCount - the current number of ticks. Default is 10 ticks/second. Resets on publish. Does not reset on variable bought.
+ *  When adaptive ticks are applied, the tickCount rate doesn't change. 
+ * @param totalMultiplier - total multiplier. It's the number shown in the publication screen (in log format).
+ *  This implicitly includes bonuses from students. For custom theories, this DOES NOT include bonuses from students.
+ * @param publicationMultiplier - current publication multiplier for this publication. Can be less than 1. 
+ *  A publication multiplier less than 1 implies that the theory hasn't recovered back to its previous 
+ *  publication mark yet. 
+ * @param publicationMark - the rho at which publication multiplier = 1, represented in log format.
+ * @param research9Level - current research 9 level. Maximum in the game is 3R9, that is level 3.
+ * @param studentNumber - current number of students.
  */ 
 public class Theory implements Simmable {
 
+    public String name;
     public Variable[] variables;
     public double rho;
     public double rhodot;
     public double maxRho;
     public double seconds; // elapsed time in seconds
     public int tickCount; // the number of elapsed ticks
+    public double tauPerHour; // current log10(tau) per hour of the theory
+    public double tickFrequency; //second per tick (default 0.1 seconds/tick)
+    public boolean isCoasting = false;
+    public boolean finishCoasting = false;
+    public double coastingCoefficient = 1.15;
+    public int coastingNumber = 0;
+    public double maxTauPerHour;
+    public double bestPubMulti;
+    public double bestPubTime;
+    public double bestTauGain;
+    public double bestCoastingNumber = 0;
+    public int activeFrequency = 10;
+
+    public double tauPerHourActive;
+    public double tauPerHourIdle;
+    public double pubMultiActive;
+    public double pubMultiIdle;
+    public String strategyActive;
+    public String strategyIdle;
+    public double pubTimeActive;
+    public double pubTimeIdle;
+    public double tauGainActive;
+    public double tauGainIdle;
+
     public final double totalMultiplier; //e.g. for T6 = T6^0.196 / 50
     public double publicationMultiplier; // current multiplier. e.g. for T6 usually publishes at about 10-30 multi
     public final double publicationMark; // Rho at which you can publish e.g. 2.75e965 etc
-    public final static int research9Level = 3;
-    public final static int studentNumber = 3000;
+    public static int research9Level = 3; // default 3 for lategame purposes.
+    public static int studentNumber = 300; // default 300 for endgame purposes.
+
     public final static double adBonus = 1.5;
-    public static int theoryNumber;
-    public double tauEfficiency; // Defined as maxRho divided by tickNumber
+    public static int theoryNumber; // First Custom Theory = theory10.
+    public double tauEfficiency; // Defined as maxRho divided by tickNumber.
 
     public Strategy strategy;
 
-
+    /**
+     * 
+     * @param theoryNumber - theory number to generate. Default theories are 1-8. First CT is theory 10. 
+     * @param pubMark - the last pub mark of the theory in log format. e.g. if last pub mark was at 2e600 then 
+     *  pubMark = log10(2) + 600. For CT pubmarks, use the RHO rather than tau. 
+     */
     public Theory(int theoryNumber, double pubMark) {
        this.publicationMark = pubMark;
        Theory.theoryNumber = theoryNumber;
+
+        this.seconds = 0;
+        this.tickCount = 0;
+        this.rho = 0;
+        this.rhodot = 0;
+        this.tickFrequency = 0.1; // seconds per tick
+
+       //Sets total multiplier for each theory. Each theory has its own formula. 
        if(Theory.theoryNumber == 1) {
             this.totalMultiplier = Theory.research9Level * (Math.log10(Theory.studentNumber) - Math.log10(20)) 
             + 0.164 * this.publicationMark - Math.log10(3);
@@ -45,6 +89,9 @@ public class Theory implements Simmable {
         } else if(Theory.theoryNumber == 4) {
             this.totalMultiplier = Theory.research9Level * (Math.log10(Theory.studentNumber) - Math.log10(20)) 
                 + 0.165 * this.publicationMark - Math.log10(4);
+        } else if(Theory.theoryNumber == 5) {
+            this.totalMultiplier = Theory.research9Level * (Math.log10(Theory.studentNumber) - Math.log10(20)) 
+                + 0.159 * this.publicationMark;
         } else if(Theory.theoryNumber == 6) {
            this.totalMultiplier = Theory.research9Level * (Math.log10(Theory.studentNumber) - Math.log10(20)) 
             + 0.196 * this.publicationMark - Math.log10(50);
@@ -62,7 +109,7 @@ public class Theory implements Simmable {
             this.totalMultiplier = 0.15 * this.publicationMark;
         }
        else {
-           this.totalMultiplier = 1;
+           this.totalMultiplier = 1; 
        }
     }
 
@@ -90,6 +137,7 @@ public class Theory implements Simmable {
     }
 
  
+    /**Intended to be overridden by corresponding theory. */
     public void moveTick() {
         // TODO Auto-generated method stub
         
@@ -97,8 +145,11 @@ public class Theory implements Simmable {
 
     
     /**Buys 1 level of the variable according to the variableNumber input. For example, an input of 3
-     * means buy 1 level of variable[3] (the 4th variable in the array).
-     * Both the values of the variables and rho are updated in this method.
+     * means buy 1 level of variable[3] (the 4th variable in the array). The nth variable in the array is read 
+     * top-down in-game. 
+     * Both the values of the variables and rho are updated in this method, so there is no need to further 
+     * update the variable parameters. 
+     * <p>Some theories may wish to override this method as there may be more than one type of rhos. </p>
      * @param variableNumber - the variable number to buy. Note that the variable number starts at 0, not 1.
      */
     public void buyVariable(int variableNumber) {
@@ -113,29 +164,12 @@ public class Theory implements Simmable {
         
     }
 
+    /**Displays intermittent theory parameters for testing purposes. Not intended for UI output to users. */
     public void display() {
 
     }
 
-    /**Coasts with autobuy off until publish. The publishing time is decided my taking the maximum of 
-     * log(maxRho)/tickNumber. In this case, since rho is already calculated in log format, it's simply the 
-     * maximum of maxRho/tickNumber.
-     */
-    public void waitUntilPublish() {
-        double efficiency = this.tauEfficiency;
-        int counter = 0;
-        while(counter < 5) {
-            efficiency = this.tauEfficiency;
-            moveTick();
-            counter++;
-        }
-       
-        while(this.tauEfficiency >= efficiency) {
-            efficiency = this.tauEfficiency;
-            moveTick();
-        }
-        return; // publish
-    }
+    
 
     /**Runs the corresponding strategy attached with the theory.
      * 
@@ -152,7 +186,7 @@ public class Theory implements Simmable {
         
     }
     
-    public int runStrategyAI() {
+    public int findBestVarToBuy() {
         this.strategy = new Strategy("T" + Theory.theoryNumber, "AI");
         for(Variable variable : this.variables) {
 
@@ -186,10 +220,10 @@ public class Theory implements Simmable {
         
         this.buyVariable(leastExpensiveVariableIndex);
     }
-    @Override
-    public void copy() {
-        // TODO Auto-generated method stub
-        
+    
+    public void printSummaryHeader() {
+        System.out.println(this.name + " at e" + String.format("%.1f", this.publicationMark) + " rho");
+        System.out.print("Tau/hr\t\t" + "PubMulti\t\t" + "Strategy\t\t" + "PubTime\t\t" + "TauGain\n");
     }
    
 

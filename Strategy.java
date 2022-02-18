@@ -22,7 +22,7 @@ public class Strategy {
             this.type = "";
             return;
         } else {
-            this.name = name.toLowerCase();
+            this.name = name;
             this.type = type.toLowerCase();
         }
 

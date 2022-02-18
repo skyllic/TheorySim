@@ -140,7 +140,7 @@ public class Theory1 extends Theory {
       
         
         for(int i = 0; i < 1; i++) {
-            int bestVarIndex = this.runStrategyAI();
+            int bestVarIndex = this.findBestVarToBuy();
             if(!isCoasting) {
                 double buyDelay = this.calculateBuyDelay(bestVarIndex);
                 this.idleUntil(this, this.variables[bestVarIndex].nextCost + buyDelay);
@@ -160,7 +160,7 @@ public class Theory1 extends Theory {
 
 
     @Override
-    public int runStrategyAI() {
+    public int findBestVarToBuy() {
         for(int i = 0; i < this.variables.length; i++) {
             this.variables[i].update();
             if(this.variables[i].isActive == 1) {

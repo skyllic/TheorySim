@@ -2,31 +2,32 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 /**An implementation of Theory 6 (Integral Calculus) from the game Exponential Idle. */
-public class Theory4 extends Theory {
+public class Theory5 extends Theory {
 
 
 
 
-    public String name = "Polynomials";
+    public String name = "Logistics Function";
 
     public double qdot;
     public double q;
+    public double qMax;
 
     public double tauPerHour;
 
-
+    public boolean c2c3New = false;
     public boolean isCoasting;
 
     public double tickFrequency; //second per tick
 
-    public double[] variableWeights = {1000,1000,10,10,10,10,10.0,10.2};
+    public double[] variableWeights = {10, 10, 10, 10, 10};
     //public double[] variableWeights = {10,10,10,10,10,10,11,10};
 
-    public Theory4[] t2Clones = new Theory4[8];
+    
     
 
-    public Theory4(double pubMark) {
-        super(4, pubMark);
+    public Theory5(double pubMark) {
+        super(5, pubMark);
 
         this.tickFrequency = 0.1; // seconds per tick
        
@@ -40,20 +41,19 @@ public class Theory4 extends Theory {
         this.qdot = Double.MAX_VALUE;
         this.isCoasting = false;
         
-        this.variables = new Variable[8];
-        this.strategy = new Strategy("T4AI", "AI"); 
+        
+        this.variables = new Variable[5];
+        this.strategy = new Strategy("T5AI", "AI"); 
   
         
 
         //Order of variable is q1, q2, r1, r2, c1, c2, c3, c4, c5 (same as in game when read top to bottom)
-        this.variables[0] = new Variable(1.305, 5, Math.pow(2, 0.1), 0, false, true, false, true, false, new double[2]);
-        this.variables[1] = new Variable(3.75, 20, 2, 1, true, true, false, false, false, new double[2]);
-        this.variables[2] = new Variable(2.468, 2000, 2, 1, true, true, false, false, false, new double[2]);
-        this.variables[3] = new Variable(4.85, Math.pow(10, 4), 3, 1, true, true, false, false, false, new double[2]);
-        this.variables[4] = new Variable(12.5, Math.pow(10, 8), 5, 1, true, true, false, false, false, new double[2]);
-        this.variables[5] = new Variable(58, Math.pow(10, 10), 10, 1, true, true, false, false, false, new double[2]);
-        this.variables[6] = new Variable(100, 1000, Math.pow(2, 0.1), 0, false, true, false, false, false, new double[2]);
-        this.variables[7] = new Variable(1000, Math.pow(10, 4), 2, 1, true, true, false, false, false, new double[2]);
+        this.variables[0] = new Variable(1.61328, 10, Math.pow(2, 0.1), 0, false, true, false, true, false, new double[2]);
+        this.variables[1] = new Variable(64, 15, 2, 1, true, true, false, false, false, new double[2]);
+        this.variables[2] = new Variable(1.18099, Math.pow(10, 6), 2, 1, false, true, false, false, true, new double[2]);
+        this.variables[3] = new Variable(4.53725, 75, 2, 1, true, true, false, false, false, new double[2]);
+        this.variables[4] = new Variable(88550700, Math.pow(10, 3), 2, 1, true, true, false, false, false, new double[2]);
+        
         
     }
     /**Moves the theory by 1 tick (default is 0.1 seconds). Also updates auxillary variables such as q, r, 
@@ -69,27 +69,33 @@ public class Theory4 extends Theory {
         if(this.rho > this.maxRho) {
             this.maxRho = this.rho;
         }
-        this.publicationMultiplier = Math.pow(10, 0.165 * (this.maxRho-this.publicationMark));
+        this.publicationMultiplier = Math.pow(10, 0.159 * (this.maxRho-this.publicationMark));
        
     }
 
     /**Part of the moveTick() method. Updates equation values such as rho, rhodot, q, qdot etc. */
     public void updateEquation() {
 
-        double term1 = this.variables[0].value * 1.15 + this.variables[1].value;
-        double term2 = this.variables[2].value + this.q;
-        double term3 = this.variables[3].value + this.q * 2;
-        double term4 = this.variables[4].value + this.q * 3;
-        double term5 = this.variables[5].value + this.q * 4;
+        if(this.publicationMultiplier > 0.01 && this.c2c3New == true) {
+            double k = 0;
+        }
+        if(this.variables[4].value * 1.1 < this.q - this.variables[3].value) {
+            this.q = this.variables[4].value * 1.1 + this.variables[3].value;
+        }
+
+        this.qdot = this.variables[2].value - this.variables[3].value + this.q + 
+            Variable.subtract(this.variables[4].value * 1.1, this.q - this.variables[3].value) + 
+                Math.log10(Theory.adBonus) + Math.log10(this.tickFrequency);
         
-
-       
-        this.q = Variable.subtract((Variable.add(Variable.add(this.q, 0) * 2, Math.log10(16) + this.variables[6].value 
-            + this.variables[7].value + Math.log10(Theory.adBonus) + Math.log10(this.tickFrequency))) * 0.5, 0);
-
-        this.rhodot = Variable.add(term5, Variable.add(term4, Variable.add(term3, Variable.add(term1, term2))))
-            + Math.log10(Theory.adBonus) + Math.log10(this.tickFrequency) + this.totalMultiplier;
+        this.q = Variable.add(this.q, Math.max(this.qdot, -Double.MAX_VALUE));
+        this.q = Math.min(q, this.variables[4].value * 1.1 + this.variables[3].value);
+        this.rhodot = this.variables[0].value * 1.15 + this.variables[1].value + this.q + 
+            Math.log10(this.tickFrequency) + Math.log10(Theory.adBonus) + this.totalMultiplier;
         this.rho = Variable.add(this.rho, this.rhodot);
+
+        
+             
+          
 
 
        
@@ -105,11 +111,25 @@ public class Theory4 extends Theory {
     public void buyVariable(int variableNumber) {
         double variableCost = this.variables[variableNumber].nextCost;
         if(this.rho >= variableCost) {
+
+
+            if(variableNumber == 3 || variableNumber == 4 && this.variables[3].level > 880) {
+                this.c2c3New = true;
+    
+            }
+
+
             this.variables[variableNumber].level += 1;
             this.variables[variableNumber].update();
             this.rho = Variable.subtract(this.rho, variableCost);
 
-           
+           if(variableNumber == 3 || variableNumber == 4) {
+            this.c2c3New = true;
+
+           }
+           if(variableNumber == 0 || variableNumber == 1) {
+            this.c2c3New = false;
+           }
 
            
            
@@ -134,6 +154,7 @@ public class Theory4 extends Theory {
             if(!isCoasting) {
                 this.idleUntil(this, this.variables[bestVarIndex].nextCost);
                 this.buyVariable(bestVarIndex);
+                this.display();
                 
             } else {//is coasting, stop buying any variable.
                 this.coastUntilPublish();
@@ -154,8 +175,9 @@ public class Theory4 extends Theory {
                 while(this.variables[i].cost < this.publicationMark * 0.8) {
                     this.variables[i].level += 1;
                     this.variables[i].update();
-                
+                    this.q = this.variables[4].value * 1.1 + this.variables[3].value;
                 }
+                
             }
             
         }
@@ -192,35 +214,64 @@ public class Theory4 extends Theory {
 
         //variableWeights = {1000,1000,10,10,10,10,10.0,10.2};
     
-            if(this.variables[i].isActive == 1) {
-                if(this.publicationMultiplier > 2.7) {
-                    this.variables[6].deactivate();
-                    
-                }
-                if(this.publicationMultiplier > 3.5) {
-                    this.variables[7].deactivate();
-                }
-                
+        double q1DefaultWeight = 10.8;
+        variableWeights[1] = 10.0;
+        variableWeights[2] = 12.0;
+        variableWeights[3] = 10.0;
+        variableWeights[4] = 10.0;
 
-               if(this.publicationMultiplier > 3.65) {
+        double c1Adjustment = 0;
+        double q1Adjustment = 0;
+
+        this.qMax = this.variables[4].value * 1.1 + this.variables[3].value;
+
+        if(this.c2c3New == true) {
+            c1Adjustment = -0.1;
+        } else {
+            c1Adjustment = 0;
+        }
+
+        if(this.publicationMark * 0.97 > this.maxRho) {
+            variableWeights[2] = 11.0 + c1Adjustment;
+            variableWeights[3] = 12.0;
+        }
+        if(this.publicationMark * 0.98 > this.maxRho) {
+            q1Adjustment = -0.0;
+            variableWeights[2] = 11.0 + c1Adjustment;
+            variableWeights[3] = 10.0;
+            
+        }
+        if(this.publicationMark * 0.99 > this.maxRho) {
+            q1Adjustment = -0.0;
+            variableWeights[2] = 12.0 + c1Adjustment;
+            variableWeights[3] = 10.0;
+            variableWeights[4] = 9.95;
+        }
+        if(this.publicationMark * 1.0 > this.maxRho) {
+            q1Adjustment = 0.0;
+            variableWeights[2] = 12.0 + c1Adjustment;
+            variableWeights[3] = 10.0;
+            variableWeights[4] = 9.95;
+        }
+        if(this.publicationMark * 1.0 < this.maxRho) {
+            q1Adjustment = -0.0;
+            variableWeights[2] = 13.0 + c1Adjustment;
+            variableWeights[3] = 10.0;
+            variableWeights[4] = 9.95;
+        }
+        variableWeights[0] = 10.8 + (0.018*(this.variables[0].level % 10) - 0.11) + q1Adjustment;
+       
+
+               if(this.publicationMultiplier > 2.20) {
                     for(int j = 0; j < this.variables.length; j++) {
                         this.variables[j].deactivate(); //autobuy for the variable off.
                         this.isCoasting = true;
                     }
                }
-               //
-               if(this.publicationMultiplier < 1) {
-                    this.variableWeights[7] = 10.1;
-                    this.variableWeights[6] = 11.05 + (0.032*(this.variables[i].level % 10) - 0.16);
-               } else {
-                    this.variableWeights[7] = 10.1;
-                    this.variableWeights[6] = 11.05 + (0.032*(this.variables[i].level % 10) - 0.16);
-               }
+               
                
 
-                
-              
-            }
+          
         
     }
 
@@ -228,19 +279,19 @@ public class Theory4 extends Theory {
 
 
     /**Idles the input theory until its rho exceeds the input rho */
-    public void idleUntil(Theory4 theory4, double variableCost) {
-        while(theory4.rho < variableCost) {
-            theory4.moveTick();
+    public void idleUntil(Theory5 theory5, double variableCost) {
+        while(theory5.rho < variableCost) {
+            theory5.moveTick();
         }
     }
 
     public void coastUntilPublish() {
-        double tauRate = 60*60*Math.log(this.publicationMultiplier) / Math.log(10) / 0.165 / this.seconds;
+        double tauRate = 60*60*Math.log(this.publicationMultiplier) / Math.log(10) / 0.159 / this.seconds;
         while(this.tauPerHour <= tauRate) {
             
             this.tauPerHour = tauRate;
             this.moveTick();
-            tauRate = 60*60*Math.log(this.publicationMultiplier) / Math.log(10) / 0.165 / this.seconds;
+            tauRate = 60*60*Math.log(this.publicationMultiplier) / Math.log(10) / 0.159 / this.seconds;
             
         }
     }
@@ -250,20 +301,18 @@ public class Theory4 extends Theory {
     public void display() {
         //System.out.println(this.rho + "\t" + this.q + "\t" + this.r + "\t" + this.tickNumber);
         System.out.print(String.format("%.3f",this.seconds / 60.0 / 60.0) + "\t");
-        /**for(int i = 0; i < this.variables.length; i++) {
+        for(int i = 0; i < this.variables.length; i++) {
             System.out.print(this.variables[i].level + "\t");
-        }*/
-        
-            System.out.print(String.format("%.4f",this.variables[0].value * 1.15 + this.variables[1].value));
+        }
+        /** 
+            System.out.print(String.format("%.4f",this.q));
             System.out.print("\t");
-            System.out.print(String.format("%.4f", this.variables[2].value + this.q));
+            System.out.print(String.format("%.4f", this.qMax));
             System.out.print("\t");
-            System.out.print(String.format("%.4f", this.variables[3].value + 2 * this.q));
+            System.out.print(String.format("%.4f", this.rhodot));
             System.out.print("\t");
-            System.out.print(String.format("%.4f", this.variables[4].value + 3 * this.q));
-            System.out.print("\t");
-            System.out.print(String.format("%.4f", this.variables[5].value + 4 * this.q));
-            System.out.print("\t");
+            System.out.print(String.format("%.4f", this.rho));
+            System.out.print("\t");*/
         
         System.out.print(String.format("%.2f", this.maxRho) + "\t" + 
         String.format("%.2f", this.q) + "\t" + "\t" + this.publicationMultiplier);
@@ -274,7 +323,7 @@ public class Theory4 extends Theory {
     public void printSummary() {
         System.out.println(this.name + " at e" + String.format("%.0f", this.publicationMark) + " rho with " + Theory.studentNumber + " students");
         System.out.print("Tau/d\t" + "PubMulti\t" + "Strategy\t" + "PubTime\t" + "TauGain\n");
-        System.out.print(String.format("%.4f", 60*60*Math.log(this.publicationMultiplier) / Math.log(10) / 0.165 / this.seconds * 24));
+        System.out.print(String.format("%.4f", 60*60*Math.log(this.publicationMultiplier) / Math.log(10) / 0.159 / this.seconds * 24));
         System.out.print("\t" + String.format("%.4f", this.publicationMultiplier) + "\t");
         System.out.print("\tT4C3d\t\t");
         System.out.print(String.format("%.4f", this.seconds / 3600.0));

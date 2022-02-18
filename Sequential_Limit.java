@@ -2,6 +2,10 @@ import java.util.ArrayList;
 
 import java.util.Collections;
 
+import javax.swing.JFrame;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+
 /**An implementation of Theory 6 (Integral Calculus) from the game Exponential Idle. */
 public class Sequential_Limit extends Theory {
 
@@ -36,7 +40,7 @@ public class Sequential_Limit extends Theory {
     public Sequential_Limit(double pubMark) {
         super(11, pubMark);
 
-        this.tickFrequency = 10.0; // seconds per tick
+        this.tickFrequency = 0.1; // seconds per tick
        
 
 
@@ -157,7 +161,7 @@ public class Sequential_Limit extends Theory {
       
         
         for(int i = 0; i < 1; i++) {
-            int bestVarIndex = this.runStrategyAI();
+            int bestVarIndex = this.findBestVarToBuy();
             if(!isCoasting) {
                 this.idleUntil(this, this.variables[bestVarIndex].nextCost);
                 this.buyVariable(bestVarIndex);
@@ -177,7 +181,7 @@ public class Sequential_Limit extends Theory {
 
 
     @Override
-    public int runStrategyAI() {
+    public int findBestVarToBuy() {
         for(int i = 0; i < this.variables.length; i++) {
             this.variables[i].update();
             if(this.variables[i].isActive == 1) {
@@ -351,14 +355,35 @@ public class Sequential_Limit extends Theory {
     }
 
     public void printSummary() {
+
+
+        tauPerHour = 60*60*Math.log(this.publicationMultiplier) / Math.log(10) / 0.15 / this.seconds;
+
         System.out.println(this.name + " at e" + String.format("%.0f", this.publicationMark) + " rho");
-        System.out.print("Tau/hr\t" + "PubMulti\t" + "Strategy\t" + "PubTime\t" + "TauGain\n");
+        System.out.print("Tau/hr\t\t" + "PubMulti\t" + "Strategy\t" + "PubTime\t\t" + "TauGain\n");
         System.out.print(String.format("%.8f", 60*60*Math.log(this.publicationMultiplier) / Math.log(10) / 0.15 / this.seconds));
         System.out.print("\t" + String.format("%.4f", this.publicationMultiplier) + "\t");
         System.out.print("\tSLAI\t\t");
         System.out.print(String.format("%.4f", this.seconds / 3600.0));
         System.out.print("\t" + String.format("%.4f", this.maxRho - this.publicationMark));
         System.out.println("\n");
+
+
+        String[] columnNames = {"Tau/hr", "Pub Multi", "Strategy", "Pub Time", "Tau Gain"};
+        String[][] data = {{String.format("%.3f", tauPerHour), 
+                        String.format("%.3f", this.publicationMultiplier),
+                        String.format("SLAI"), 
+                        String.format("%.3f", this.seconds / 3600.0), 
+                        String.format("%.3f", this.maxRho - this.publicationMark)}};
+        JTable table = new JTable(data, columnNames);
+
+        JScrollPane scrollPane = new JScrollPane(table);
+        table.setFillsViewportHeight(true);
+
+        JFrame jFrame = new JFrame();
+        jFrame.add(scrollPane);
+        jFrame.setSize(500, 200);
+        jFrame.setVisible(true);
 
     }
 

@@ -23,7 +23,6 @@ public class TestAIStrategies {
             
         }
         theory6.display();
-        theory6.waitUntilPublish();
         theory6.display();
         
     }

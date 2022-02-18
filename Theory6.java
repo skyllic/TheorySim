@@ -11,10 +11,15 @@ public class Theory6 extends Theory {
     public double c; //Minus C at end of Integral
     public double usedMoney;
 
+    public double tauPerHour;
+    public String name = "Integral Calculus";
+    public boolean isCoasting = false;
+
     public double tickFrequency; //second per tick
 
     public double[] variableWeights = {11,10.0,10.5,9.8,11,10,1000,1000,10};
-    //public double[] variableWeights = {10,10.0,10.0,10,10,10,1000,1000,10};
+    public String strategyType = "";
+    //public double[] variableWeights = {10,10.0,10.0,10,100,100,1000,1000,10};
 
     public Theory6[] t6Clones = new Theory6[9];
     
@@ -89,13 +94,17 @@ public class Theory6 extends Theory {
      */
     @Override
     public void buyVariable(int variableNumber) {
+
+        if(this.variables[0].level > 2266) {
+            double w = 0;
+        }
         double variableCost = this.variables[variableNumber].nextCost;
         if(this.rho >= variableCost) {
             this.variables[variableNumber].level += 1;
             this.variables[variableNumber].update();
             this.rho = Variable.subtract(this.rho, variableCost);
 
-           
+          
 
             this.usedMoney = Variable.add(this.usedMoney, variableCost);
             this.c = Variable.subtract(this.getIntegral(), this.rho);
@@ -135,26 +144,36 @@ public class Theory6 extends Theory {
         return t6Clone;
     }
 
-    public void runStrategyAILoop() {
+    public void runStrategyAILoop(double pubMulti) {
         for(int i = 0; i < this.variables.length; i++) {
             this.variables[i].update();
         }
-        this.c = Variable.subtract(this.getIntegral(), this.rho);
-        for(int i = 0; i < 10; i++) {
-            int bestVarIndex = this.runStrategyAI();
-            this.idleUntil(this, this.variables[bestVarIndex].nextCost);
-            this.buyVariable(bestVarIndex);
-            this.display();
+      
+        
+        for(int i = 0; i < 1; i++) {
+            int bestVarIndex = this.findBestVarToBuy();
+            if(!isCoasting) {
+                this.idleUntil(this, this.variables[bestVarIndex].nextCost);
+                this.buyVariable(bestVarIndex);
+                //this.display();
+                
+            } else {//is coasting, stop buying any variable.
+                this.coastUntilPublish();
+                this.printSummary();
+                
+                this.publicationMultiplier = 500000000.0;
+                return;
+            }
         }
     }
 
 
     @Override
-    public int runStrategyAI() {
+    public int findBestVarToBuy() {
         for(int i = 0; i < this.variables.length; i++) {
             this.variables[i].update();
             if(this.variables[i].isActive == 1) {
-                while(this.variables[i].cost < this.publicationMark * 0.8) {
+                while(this.variables[i].cost < this.publicationMark * 0.80) {
                     this.variables[i].level += 1;
                     this.variables[i].update();
                 
@@ -188,7 +207,16 @@ public class Theory6 extends Theory {
     
             if(this.variables[i].isActive == 1) {
                 
-
+                if(strategyType == "idle") {
+                    if(this.publicationMultiplier > 12.00) {
+                        for(int j = 0; j < this.variables.length; j++) {
+                            this.variables[j].deactivate(); //autobuy for the variable off.
+                            this.isCoasting = true;
+                        }
+                    
+                    }
+                    return;
+                }
                 
                if(this.maxRho < this.publicationMark * 0.981) {
                     this.variableWeights[4] = 11;
@@ -210,6 +238,13 @@ public class Theory6 extends Theory {
                     this.variableWeights[1] = 11;
                     this.variableWeights[0] = 12;
                }
+
+               if(this.publicationMultiplier > 10.5) {
+                for(int j = 0; j < this.variables.length; j++) {
+                    this.variables[j].deactivate(); //autobuy for the variable off.
+                    this.isCoasting = true;
+                }
+           }
               
 
 
@@ -245,6 +280,17 @@ public class Theory6 extends Theory {
         }
     }
 
+    public void coastUntilPublish() {
+        double tauRate = 60*60*Math.log(this.publicationMultiplier) / Math.log(10) / 0.196 / this.seconds;
+        while(this.tauPerHour <= tauRate) {
+            
+            this.tauPerHour = tauRate;
+            this.moveTick();
+            tauRate = 60*60*Math.log(this.publicationMultiplier) / Math.log(10) / 0.196 / this.seconds;
+            
+        }
+    }
+
     protected double getIntegral() {
         double rhoTerm1 = this.variables[4].value * 1.15 + this.variables[5].value + this.q + this.r;
         double rhoTerm2 = this.variables[6].value + 2 * this.q + Math.log10(0.5);
@@ -253,6 +299,19 @@ public class Theory6 extends Theory {
 
         return Variable.add(rhoTerm4, Variable.add(rhoTerm3, Variable.add(rhoTerm1, rhoTerm2))) +
             this.totalMultiplier;
+    }
+
+
+    public void printSummary() {
+        System.out.println(this.name + " at e" + String.format("%.0f", this.publicationMark) + " rho with " + Theory.studentNumber + " students");
+        System.out.print("Tau/d\t" + "PubMulti\t" + "Strategy\t" + "PubTime\t" + "TauGain\n");
+        System.out.print(String.format("%.4f", 60*60*Math.log(this.publicationMultiplier) / Math.log(10) / 0.196 / this.seconds * 24));
+        System.out.print("\t" + String.format("%.4f", this.publicationMultiplier) + "\t");
+        System.out.print("\tT6I\t\t");
+        System.out.print(String.format("%.4f", this.seconds / 3600.0));
+        System.out.print("\t" + String.format("%.4f", this.maxRho - this.publicationMark));
+        System.out.println("\n");
+
     }
     
     @Override
@@ -274,7 +333,7 @@ public class Theory6 extends Theory {
             System.out.print(this.variables[i].level + "\t");
         }
         System.out.print(String.format("%.2f", this.maxRho) + "\t" + 
-        String.format("%.2f", this.q) + "\t" + String.format("%.2f", this.r) + "\t" + this.publicationMultiplier);
+        String.format("%.2f", this.q) + "\t" + String.format("%.2f", this.r) + "\t" + String.format("%.4f", this.publicationMultiplier));
         System.out.println("");
         //System.out.println(Arrays.toString(this.variableWeights));
     }

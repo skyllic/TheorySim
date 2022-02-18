@@ -33,7 +33,7 @@ public class Theory2 extends Theory {
     public Theory2(double pubMark) {
         super(2, pubMark);
 
-        this.tickFrequency = 1000000.0; // seconds per tick
+        this.tickFrequency = 1000000000.0; // seconds per tick
        
 
         this.q1 = 0;
@@ -141,11 +141,11 @@ public class Theory2 extends Theory {
       
         
         for(int i = 0; i < 1; i++) {
-            int bestVarIndex = this.runStrategyAI();
+            int bestVarIndex = this.findBestVarToBuy();
             if(!isCoasting) {
                 this.idleUntil(this, this.variables[bestVarIndex].nextCost);
                 this.buyVariable(bestVarIndex);
-                this.display();
+                //this.display();
             } else {//is coasting, stop buying any variable.
                 this.coastUntilPublish();
                 this.printSummary();
@@ -158,7 +158,7 @@ public class Theory2 extends Theory {
 
 
     @Override
-    public int runStrategyAI() {
+    public int findBestVarToBuy() {
         for(int i = 0; i < this.variables.length; i++) {
             this.variables[i].update();
             if(this.variables[i].isActive == 1) {
@@ -213,9 +213,14 @@ public class Theory2 extends Theory {
                     this.variables[1].deactivate();
                     this.variables[5].deactivate();
                 }
+                if(this.publicationMultiplier > 1000) {
+                    this.variables[0].deactivate();
+                    this.variables[4].deactivate();
+                }
+               
                
 
-               if(this.publicationMultiplier > 660) {
+               if(this.publicationMultiplier > 1000) {
                     for(int j = 0; j < this.variables.length; j++) {
                         this.variables[j].deactivate(); //autobuy for the variable off.
                         this.isCoasting = true;
@@ -268,7 +273,7 @@ public class Theory2 extends Theory {
     public void coastUntilPublish() {
         double tauRate = 60*60*Math.log(this.publicationMultiplier) / Math.log(10) / 0.198 / this.seconds;
         while(this.tauPerHour <= tauRate) {
-            
+            System.out.println(tauRate);
             this.tauPerHour = tauRate;
             this.moveTick();
             tauRate = 60*60*Math.log(this.publicationMultiplier) / Math.log(10) / 0.198 / this.seconds;
@@ -294,9 +299,9 @@ public class Theory2 extends Theory {
 
     public void printSummary() {
         System.out.println(this.name + " at e" + String.format("%.0f", this.publicationMark) + " rho with " + Theory.studentNumber + " students");
-        System.out.print("Tau/d\t" + "PubMulti\t" + "Strategy\t" + "PubTime\t" + "TauGain\n");
+        System.out.print("Tau/d\t" + "PubMulti\t" + "Strategy\t" + "PubTime\t\t" + "TauGain\n");
         System.out.print(String.format("%.4f", 60*60*Math.log(this.publicationMultiplier) / Math.log(10) / 0.198 / this.seconds * 24));
-        System.out.print("\t" + String.format("%.4f", this.publicationMultiplier) + "\t");
+        System.out.print("\t" + String.format("%.2f", this.publicationMultiplier) + "\t");
         System.out.print("\tT2\t\t");
         System.out.print(String.format("%.4f", this.seconds / 3600.0));
         System.out.print("\t" + String.format("%.4f", this.maxRho - this.publicationMark));
