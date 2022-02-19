@@ -138,9 +138,20 @@ public class Theory implements Simmable {
 
  
     /**Intended to be overridden by corresponding theory. */
+    
     public void moveTick() {
-        // TODO Auto-generated method stub
-        
+        this.seconds += this.tickFrequency;
+        this.tickCount += 1;
+
+        if (this.rho > this.maxRho) {
+            this.maxRho = this.rho;
+        }
+        if ((this.maxRho - this.publicationMark) / (this.seconds / 3600.0) > this.maxTauPerHour) {
+            this.maxTauPerHour = (this.maxRho - this.publicationMark) / (this.seconds / 3600.0);
+            this.bestPubMulti = this.publicationMultiplier;
+            this.bestPubTime = this.seconds / 3600.0;
+            this.bestTauGain = this.maxRho - this.publicationMark;
+        }    
     }
 
     
@@ -163,6 +174,8 @@ public class Theory implements Simmable {
         }
         
     }
+
+    
 
     /**Displays intermittent theory parameters for testing purposes. Not intended for UI output to users. */
     public void display() {
@@ -222,8 +235,39 @@ public class Theory implements Simmable {
     }
     
     public void printSummaryHeader() {
-        System.out.println(this.name + " at e" + String.format("%.1f", this.publicationMark) + " rho");
+        System.out.println(this.name + " at e" + String.format("%.1f", this.publicationMark) + " rho" + 
+            ", " + Theory.studentNumber + " students" );
         System.out.print("Tau/hr\t\t" + "PubMulti\t\t" + "Strategy\t\t" + "PubTime\t\t" + "TauGain\n");
+    }
+
+    public void printSummary() {
+        System.out.print(String.format("%.5f",
+                this.maxTauPerHour));
+        System.out.print("\t\t" + String.format("%.4f", this.bestPubMulti) + "\t\t\t");
+        System.out.print(String.format("%s", this.strategy.name) + "\t\t\t");
+        System.out.print(String.format("%.4f", this.bestPubTime));
+        System.out.print("\t\t" + String.format("%.4f", this.bestTauGain));
+        System.out.println("");
+
+    }
+
+    public void printSummary(Summary summary) {
+        System.out.print(String.format("%.4f",
+                summary.tauPerHour));
+        System.out.print("\t\t" + String.format("%.4f", summary.pubMulti) + "\t\t\t");
+        System.out.print(String.format("%s", summary.strategy) + "\t\t\t");
+        System.out.print(String.format("%.4f", summary.pubTime));
+        System.out.print("\t\t" + String.format("%.4f", summary.tauGain));
+        System.out.print("\t\t" + String.format("%.1f", this.publicationMark));
+        System.out.println("");
+
+    }
+
+    public Summary getSummary() {
+        Summary summary = new Summary(this.maxTauPerHour, this.bestPubMulti, this.strategy.name,
+         this.bestPubTime, this.bestTauGain);
+
+         return summary;
     }
    
 

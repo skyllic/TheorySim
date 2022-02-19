@@ -50,7 +50,8 @@ public class StrategyTest {
 
     @Test
     public void testFindStrategyStrengthT4() {
-        double pubMark = 740 + Math.log10(1);
+        double pubMark = 721 + Math.log10(1.14);
+        Theory.studentNumber = 293;
         Theory4 t4 = new Theory4(pubMark);
 
         t4.variables[1].deactivate();
@@ -58,10 +59,37 @@ public class StrategyTest {
         t4.variables[4].deactivate();
         t4.variables[5].deactivate();
 
-        // best is 163.357 at pub multi 1485.8
-        while (t4.publicationMultiplier < 15000.0) {
-            t4.runStrategyAILoop(15000.0);
+        Theory4 t42 = new Theory4(pubMark);
+
+        t4.variables[6].level = 100;
+        t4.variables[7].level = 100;
+        t42.variables[6].level = 100;
+        t42.variables[7].level = 100;
+        t4.variables[6].update();
+        t4.variables[7].update();
+        t42.variables[6].update();
+        t42.variables[7].update();
+
+
+        for(int i = 0; i < 50; i++) {
+            t4.moveTick();
+            t42.moveTick();
+            System.out.println(t4.q + "\t" + t42.q);
         }
+
+        t42.variables[7].level += 1;
+        t42.variables[7].update();
+
+        for(int i = 0; i < 50; i++) {
+            t4.moveTick();
+            t42.moveTick();
+            System.out.println(t4.q + "\t" + t42.q);
+        }
+
+        // best is 163.357 at pub multi 1485.8
+        /**while (t4.publicationMultiplier < 15000.0) {
+            t4.runEpoch();
+        }*/
     }
 
     @Test
@@ -174,11 +202,11 @@ public class StrategyTest {
          * t4.variables[5].deactivate();
          */
 
-        double pubMark = 996 + Math.log10(2);
+        double pubMark = 873 + Math.log10(2);
         Sequential_Limit tSL = new Sequential_Limit(pubMark);
         double start = System.currentTimeMillis();
         while (tSL.publicationMultiplier < 15000.0) {
-            tSL.runStrategyAILoop(15000.0);
+            tSL.runEpoch();
         }
         double finish = System.currentTimeMillis();
 

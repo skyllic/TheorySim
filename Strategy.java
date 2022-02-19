@@ -29,9 +29,7 @@ public class Strategy {
         this.autoBuyVariable = new ArrayList<>();
         this.chasingVariable = new ArrayList<>();
 
-        int indexOfT = this.name.indexOf("t");
-        char theoryNumber = this.name.charAt(indexOfT + 1);
-        this.theoryNumber = Character.getNumericValue(theoryNumber);
+        
 
         if(this.type.equalsIgnoreCase("speedrun")) {
             this.autoBuyVariable = null;

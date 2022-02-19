@@ -173,7 +173,7 @@ public class Theory6 extends Theory {
         for(int i = 0; i < this.variables.length; i++) {
             this.variables[i].update();
             if(this.variables[i].isActive == 1) {
-                while(this.variables[i].cost < this.publicationMark * 0.80) {
+                while(this.variables[i].cost < this.publicationMark * 0.95) {
                     this.variables[i].level += 1;
                     this.variables[i].update();
                 
@@ -305,7 +305,7 @@ public class Theory6 extends Theory {
     public void printSummary() {
         System.out.println(this.name + " at e" + String.format("%.0f", this.publicationMark) + " rho with " + Theory.studentNumber + " students");
         System.out.print("Tau/d\t" + "PubMulti\t" + "Strategy\t" + "PubTime\t" + "TauGain\n");
-        System.out.print(String.format("%.4f", 60*60*Math.log(this.publicationMultiplier) / Math.log(10) / 0.196 / this.seconds * 24));
+        System.out.print(String.format("%.4f", 60*60*Math.log(this.publicationMultiplier) / Math.log(10) / 0.196 / this.seconds));
         System.out.print("\t" + String.format("%.4f", this.publicationMultiplier) + "\t");
         System.out.print("\tT6I\t\t");
         System.out.print(String.format("%.4f", this.seconds / 3600.0));
@@ -318,7 +318,7 @@ public class Theory6 extends Theory {
     public void display() {
         //System.out.println(this.rho + "\t" + this.q + "\t" + this.r + "\t" + this.tickNumber);
         double duration = this.seconds;
-        int day = (int) Math.floor(this.seconds / 60.0 / 60.0 / 24.0);
+        int day = (int) Math.floor(this.seconds / 60.0 / 60.0);
         duration = duration - day * 60 * 60 * 24;
         int hour = (int) Math.floor(duration / 60.0 / 60.0);
         duration = duration - hour * 60 * 60;

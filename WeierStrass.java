@@ -49,18 +49,8 @@ public class WeierStrass extends Theory {
 
         this.updateEquation(); // theory equation related updates.
 
-        this.seconds += this.tickFrequency;
-        this.tickCount += 1;
-
-        if (this.rho > this.maxRho) {
-            this.maxRho = this.rho;
-        }
-        if ((this.maxRho - this.publicationMark) / (this.seconds / 3600.0) > this.maxTauPerHour) {
-            this.maxTauPerHour = (this.maxRho - this.publicationMark) / (this.seconds / 3600.0);
-            this.bestPubMulti = this.publicationMultiplier;
-            this.bestPubTime = this.seconds / 3600.0;
-            this.bestTauGain = this.maxRho - this.publicationMark;
-        }
+        super.moveTick();
+        
         this.publicationMultiplier = Math.pow(10, 0.15 * (this.maxRho - this.publicationMark));
 
     }
@@ -246,33 +236,47 @@ public class WeierStrass extends Theory {
      */
     public void adjustWeightings(int i) {
         if (this.publicationMultiplier > 0.01) {
-            this.tickFrequency = 0.1;
+            this.tickFrequency = 1.0;
         }
 
         if (this.variables[i].isActive == 1) {
 
-            if (this.strategy.name == "WSPlay2") {
+            if (this.strategy.name == "WSPlay") {
 
                 this.variableWeights[0] = 11;
                 this.variableWeights[0] = 10.85 + (0.028 * (this.variables[i].level % 10) - 0.16);
                 this.variableWeights[1] = 10.0;
-                this.variableWeights[2] = 9.75;
+                this.variableWeights[2] = 9.70;
                 this.variableWeights[3] = 15;
                 this.variableWeights[4] = 10.0;
 
-            } else if (this.strategy.name == "WSPlay") {
+            } else if (this.strategy.name == "WSPlay2") {
                 this.variableWeights[0] = 11;
-                this.variableWeights[0] = 10.8 + (0.030 * (this.variables[i].level % 10) - 0.14);
-                this.variableWeights[1] = 9.9;
+                this.variableWeights[0] = 10.85 + (0.028 * (this.variables[i].level % 10) - 0.16);
+                this.variableWeights[1] = 10.0;
                 this.variableWeights[2] = 9.70;
-                this.variableWeights[3] = 13;
-                this.variableWeights[4] = 9.9;
+                this.variableWeights[3] = 15;
+                this.variableWeights[4] = 10.0;
+
+
+                this.variableWeights[0] = 11;
+                this.variableWeights[0] = 10.85 + (0.028 * (this.variables[i].level % 10) - 0.16);
+                this.variableWeights[1] = 10.0;
+                this.variableWeights[2] = 9.70;
+                this.variableWeights[3] = 15;
+                this.variableWeights[4] = 10.0;
+
+                if(this.publicationMultiplier > 5) {
+                    this.variableWeights[2] = 9.75;
+                }
+
+
 
             } else if (this.strategy.name == "WSPd") {
                 this.variableWeights[0] = 11.0;
                 this.variableWeights[1] = 10.0;
                 this.variableWeights[2] = 10.0;
-                this.variableWeights[3] = 13.0;
+                this.variableWeights[3] = 11.0;
                 this.variableWeights[4] = 10.0;
             } else if (this.strategy.name == "WSPStC1") {
                 this.variableWeights[0] = 10.0;
@@ -288,7 +292,7 @@ public class WeierStrass extends Theory {
                 this.variableWeights[4] = 10.0;
             }
 
-            if (this.publicationMultiplier > 35.0) {
+            if (this.publicationMultiplier > 15.0) {
                 for (int j = 0; j < this.variables.length; j++) {
                     this.variables[j].deactivate(); // autobuy for the variable off.
                     this.isCoasting = true;
@@ -331,27 +335,10 @@ public class WeierStrass extends Theory {
         System.out.println("");
     }
 
-    public Summary getSummary() {
-        if (this.strategy.type == "active") {
-            Summary summary = new Summary(this.tauPerHourActive,
-                    this.pubMultiActive,
-                    this.strategyActive,
-                    this.pubTimeActive,
-                    this.tauGainActive);
-            return summary;
-        } else {
-            Summary summary = new Summary(this.tauPerHourIdle,
-                    this.pubMultiIdle,
-                    this.strategyIdle,
-                    this.pubTimeIdle,
-                    this.tauGainIdle);
-            return summary;
-        }
 
-    }
 
     public void printSummary() {
-        System.out.print(String.format("%.4f",
+        System.out.print(String.format("%.5f",
                 this.maxTauPerHour));
         System.out.print("\t\t" + String.format("%.4f", this.bestPubMulti) + "\t\t\t");
         System.out.print(String.format("%s", this.strategy.name) + "\t\t\t");
