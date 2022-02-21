@@ -15,7 +15,7 @@ public class StrategyTest {
         t1.variables[3].deactivate();
 
         while (t1.publicationMultiplier < 15000.0) {
-            t1.runStrategyAILoop(15000.0);
+            t1.runEpoch();
         }
         System.out.println(t1.totalMultiplier);
     }
@@ -28,7 +28,7 @@ public class StrategyTest {
         double start = System.currentTimeMillis();
         // best is 163.357 at pub multi 1485.8
         while (t2.publicationMultiplier < 15000.0) {
-            t2.runStrategyAILoop(15000.0);
+            t2.runEpoch();
         }
         double finish = System.currentTimeMillis();
         System.out.println("elapsed time: " + String.format("%.3f", (finish - start) / 1000.0) + " seconds.");
@@ -44,7 +44,7 @@ public class StrategyTest {
         t3.variables[6].deactivate();
 
         while (t3.publicationMultiplier < 15000.0) {
-            t3.runStrategyAILoop(15000.0);
+            t3.runEpoch();
         }
     }
 

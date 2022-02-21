@@ -11,13 +11,15 @@ public class Theory4 extends Theory {
     public double qdot;
     public double q;
 
-    public double tauPerHour;
+    //public double tauPerHour;
 
     public boolean isCoasting;
     public int  q2check = 0;
     public int counter = 0; 
 
-    public double tickFrequency; // second per tick
+    public double coastingPub = 6.5;
+
+    
 
     public double[] variableWeights = { 1000, 1000, 10, 10, 10, 10, 10.0, 10.2 };
     // public double[] variableWeights = {10,10,10,10,10,10,11,10};
@@ -28,7 +30,7 @@ public class Theory4 extends Theory {
         super(4, pubMark);
         this.name = "Polynomials";
 
-        this.tickFrequency = 0.1; // seconds per tick
+        
 
         this.seconds = 0;
         this.tickCount = 0;
@@ -37,6 +39,7 @@ public class Theory4 extends Theory {
         this.q = 0;
         this.qdot = Double.MAX_VALUE;
         this.isCoasting = false;
+    
         
 
         this.variables = new Variable[8];
@@ -156,13 +159,17 @@ public class Theory4 extends Theory {
         // If not coasting, waits and buys the recommended variable. If is coasting,
         // then just wait until
         // ready to publish.
+        int counter = 0;
         if (!isCoasting) {
+            
             this.idleUntil(this, this.variables[bestVarIndex].nextCost);
             this.buyVariable(bestVarIndex);
             
 
         } else {// is coasting, stop buying any variable.
 
+            
+        
             this.coastUntilPublish();
 
             // this.printSummary();
@@ -183,7 +190,7 @@ public class Theory4 extends Theory {
             if (this.variables[i].isActive == 1) {
                 // Time spent in the initial recovery stage is negligible. Prevents
                 // initialisation errors.
-                while (this.variables[i].cost < this.publicationMark * 0.9) {
+                while (this.variables[i].cost < this.publicationMark * 0.95) {
                     this.variables[i].level += 1;
                     this.variables[i].update();
 
@@ -232,6 +239,45 @@ public class Theory4 extends Theory {
                 this.variables[5].deactivate();
                 this.variableWeights[6] = 11.0;
                 this.variableWeights[7] = 10.0;
+            } else if(this.strategy.name == "T4SolC") {
+                this.variables[0].deactivate();
+                this.variables[1].deactivate();
+                this.variableWeights[2] = 10.0;
+                this.variables[3].deactivate();
+                this.variables[4].deactivate();
+                this.variables[5].deactivate();
+                this.variableWeights[6] = 11.0;
+                this.variableWeights[7] = 10.0;
+
+                if (this.publicationMultiplier > 3.0) {
+                    this.variables[6].deactivate();
+
+                }
+                if (this.publicationMultiplier > 3.0) {
+                    this.variables[7].deactivate();
+                }
+
+                
+                //
+                if (this.publicationMultiplier < 1) {
+                    this.variableWeights[7] = 10.20;
+                    this.variableWeights[6] = 11.1 + (0.028 * (this.variables[i].level % 10) - 0.12);
+                } else {
+                    this.variableWeights[7] = 10.20;
+                    this.variableWeights[6] = 11.10 + (0.028 * (this.variables[i].level % 10) - 0.12);
+                }
+
+                this.variableWeights[7] = 10.00;
+
+                double q2Offset = 1.0 + Math.pow(this.publicationMultiplier, 0.5);
+
+                if(this.publicationMultiplier < 1) {
+                    q2Offset = 1.0;
+                }
+
+                q2Offset = Math.log10(q2Offset);
+                this.variableWeights[7] = 10.00 + q2Offset;
+            
             } else if(this.strategy.name == "T4Sol2") {
                 this.variables[0].deactivate();
                 this.variables[1].deactivate();
@@ -347,7 +393,7 @@ public class Theory4 extends Theory {
                 this.variableWeights[7] = 10.0;
             }
 
-            if (this.publicationMultiplier > 6.65) {
+            if (this.publicationMultiplier > this.coastingPub) {
                 for (int j = 0; j < this.variables.length; j++) {
                     this.variables[j].deactivate(); // autobuy for the variable off.
                     this.isCoasting = true;
@@ -365,16 +411,7 @@ public class Theory4 extends Theory {
         }
     }
 
-    public void coastUntilPublish() {
-        double tauRate = 60 * 60 * Math.log(this.publicationMultiplier) / Math.log(10) / 0.165 / this.seconds;
-        while (this.tauPerHour <= tauRate) {
-
-            this.tauPerHour = tauRate;
-            this.moveTick();
-            tauRate = 60 * 60 * Math.log(this.publicationMultiplier) / Math.log(10) / 0.165 / this.seconds;
-
-        }
-    }
+    
 
     @Override
     public void display() {
@@ -404,15 +441,6 @@ public class Theory4 extends Theory {
         // System.out.println(Arrays.toString(this.variableWeights));
     }
 
-    public void printSummary() {
-        System.out.print(String.format("%.5f",
-                this.maxTauPerHour));
-        System.out.print("\t\t" + String.format("%.4f", this.bestPubMulti) + "\t\t\t");
-        System.out.print(String.format("%s", this.strategy.name) + "\t\t\t");
-        System.out.print(String.format("%.4f", this.bestPubTime));
-        System.out.print("\t\t" + String.format("%.4f", this.bestTauGain));
-        System.out.println("");
-
-    }
+   
 
 }

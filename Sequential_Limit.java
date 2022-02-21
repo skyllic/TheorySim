@@ -22,9 +22,10 @@ public class Sequential_Limit extends Theory {
 
     
 
-    public double tauPerHour;
 
     public boolean isCoasting;
+
+    public double coastingPub = 9.5;
 
     
 
@@ -66,20 +67,15 @@ public class Sequential_Limit extends Theory {
     public void moveTick() {
 
         this.updateEquation();
+        
+        super.moveTick();
+        this.rho = this.rho1;
     
-
-        this.seconds += this.tickFrequency;
-        this.tickCount += 1;
 
         if (this.rho1 > this.maxRho) {
             this.maxRho = this.rho1;
         }
-        if ((this.maxRho - this.publicationMark) / (this.seconds / 3600.0) > this.maxTauPerHour) {
-            this.maxTauPerHour = (this.maxRho - this.publicationMark) / (this.seconds / 3600.0);
-            this.bestPubMulti = this.publicationMultiplier;
-            this.bestPubTime = this.seconds / 3600.0;
-            this.bestTauGain = this.maxRho - this.publicationMark;
-        }
+       
         this.publicationMultiplier = Math.pow(10, 0.15 * (this.maxRho - this.publicationMark));
 
     }
@@ -131,16 +127,15 @@ public class Sequential_Limit extends Theory {
      */
     @Override
     public void buyVariable(int variableNumber) {
+       
         double variableCost = this.variables[variableNumber].nextCost;
-        if (this.rho1 >= variableCost) {
+        if(this.rho1 >= variableCost) {
             this.variables[variableNumber].level += 1;
             this.variables[variableNumber].update();
             this.rho1 = Variable.subtract(this.rho1, variableCost);
-
-            // System.out.println(this.getIntegral() + "\t" + this.c);
-
+            this.rho = this.rho1;
         } else {
-            // too poor to buy stuff feelsbadman
+            //too poor to buy stuff feelsbadman
         }
 
     }
@@ -232,10 +227,10 @@ public class Sequential_Limit extends Theory {
 
         double a1Penalty = 0;
         double a2Penalty = 0;
+        
 
         if (this.variables[i].isActive == 1) {
-
-            if (this.strategy.name == "SLPlay") {
+            if (this.strategy.name == "SLPlay2") {
 
                 if (this.publicationMultiplier > 0.1) {
                     a1Penalty = 0.00;
@@ -289,7 +284,67 @@ public class Sequential_Limit extends Theory {
 
                 }
 
-                if (this.publicationMultiplier > 7.5) {
+                if (this.publicationMultiplier > 15.5) {
+                    this.variables[2].deactivate();
+                    this.variables[3].deactivate();
+                }
+            }
+
+            else if (this.strategy.name == "SLPlay") {
+
+                if (this.publicationMultiplier > 0.1) {
+                    a1Penalty = 0.00;
+                    a2Penalty = 0.00;
+
+                }
+
+                if (this.publicationMultiplier > 1) {
+                    a1Penalty = 0.00;
+                    a2Penalty = 0.00;
+
+                }
+                if (this.publicationMultiplier > 2) {
+                    a1Penalty = 0.00;
+                    a2Penalty = 0.00;
+
+                }
+                if (this.publicationMultiplier > 3) {
+                    a1Penalty = 0.00;
+                    a2Penalty = 0.00;
+
+                }
+
+                if (this.variables[0].level % 3 == 0) {
+                    // strongest
+                    this.variableWeights[0] = 10.05 + a1Penalty;
+                } else if (this.variables[0].level % 3 == 1) {
+                    this.variableWeights[0] = 10.10 + a1Penalty;
+                } else if (this.variables[0].level % 3 == 2) {
+                    // weakest
+                    this.variableWeights[0] = 10.35 + a1Penalty;
+                }
+                this.variableWeights[1] = 9.95 + a2Penalty;
+
+                if (this.variables[2].level % 4 == 0) {
+                    // strongest
+                    this.variableWeights[2] = 9.90;
+                } else if (this.variables[2].level % 4 == 1) {
+                    this.variableWeights[2] = 10.10;
+                } else if (this.variables[2].level % 4 == 2) {
+                    this.variableWeights[2] = 10.25;
+                } else if (this.variables[2].level % 4 == 3) {
+                    // weakest
+                    this.variableWeights[2] = 10.40;
+                }
+                this.variableWeights[3] = 10.00;
+
+                if (this.publicationMultiplier > 15.5) {
+                    this.variables[0].deactivate();
+                    this.variables[1].deactivate();
+
+                }
+
+                if (this.publicationMultiplier > 15.5) {
                     this.variables[2].deactivate();
                     this.variables[3].deactivate();
                 }
@@ -313,10 +368,11 @@ public class Sequential_Limit extends Theory {
             }
 
         }
-        if (this.publicationMultiplier > 7.5) {
+        if (this.publicationMultiplier > this.coastingPub) {
             for (int j = 0; j < this.variables.length; j++) {
                 this.variables[j].deactivate(); // autobuy for the variable off.
                 this.isCoasting = true;
+                //System.out.println(this.variables[j].level);
             }
         }
 
@@ -329,16 +385,6 @@ public class Sequential_Limit extends Theory {
         }
     }
 
-    public void coastUntilPublish() {
-        double tauRate = 60 * 60 * Math.log(this.publicationMultiplier) / Math.log(10) / 0.15 / this.seconds;
-        while (this.tauPerHour <= tauRate) {
-
-            this.tauPerHour = tauRate;
-            this.moveTick();
-            tauRate = 60 * 60 * Math.log(this.publicationMultiplier) / Math.log(10) / 0.15 / this.seconds;
-
-        }
-    }
 
     @Override
     public void display() {

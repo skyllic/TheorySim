@@ -25,14 +25,14 @@ public class Theory3 extends Theory {
     public double term32;
     public double term33;
 
-    public String strategyType = "AI";
-    public String name = "Linear Algebra";
+    public String strategyType = "active";
+    public double coastingPub = 2.3;
 
 
     public boolean isCoasting;
-    public double tauPerHour;
+    
 
-    public double tickFrequency; //second per tick
+    
 
     //public double[] variableWeights = {1000,1000,10,10,10,10,11.1,10.20};
     public double[] variableWeights = {11.0, 11.0, 11.0, 
@@ -47,7 +47,7 @@ public class Theory3 extends Theory {
     public Theory3(double pubMark) {
         super(3, pubMark);
 
-        this.tickFrequency = 0.1; // seconds per tick
+        this.name = "Linear Algebra";
        
     
 
@@ -90,9 +90,10 @@ public class Theory3 extends Theory {
     public void moveTick() {
 
         this.updateEquation();
+        this.rho = this.rho1;
+        
 
-        this.seconds += this.tickFrequency;
-        this.tickCount += 1;
+        super.moveTick();
 
         if(this.rho1 > this.maxRho) {
             this.maxRho = this.rho1;
@@ -123,11 +124,6 @@ public class Theory3 extends Theory {
         this.rho1 = Variable.add(this.rho1, this.rho1dot);
         this.rho2 = Variable.add(this.rho2, this.rho2dot);
         this.rho3 = Variable.add(this.rho3, this.rho3dot);
-        
-
-
-       
-
       
     }
 
@@ -168,7 +164,7 @@ public class Theory3 extends Theory {
 
     
 
-    public void runStrategyAILoop(double pubMulti) {
+    public void runEpoch() {
         for(int i = 0; i < this.variables.length; i++) {
             this.variables[i].update();
         }
@@ -192,9 +188,9 @@ public class Theory3 extends Theory {
             } else {//is coasting, stop buying any variable.
                 
                 this.coastUntilPublish();
-                this.printSummary();
+                
 
-                this.publicationMultiplier = 500000000.0;
+                this.finishCoasting = true;
                 return;
             }
         }
@@ -298,21 +294,22 @@ public class Theory3 extends Theory {
             100, 10.5, 10.1, 
             10, 10.1, 11.1*/
 
-            if(this.strategyType != "idle"){
+            if(this.strategy.name == "T3Play2"){
     
             if(this.variables[i].isActive == 1) {
                 this.variableWeights[0] = 10.9 + (0.028*(this.variables[i].level % 10) - 0.14);
                 this.variableWeights[1] = 10.80 + (0.028*(this.variables[i].level % 10) - 0.14);
                 this.variableWeights[2] = 11.00 + (0.028*(this.variables[i].level % 10) - 0.14);
 
+                
+                
+                this.variableWeights[7] = 10.5; //c22 8x
+                this.variableWeights[10] = 10.1; //c32 auto
+
 
                 //Sandbag on c12 since we don't need to buy them yet.
                 if(this.publicationMultiplier < 1.0) {
                     this.variableWeights[4] = 12.1;
-                } else if(this.publicationMultiplier < 1.5) {
-                    this.variableWeights[4] = 10.1;
-                } else if(this.publicationMultiplier < 2) {
-                    this.variableWeights[4] = 10.1;
                 } else {
                     this.variableWeights[4] = 10.1;
                 }
@@ -330,26 +327,39 @@ public class Theory3 extends Theory {
                 
                }
                if(this.publicationMultiplier > 1.0) {
+
+
+                    this.variableWeights[1] = 11.0; // b2 8x
+                    this.variableWeights[4] = 10.1;//c12 autobuy
+                    this.variableWeights[7] = 11.0; //c22 8x
+                    this.variableWeights[10] = 11.0; //c32 8x
+
+
                     this.variableWeights[11] = 120.0;//After c12 autobuy, c33 off.
-                    this.variableWeights[7] = 12.8;
-                    this.variableWeights[10] = 12.8;
-                    this.variableWeights[8] = 10.1;
+
+                   
                }
                if(this.publicationMultiplier > 2.0) {
-                   this.variableWeights[4] = 10.1;//c12 is important
-                   this.variableWeights[7] = 11.5;//c22 becomes bad
-                   this.variableWeights[10] = 11.5;//c32 becomes bad
-                   this.variableWeights[1] = 10.1; // b2
+                
+                
 
-                   this.variableWeights[2] = 10.0;//b3 autobuy as c23 is bad
-                   this.variableWeights[8] = 10.0;//c23
+                   this.variableWeights[1] = 10.1; // b2 autobuy
+                   this.variableWeights[4] = 10.1;//c12 autobuy
+                   this.variableWeights[7] = 13.1; //c22 OFF
+                   this.variableWeights[10] = 13.1; //c32 OFF
+
+                   this.variableWeights[2] = 10.1;//b3 autobuy as c23 is bad
+                   this.variableWeights[8] = 10.1;//c23
                    
                }
               
-               if(this.publicationMultiplier > 2.3) {
+               if(this.publicationMultiplier > this.coastingPub) {
                     /**for(int j = 0; j < this.variables.length; j++) {
                         this.variables[j].deactivate();
                     }*/
+
+                    this.variables[7].deactivate();
+                    this.variables[10].deactivate();
                     
                     this.isCoasting = true;
                    
@@ -405,19 +415,6 @@ public class Theory3 extends Theory {
         return varTypeBreak;
     }
 
-
-    public void coastUntilPublish() {
-        double tauRate = 60*60*Math.log(this.publicationMultiplier) / Math.log(10) / 0.147 / this.seconds;
-        while(this.tauPerHour <= tauRate) {
-            
-            this.tauPerHour = tauRate;
-            this.moveTick();
-            tauRate = 60*60*Math.log(this.publicationMultiplier) / Math.log(10) / 0.147 / this.seconds;
-            
-        }
-    }
-
-
     
     
     @Override
@@ -455,17 +452,6 @@ public class Theory3 extends Theory {
         //System.out.println(Arrays.toString(this.variableWeights));
     }
 
-    public void printSummary() {
-        System.out.println(this.name + " at e" + String.format("%.0f", this.publicationMark) + " rho with " + Theory.studentNumber + " students");
-        System.out.print("Tau/hr\t" + "PubMulti\t" + "Strategy\t" + "PubTime\t" + "TauGain\n");
-        System.out.print(String.format("%.4f", 60*60*Math.log(this.publicationMultiplier) / Math.log(10) / 0.147 / this.seconds));
-        System.out.print("\t" + String.format("%.4f", this.publicationMultiplier) + "\t");
-        System.out.print("\tT3Play2\t\t");
-        System.out.print(String.format("%.4f", this.seconds / 3600.0));
-        System.out.print("\t" + String.format("%.4f", this.maxRho - this.publicationMark));
-        System.out.println("\n");
-
-    }
 
 
 }

@@ -9,22 +9,21 @@ public class Theory1 extends Theory {
 
 
 
-    public double rho;
-   
-    public double rhodot;
+
+  
    
 
-
+    public double coastingPub = 6;
 
  
     
    
 
-    public String name  = "Recurrence Relations";
+    
     public boolean isCoasting;
-    public double tauPerHour;
+    
 
-    public double tickFrequency; //second per tick
+  
 
     //public double[] variableWeights = {1000,1000,10,10,10,10,11.1,10.20};
     public double[] variableWeights = {11, 10, 10, 10, 10, 10};
@@ -35,7 +34,7 @@ public class Theory1 extends Theory {
     public Theory1(double pubMark) {
         super(1, pubMark);
 
-        this.tickFrequency = 0.1; // seconds per tick
+        this.name = "Recurrence Relations";
        
 
 
@@ -68,12 +67,9 @@ public class Theory1 extends Theory {
 
         this.updateEquation();
 
-        this.seconds += this.tickFrequency;
-        this.tickCount += 1;
+        super.moveTick();
 
-        if(this.rho > this.maxRho) {
-            this.maxRho = this.rho;
-        }
+    
         this.publicationMultiplier = Math.pow(10, 0.164 * (this.maxRho-this.publicationMark));
        
     }
@@ -133,7 +129,7 @@ public class Theory1 extends Theory {
 
     
 
-    public void runStrategyAILoop(double pubMulti) {
+    public void runEpoch() {
         for(int i = 0; i < this.variables.length; i++) {
             this.variables[i].update();
         }
@@ -145,14 +141,13 @@ public class Theory1 extends Theory {
                 double buyDelay = this.calculateBuyDelay(bestVarIndex);
                 this.idleUntil(this, this.variables[bestVarIndex].nextCost + buyDelay);
                 this.buyVariable(bestVarIndex);
-                this.display();
+                
                 
             } else {//is coasting, stop buying any variable.
                 //this.idleUntil(this, this.publicationMark + Math.log(2.5) / Math.log(10) / 0.152);
                 this.coastUntilPublish();
                 //this.display();
-                this.printSummary();
-                this.publicationMultiplier = 500000000.0;
+                this.finishCoasting = true;
                 return;
             }
         }
@@ -320,16 +315,7 @@ public class Theory1 extends Theory {
         }
     }
 
-    public void coastUntilPublish() {
-        double tauRate = 60*60*Math.log(this.publicationMultiplier) / Math.log(10) / 0.164 / this.seconds;
-        while(this.tauPerHour <= tauRate) {
-            
-            this.tauPerHour = tauRate;
-            this.moveTick();
-            tauRate = 60*60*Math.log(this.publicationMultiplier) / Math.log(10) / 0.164 / this.seconds;
-            
-        }
-    }
+  
     
     @Override
     public void display() {
@@ -347,17 +333,7 @@ public class Theory1 extends Theory {
         //System.out.println(Arrays.toString(this.variableWeights));
     }
 
-    public void printSummary() {
-        System.out.println(this.name + " at e" + String.format("%.0f", this.publicationMark) + " rho with " + Theory.studentNumber + " students");
-        System.out.print("Tau/d\t" + "PubMulti\t" + "Strategy\t" + "PubTime\t" + "TauGain\n");
-        System.out.print(String.format("%.4f", 60*60*Math.log(this.publicationMultiplier) / Math.log(10) / 0.164 / this.seconds * 24));
-        System.out.print("\t" + String.format("%.4f", this.publicationMultiplier) + "\t");
-        System.out.print("\tT1Play\t\t");
-        System.out.print(String.format("%.4f", this.seconds / 3600.0));
-        System.out.print("\t" + String.format("%.4f", this.maxRho - this.publicationMark));
-        System.out.println("\n");
 
-    }
 
 
 

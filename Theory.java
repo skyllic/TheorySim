@@ -34,6 +34,7 @@ public class Theory implements Simmable {
     public double bestPubMulti;
     public double bestPubTime;
     public double bestTauGain;
+    public double bestCoastStart;
     public double bestCoastingNumber = 0;
     public int activeFrequency = 10;
 
@@ -60,6 +61,9 @@ public class Theory implements Simmable {
 
     public Strategy strategy;
 
+    public double coastStart = 0;
+    public double pubCoefficient;
+
     /**
      * 
      * @param theoryNumber - theory number to generate. Default theories are 1-8. First CT is theory 10. 
@@ -80,33 +84,43 @@ public class Theory implements Simmable {
        if(Theory.theoryNumber == 1) {
             this.totalMultiplier = Theory.research9Level * (Math.log10(Theory.studentNumber) - Math.log10(20)) 
             + 0.164 * this.publicationMark - Math.log10(3);
+            this.pubCoefficient = 0.164;
         } else if(Theory.theoryNumber == 2){
             this.totalMultiplier = Theory.research9Level * (Math.log10(Theory.studentNumber) - Math.log10(20)) 
                 + 0.198 * this.publicationMark - Math.log10(100);
+                this.pubCoefficient = 0.198;
         } else if(Theory.theoryNumber == 3) {
             this.totalMultiplier = Theory.research9Level * (Math.log10(Theory.studentNumber) - Math.log10(20)) 
                 + 0.147 * this.publicationMark + Math.log10(3);
+                this.pubCoefficient = 0.147;
         } else if(Theory.theoryNumber == 4) {
             this.totalMultiplier = Theory.research9Level * (Math.log10(Theory.studentNumber) - Math.log10(20)) 
                 + 0.165 * this.publicationMark - Math.log10(4);
+                this.pubCoefficient = 0.165;
         } else if(Theory.theoryNumber == 5) {
             this.totalMultiplier = Theory.research9Level * (Math.log10(Theory.studentNumber) - Math.log10(20)) 
                 + 0.159 * this.publicationMark;
+                this.pubCoefficient = 0.159;
         } else if(Theory.theoryNumber == 6) {
            this.totalMultiplier = Theory.research9Level * (Math.log10(Theory.studentNumber) - Math.log10(20)) 
             + 0.196 * this.publicationMark - Math.log10(50);
+            this.pubCoefficient = 0.196;
         } else if(Theory.theoryNumber == 7) {
             this.totalMultiplier = Theory.research9Level * (Math.log10(Theory.studentNumber) - Math.log10(20)) 
                 + 0.152 * this.publicationMark;
+                this.pubCoefficient = 0.152;
         } else if(Theory.theoryNumber == 8) {
             this.totalMultiplier = Theory.research9Level * (Math.log10(Theory.studentNumber) - Math.log10(20)) 
                 + 0.15 * this.publicationMark;
+                this.pubCoefficient = 0.15;
         }
         else if(Theory.theoryNumber == 10) {
             this.totalMultiplier = 0.15 * this.publicationMark;
+            this.pubCoefficient = 0.15;
         }
         else if(Theory.theoryNumber == 11) {
             this.totalMultiplier = 0.15 * this.publicationMark;
+            this.pubCoefficient = 0.15;
         }
        else {
            this.totalMultiplier = 1; 
@@ -140,17 +154,23 @@ public class Theory implements Simmable {
     /**Intended to be overridden by corresponding theory. */
     
     public void moveTick() {
+
+        
         this.seconds += this.tickFrequency;
         this.tickCount += 1;
 
         if (this.rho > this.maxRho) {
             this.maxRho = this.rho;
         }
+        if(this.coastStart > this.bestPubMulti) {
+            this.coastStart = this.bestPubMulti;
+        }
         if ((this.maxRho - this.publicationMark) / (this.seconds / 3600.0) > this.maxTauPerHour) {
             this.maxTauPerHour = (this.maxRho - this.publicationMark) / (this.seconds / 3600.0);
             this.bestPubMulti = this.publicationMultiplier;
             this.bestPubTime = this.seconds / 3600.0;
             this.bestTauGain = this.maxRho - this.publicationMark;
+            
         }    
     }
 
@@ -233,11 +253,33 @@ public class Theory implements Simmable {
         
         this.buyVariable(leastExpensiveVariableIndex);
     }
+
+    public void coastUntilPublish() {
+        if(this.coastStart == 0) {
+            this.coastStart = this.publicationMultiplier;
+        }
+        
+        while(this.rho < this.maxRho) {
+            this.moveTick();
+        }
+        this.tauPerHour = 60 * 60 * Math.log(this.publicationMultiplier) / Math.log(10) / this.pubCoefficient / this.seconds;
+        this.moveTick();
+        double tauRate = 60 * 60 * Math.log(this.publicationMultiplier) / Math.log(10) / this.pubCoefficient / this.seconds;
+        while (this.tauPerHour <= tauRate) {
+            
+            this.tauPerHour = tauRate;
+            this.moveTick();
+            tauRate = 60 * 60 * Math.log(this.publicationMultiplier) / Math.log(10) / this.pubCoefficient / this.seconds;
+
+        }
+        int j = 0;
+    }
     
     public void printSummaryHeader() {
         System.out.println(this.name + " at e" + String.format("%.1f", this.publicationMark) + " rho" + 
             ", " + Theory.studentNumber + " students" );
-        System.out.print("Tau/hr\t\t" + "PubMulti\t\t" + "Strategy\t\t" + "PubTime\t\t" + "TauGain\n");
+        System.out.print("Tau/hr\t\t" + "PubMulti\t\t" + "Strategy\t\t" + "PubTime\t\t" + "TauGain\t\t"
+        + "CoastM\n");
     }
 
     public void printSummary() {
@@ -247,6 +289,7 @@ public class Theory implements Simmable {
         System.out.print(String.format("%s", this.strategy.name) + "\t\t\t");
         System.out.print(String.format("%.4f", this.bestPubTime));
         System.out.print("\t\t" + String.format("%.4f", this.bestTauGain));
+        System.out.print("\t\t" + String.format("%.4f", this.coastStart));
         System.out.println("");
 
     }
@@ -258,14 +301,15 @@ public class Theory implements Simmable {
         System.out.print(String.format("%s", summary.strategy) + "\t\t\t");
         System.out.print(String.format("%.4f", summary.pubTime));
         System.out.print("\t\t" + String.format("%.4f", summary.tauGain));
-        System.out.print("\t\t" + String.format("%.1f", this.publicationMark));
+        System.out.print("\t\t" + String.format("%.4f", summary.coastStart));
+        //System.out.print("\t\t" + String.format("%.1f", this.publicationMark));
         System.out.println("");
 
     }
 
     public Summary getSummary() {
         Summary summary = new Summary(this.maxTauPerHour, this.bestPubMulti, this.strategy.name,
-         this.bestPubTime, this.bestTauGain);
+         this.bestPubTime, this.bestTauGain, this.coastStart);
 
          return summary;
     }

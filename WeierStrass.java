@@ -13,6 +13,8 @@ public class WeierStrass extends Theory {
     public double qdot;
     public double chi;
     public double product; // Sn(chi) product as shown in the equation in game.
+    public double coastingPub = 8.5;
+    public boolean isCoasting;
 
     // Miscellaneous variables
 
@@ -26,6 +28,7 @@ public class WeierStrass extends Theory {
         this.chi = 0;
         this.variables = new Variable[5];
         this.strategy = new Strategy("", "");
+        this.isCoasting = false;
 
         // Order of variable is q1, q2, n, c1, c2 (same as in game when read top to
         // bottom).
@@ -129,11 +132,11 @@ public class WeierStrass extends Theory {
         double variableCost = this.variables[variableNumber].nextCost;
         super.buyVariable(variableNumber); // default behaviour.
 
-        if (this.rho >= variableCost) {
+        
             // Re-calculates chi and Sn(chi).
             this.chi = this.calculateChi();
             this.product = this.calculateSn();
-        }
+        
     }
 
     /**
@@ -249,6 +252,9 @@ public class WeierStrass extends Theory {
                 this.variableWeights[2] = 9.70;
                 this.variableWeights[3] = 15;
                 this.variableWeights[4] = 10.0;
+                if(this.publicationMultiplier > 0.1) {
+                    this.variables[3].deactivate();
+                }
 
             } else if (this.strategy.name == "WSPlay2") {
                 this.variableWeights[0] = 11;
@@ -292,13 +298,14 @@ public class WeierStrass extends Theory {
                 this.variableWeights[4] = 10.0;
             }
 
-            if (this.publicationMultiplier > 15.0) {
-                for (int j = 0; j < this.variables.length; j++) {
-                    this.variables[j].deactivate(); // autobuy for the variable off.
-                    this.isCoasting = true;
-                }
-            }
 
+        }
+        if (this.publicationMultiplier > this.coastingPub) {
+            for (int j = 0; j < this.variables.length; j++) {
+                this.variables[j].deactivate(); // autobuy for the variable off.
+                this.isCoasting = true;
+                //System.out.println(this.variables[j].level + "\t" + this.coastStart);
+            }
         }
 
     }
@@ -310,16 +317,7 @@ public class WeierStrass extends Theory {
         }
     }
 
-    public void coastUntilPublish() {
-        double tauRate = 60 * 60 * Math.log(this.publicationMultiplier) / Math.log(10) / 0.15 / this.seconds;
-        while (this.tauPerHour <= tauRate) {
-
-            this.tauPerHour = tauRate;
-            this.moveTick();
-            tauRate = 60 * 60 * Math.log(this.publicationMultiplier) / Math.log(10) / 0.15 / this.seconds;
-
-        }
-    }
+  
 
     @Override
     public void display() {
@@ -337,15 +335,5 @@ public class WeierStrass extends Theory {
 
 
 
-    public void printSummary() {
-        System.out.print(String.format("%.5f",
-                this.maxTauPerHour));
-        System.out.print("\t\t" + String.format("%.4f", this.bestPubMulti) + "\t\t\t");
-        System.out.print(String.format("%s", this.strategy.name) + "\t\t\t");
-        System.out.print(String.format("%.4f", this.bestPubTime));
-        System.out.print("\t\t" + String.format("%.4f", this.bestTauGain));
-        System.out.println("");
-
-    }
 
 }
