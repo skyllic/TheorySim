@@ -122,7 +122,7 @@ public class StrategyTest {
         t6.variables[7].deactivate();
 
         while (t6.publicationMultiplier < 20.0) {
-            t6.runStrategyAILoop(15000.0);
+            t6.runEpoch();
         }
     }
 

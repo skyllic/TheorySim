@@ -10,10 +10,10 @@ public class TheoryRunner {
 
     public static void main(String[] args) {
 
-        runDetailedSim(300, 10, 984 + Math.log10(1), true);
+        runDetailedSim(300, 6, 1148 + Math.log10(1), true);
         // runIndividualSim(300, 10, 764 + Math.log10(1));
 
-         //findBestStrats(300, 10, 1000, 3000, 100);
+        // findBestStrats(300, 10, 1000, 3000, 100);
         // findBestStrats(300, 10, 400, 1000, 1);
         // runDetailedSim(300, 10, 870 + Math.log10(1));
         // runDetailedSim(300, 4, 757 + Math.log10(1));
@@ -89,11 +89,11 @@ public class TheoryRunner {
 
         Theory.studentNumber = studentNumber;
 
-        if(theoryNumber == 1) {
+        if (theoryNumber == 1) {
             strategies.add(new Strategy("T1Play", "active"));
 
             Theory1 t1 = new Theory1(pubMark);
-            
+
             double bestPubMulti = 0;
             Summary summary = new Summary();
             for (Strategy strategy : strategies) {
@@ -122,12 +122,11 @@ public class TheoryRunner {
                 t1.printSummary(summary);
 
             }
-        }
-        else if (theoryNumber == 2) {
+        } else if (theoryNumber == 2) {
             strategies.add(new Strategy("T2Coast", "idle"));
 
             Theory2 t2 = new Theory2(pubMark);
-            
+
             double bestPubMulti = 0;
             Summary summary = new Summary();
             for (Strategy strategy : strategies) {
@@ -156,12 +155,11 @@ public class TheoryRunner {
                 t2.printSummary(summary);
 
             }
-        }
-        else if(theoryNumber == 3) {
+        } else if (theoryNumber == 3) {
             strategies.add(new Strategy("T3Play2", "active"));
 
             Theory3 t3 = new Theory3(pubMark);
-            
+
             double bestPubMulti = 0;
             Summary summary = new Summary();
             for (Strategy strategy : strategies) {
@@ -228,6 +226,39 @@ public class TheoryRunner {
                 }
                 t4.printSummary(summary);
 
+            }
+        } else if (theoryNumber == 6) {
+            strategies.add(new Strategy("T6Play", "active"));
+            strategies.add(new Strategy("T6C5", "idle"));
+            strategies.add(new Strategy("T6C125", "idle"));
+
+            Theory6 t6 = new Theory6(pubMark);
+            double bestPubMulti = 0;
+            Summary summary = new Summary();
+            for (Strategy strategy : strategies) {
+                for (int i = 0; i < 5; i++) {
+                    t6 = new Theory6(pubMark);
+                    t6.strategy = strategy;
+
+                    if (i > 0) {
+                        t6.coastingPub = bestPubMulti - 0.15 * i * bestPubMulti;
+                    }
+
+                    while (t6.finishCoasting == false) {
+                        t6.runEpoch();
+                    }
+                    if (printHeaderCounter == 0) {
+                        t6.printSummaryHeader();
+                        printHeaderCounter = 1;
+                    }
+                    if (i == 0 || t6.maxTauPerHour > summary.tauPerHour) {
+                        bestPubMulti = t6.getSummary().pubMulti;
+                        summary = new Summary(t6.maxTauPerHour,
+                                t6.bestPubMulti, t6.strategy.name, t6.bestPubTime, t6.bestTauGain,
+                                t6.coastStart);
+                    }
+                }
+                t6.printSummary(summary);
             }
         } else if (theoryNumber == 10) {
 
