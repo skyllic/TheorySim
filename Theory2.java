@@ -18,6 +18,8 @@ public class Theory2 extends Theory {
     public double r4;
     public double rdot;
     public double qdot;
+
+    public int[] milestoneLevels = new int[4];
     
     
     public double coastingPub = 250;
@@ -48,6 +50,12 @@ public class Theory2 extends Theory {
 
         this.variables = new Variable[8];
         this.strategy = new Strategy("T2AI", "AI");
+
+        //Default all milestones.
+        milestoneLevels[0] = 2;
+        milestoneLevels[1] = 2;
+        milestoneLevels[2] = 3;
+        milestoneLevels[3] = 3;
        
       
 
@@ -79,7 +87,7 @@ public class Theory2 extends Theory {
 
         this.updateEquation();
         if(this.publicationMultiplier > 1) {
-            this.tickFrequency = 0.1;
+            this.tickFrequency = 1.0;
         }
         super.moveTick();
 
@@ -95,22 +103,40 @@ public class Theory2 extends Theory {
 
         this.q1 = Variable.add(this.q1,
                 this.variables[0].value + this.q2 + Math.log10(Theory2.adBonus) + Math.log10(this.tickFrequency));
-        this.q2 = Variable.add(this.q2,
+        
+        if(this.milestoneLevels[0] > 0) {
+                this.q2 = Variable.add(this.q2,
                 this.variables[1].value + this.q3 + Math.log10(Theory2.adBonus) + Math.log10(this.tickFrequency));
+        } else {
+            this.q2 = Variable.add(this.q2, 
+                this.variables[1].value + Math.log10(Theory2.adBonus) + Math.log10(this.tickFrequency));
+        }
+        if(this.milestoneLevels[0] > 1) {
         this.q3 = Variable.add(this.q3,
                 this.variables[2].value + this.q4 + Math.log10(Theory2.adBonus) + Math.log10(this.tickFrequency));
-        this.q4 = Variable.add(this.q4,
+        } else {
+            
+        }
+                this.q4 = Variable.add(this.q4,
                 this.variables[3].value + Math.log10(Theory2.adBonus) + Math.log10(this.tickFrequency));
         this.r1 = Variable.add(this.r1,
                 this.variables[4].value + this.r2 + Math.log10(Theory2.adBonus) + Math.log10(this.tickFrequency));
-        this.r2 = Variable.add(this.r2,
+        
+        if(this.milestoneLevels[1] > 0) {
+                this.r2 = Variable.add(this.r2,
                 this.variables[5].value + this.r3 + Math.log10(Theory2.adBonus) + Math.log10(this.tickFrequency));
-        this.r3 = Variable.add(this.r3,
-                this.variables[6].value + this.r4 + Math.log10(Theory2.adBonus) + Math.log10(this.tickFrequency));
-        this.r4 = Variable.add(this.r4,
+        }
+                if(this.milestoneLevels[1] > 1) {
+                this.r3 = Variable.add(this.r3,
+                this.variables[6].value + this.r4 + Math.log10(Theory2.adBonus) + 
+                Math.log10(this.tickFrequency));
+        } 
+        if(this.milestoneLevels[1] > 1) {
+            this.r4 = Variable.add(this.r4,
                 this.variables[7].value + Math.log10(Theory2.adBonus) + Math.log10(this.tickFrequency));
-
-        this.rhodot = this.q1 * 1.15 + this.r1 * 1.15 + Math.log10(Theory2.adBonus) + Math.log10(this.tickFrequency)
+        }
+        this.rhodot = this.q1 * (1 + 0.05 * this.milestoneLevels[2]) + this.r1 * (1 + 0.05 * this.milestoneLevels[3]) + 
+            Math.log10(Theory2.adBonus) + Math.log10(this.tickFrequency)
                 + (this.totalMultiplier);
 
         this.rho = Variable.add(this.rho, this.rhodot);
@@ -192,9 +218,9 @@ public class Theory2 extends Theory {
 
     public void adjustWeightings(int i) {
 
-        if (this.strategy.name == "T2Coast") {
+        if (this.variables[i].isActive == 1) {
 
-            if (this.variables[i].isActive == 1) {
+            if (this.strategy.name == "T2Coast") {
                 if (this.publicationMultiplier > 800) {
                     this.variables[3].deactivate();
                     this.variables[7].deactivate();
@@ -214,6 +240,14 @@ public class Theory2 extends Theory {
 
                 this.variableWeights[i] = 10 + (0.032 * (this.variables[i].level % 10) - 0.16);
 
+            } else if(this.strategy.name == "T2MS") {
+                if(this.publicationMark < 25) {
+                    for(int j = 0; j < this.milestoneLevels.length; j++) {
+                        this.milestoneLevels[j] = 0;
+                    }
+                } else if(this.publicationMark< 50) {
+                    this.milestoneLevels[0] = 1;
+                }
             }
 
         }

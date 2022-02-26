@@ -98,7 +98,7 @@ public class StrategyTest {
         Theory5 t5 = new Theory5(pubMark);
 
         while (t5.publicationMultiplier < 4.0) {
-            t5.runStrategyAILoop(15000.0);
+            t5.runEpoch();
         }
     }
 
@@ -143,7 +143,7 @@ public class StrategyTest {
 
         // best is 163.357 at pub multi 1485.8
         while (t7.publicationMultiplier < 15000.0) {
-            t7.runStrategyAILoop(15000.0);
+            t7.runEpoch();
         }
     }
 
@@ -153,7 +153,7 @@ public class StrategyTest {
         Theory8 t8 = new Theory8(pubMark);
 
         while (t8.publicationMultiplier < 15000.0) {
-            t8.runStrategyAILoop(15000.0);
+            t8.runEpoch();
         }
         System.out.println(t8.totalMultiplier);
     }

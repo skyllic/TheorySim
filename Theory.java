@@ -1,4 +1,4 @@
-
+import java.util.ArrayList;
 
 /**A class representing a theory. 
  * @param rho - the current rho in log format.
@@ -78,7 +78,17 @@ public class Theory implements Simmable {
         this.tickCount = 0;
         this.rho = 0;
         this.rhodot = 0;
-        this.tickFrequency = 0.1; // seconds per tick
+        this.tickFrequency = 10.0; // seconds per tick
+
+        if(Theory.studentNumber < 65) {
+            Theory.research9Level = 0;
+        } else if(Theory.studentNumber < 75) {
+            Theory.research9Level = 1;
+        } else if(Theory.studentNumber < 85) {
+            Theory.research9Level = 2;
+        } else {
+            Theory.research9Level = 3;
+        }
 
        //Sets total multiplier for each theory. Each theory has its own formula. 
        if(Theory.theoryNumber == 1) {
@@ -297,14 +307,20 @@ public class Theory implements Simmable {
     public void printSummary(Summary summary) {
         System.out.print(String.format("%.4f",
                 summary.tauPerHour));
-        System.out.print("\t\t" + String.format("%.4f", summary.pubMulti) + "\t\t\t");
+        System.out.print("\t\t" + String.format("%.2f", summary.pubMulti) + "\t\t\t");
         System.out.print(String.format("%s", summary.strategy) + "\t\t\t");
-        System.out.print(String.format("%.4f", summary.pubTime));
+        System.out.print(String.format("%.3f", summary.pubTime));
         System.out.print("\t\t" + String.format("%.4f", summary.tauGain));
         System.out.print("\t\t" + String.format("%.4f", summary.coastStart));
         //System.out.print("\t\t" + String.format("%.1f", this.publicationMark));
         System.out.println("");
 
+    }
+
+    public void printSummaries(ArrayList<Summary> summaries) {
+        for(int i = 0; i< summaries.size(); i++) {
+            this.printSummary(summaries.get(i));
+        }
     }
 
     public Summary getSummary() {

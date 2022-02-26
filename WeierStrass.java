@@ -13,7 +13,7 @@ public class WeierStrass extends Theory {
     public double qdot;
     public double chi;
     public double product; // Sn(chi) product as shown in the equation in game.
-    public double coastingPub = 8.5;
+    public double coastingPub = 10.5;
     public boolean isCoasting;
 
     // Miscellaneous variables
@@ -304,6 +304,7 @@ public class WeierStrass extends Theory {
             for (int j = 0; j < this.variables.length; j++) {
                 this.variables[j].deactivate(); // autobuy for the variable off.
                 this.isCoasting = true;
+                
                 //System.out.println(this.variables[j].level + "\t" + this.coastStart);
             }
         }
