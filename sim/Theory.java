@@ -267,7 +267,7 @@ public class Theory implements Simmable {
     public void printSummaryHeader() {
         System.out.println(this.name + " at e" + String.format("%.1f", this.publicationMark) + " rho" + 
             ", " + Theory.studentNumber + " students" );
-        System.out.print("Tau/d\t\t" + "PubMulti\t\t" + "Strategy\t\t" + "PubTime\t\t" + "TauGain\t\t"
+        System.out.print("Tau/hr\t\t" + "PubMulti\t\t" + "Strategy\t\t" + "PubTime\t\t" + "TauGain\t\t"
         + "CoastM\n");
     }
 
@@ -285,7 +285,7 @@ public class Theory implements Simmable {
 
     public void printSummary(Summary summary) {
         System.out.print(String.format("%.4f",
-                summary.tauPerHour * 24));
+                summary.tauPerHour));
         System.out.print("\t\t" + String.format("%.2f", summary.pubMulti) + "\t\t\t");
         System.out.print(String.format("%s", summary.strategy) + "\t\t\t");
         System.out.print(String.format("%.3f", summary.pubTime));
