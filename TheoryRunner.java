@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 
-import javax.sql.rowset.WebRowSet;
 
 /**
  * A TheoryRunner class containing the main method used to run to theory
@@ -10,7 +9,18 @@ public class TheoryRunner {
 
     public static void main(String[] args) {
 
-         SimRunner.runDetailedSim(300, 8, 519 + Math.log10(1), true);
+        if(args.length == 3) {
+            try {
+                int studentNumber = Integer.parseInt(args[0]);
+                int theoryNumber = Integer.parseInt(args[1]);
+                double pubMark = Double.parseDouble(args[2]);
+                SimRunner.runDetailedSim(studentNumber, theoryNumber, pubMark, true);
+            } catch (Exception e) {
+                //TODO: handle exception
+            }
+        }
+
+         //SimRunner.runDetailedSim(300, 6, 1250 + Math.log10(1), true);
 
         /**
          * SimRunner.runDetailedSim(303, 1, 632 + Math.log10(7.14), false);

@@ -4,20 +4,14 @@ import java.util.Timer;
 
 import org.junit.Test;
 
+
+
 public class StrategyTest {
 
     @Test
     public void testFindStrategyStrengthT1() {
-        double pubMark = 600 + Math.log10(1);
-        Theory1 t1 = new Theory1(pubMark);
-
-        t1.variables[2].deactivate();
-        t1.variables[3].deactivate();
-
-        while (t1.publicationMultiplier < 15000.0) {
-            t1.runEpoch();
-        }
-        System.out.println(t1.totalMultiplier);
+        
+        SimRunner.runDetailedSim(300, 1, 600, true);
     }
 
     @Test
