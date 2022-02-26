@@ -64,7 +64,7 @@ public class Theory8 extends Theory {
      * qdot, rdot and rho.
      */
     public void moveTick() {
-        if(this.strategy.name == "T8MS" && (this.tickCount) % 350 == 0 ) {
+        if(this.strategy.name == "T8MS" && (this.tickCount) % 340 == 0 ) {
             this.resetStateDefault();
         }
 
@@ -226,7 +226,7 @@ public class Theory8 extends Theory {
             } else if(this.strategy.name == "T8MS") {
                 this.variableWeights[1] = 10.0;
                 this.variableWeights[2] = 10.4;
-                this.variableWeights[3] = 10.10;
+                this.variableWeights[3] = 10.0;
                 this.variableWeights[4] = 10.6;
 
                 this.variableWeights[0] = 10.9 + (0.018 * (this.variables[0].level % 10) - 0.11);

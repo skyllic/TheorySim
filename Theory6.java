@@ -193,7 +193,27 @@ public class Theory6 extends Theory {
                     this.variableWeights[8] = 10;
                 }
               
+                this.variableWeights[0] = 10.9 + (0.022 * (this.variables[0].level % 10) - 0.12);
+
+            }else if(this.strategy.name == "T6C5d") {
                 this.variableWeights[0] = 11 + (0.018 * (this.variables[0].level % 10) - 0.11);
+                this.variableWeights[2] = 11.0;
+                this.variableWeights[3] = 10.0;
+                this.variables[4].deactivate();
+                this.variables[5].deactivate();
+                this.variables[6].deactivate();
+                this.variables[7].deactivate();
+
+
+            } else if(this.strategy.name == "T6C125d") {
+                this.variableWeights[0] = 11 + (0.018 * (this.variables[0].level % 10) - 0.11);
+                this.variableWeights[2] = 11.0;
+                this.variableWeights[3] = 10.0;
+                this.variableWeights[4] = 11 + (0.018 * (this.variables[0].level % 10) - 0.11);
+                this.variableWeights[5] = 10.0;
+                this.variables[5].deactivate();
+                this.variables[6].deactivate();
+                this.variables[7].deactivate();
 
             }
             else if(this.strategy.name == "T6C5") {

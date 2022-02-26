@@ -44,13 +44,13 @@ public class SimRunner {
           }
           if (i == 0 || t1.maxTauPerHour > summary.tauPerHour) {
             bestPubMulti = t1.getSummary().pubMulti;
-            summary = new Summary(t1.maxTauPerHour,
-                t1.bestPubMulti, t1.strategy.name, t1.bestPubTime, t1.bestTauGain,
+            summary = new Summary(1, t1.maxTauPerHour,
+                t1.bestPubMulti, t1.strategy.name, t1.strategy.type, t1.bestPubTime, t1.bestTauGain,
                 t1.coastStart);
           }
         }
         summaries.add(summary);
-        if(print == true) {
+        if (print == true) {
           t1.printSummary(summary);
         }
       }
@@ -80,13 +80,13 @@ public class SimRunner {
           }
           if (i == 0 || t2.maxTauPerHour > summary.tauPerHour) {
             bestPubMulti = t2.getSummary().pubMulti;
-            summary = new Summary(t2.maxTauPerHour,
-                t2.bestPubMulti, t2.strategy.name, t2.bestPubTime, t2.bestTauGain,
+            summary = new Summary(2, t2.maxTauPerHour,
+                t2.bestPubMulti, t2.strategy.name, t2.strategy.type, t2.bestPubTime, t2.bestTauGain,
                 t2.coastStart);
           }
         }
         summaries.add(summary);
-        if(print == true) {
+        if (print == true) {
           t2.printSummary(summary);
         }
       }
@@ -115,13 +115,13 @@ public class SimRunner {
           }
           if (i == 0 || t3.maxTauPerHour > summary.tauPerHour) {
             bestPubMulti = t3.getSummary().pubMulti;
-            summary = new Summary(t3.maxTauPerHour,
-                t3.bestPubMulti, t3.strategy.name, t3.bestPubTime, t3.bestTauGain,
+            summary = new Summary(3, t3.maxTauPerHour,
+                t3.bestPubMulti, t3.strategy.name, t3.strategy.type, t3.bestPubTime, t3.bestTauGain,
                 t3.coastStart);
           }
         }
         summaries.add(summary);
-        if(print == true) {
+        if (print == true) {
           t3.printSummary(summary);
         }
       }
@@ -156,21 +156,20 @@ public class SimRunner {
           }
           if (i == 0 || t4.maxTauPerHour > summary.tauPerHour) {
             bestPubMulti = t4.getSummary().pubMulti;
-            summary = new Summary(t4.maxTauPerHour,
-                t4.bestPubMulti, t4.strategy.name, t4.bestPubTime, t4.bestTauGain,
+            summary = new Summary(4, t4.maxTauPerHour,
+                t4.bestPubMulti, t4.strategy.name, t4.strategy.type, t4.bestPubTime, t4.bestTauGain,
                 t4.coastStart);
           }
         }
         summaries.add(summary);
-        if(print == true) {
+        if (print == true) {
           t4.printSummary(summary);
         }
       }
 
-      } else if(theoryNumber == 5) {
-        strategies.add(new Strategy("T5Play", "active"));
+    } else if (theoryNumber == 5) {
+      strategies.add(new Strategy("T5Play", "active"));
       strategies.add(new Strategy("T5", "idle"));
-      
 
       Theory5 t5 = new Theory5(pubMark);
       double bestPubMulti = 0;
@@ -193,19 +192,21 @@ public class SimRunner {
           }
           if (i == 0 || t5.maxTauPerHour > summary.tauPerHour) {
             bestPubMulti = t5.getSummary().pubMulti;
-            summary = new Summary(t5.maxTauPerHour,
-                t5.bestPubMulti, t5.strategy.name, t5.bestPubTime, t5.bestTauGain,
+            summary = new Summary(5, t5.maxTauPerHour,
+                t5.bestPubMulti, t5.strategy.name, t5.strategy.type, t5.bestPubTime, t5.bestTauGain,
                 t5.coastStart);
           }
         }
         summaries.add(summary);
-        if(print == true) {
+        if (print == true) {
           t5.printSummary(summary);
         }
       }
-      
+
     } else if (theoryNumber == 6) {
       strategies.add(new Strategy("T6Play", "active"));
+      strategies.add(new Strategy("T6C5d", "active"));
+      strategies.add(new Strategy("T6C125d", "active"));
       strategies.add(new Strategy("T6C5", "idle"));
       strategies.add(new Strategy("T6C125", "idle"));
 
@@ -230,13 +231,13 @@ public class SimRunner {
           }
           if (i == 0 || t6.maxTauPerHour > summary.tauPerHour) {
             bestPubMulti = t6.getSummary().pubMulti;
-            summary = new Summary(t6.maxTauPerHour,
-                t6.bestPubMulti, t6.strategy.name, t6.bestPubTime, t6.bestTauGain,
+            summary = new Summary(6, t6.maxTauPerHour,
+                t6.bestPubMulti, t6.strategy.name, t6.strategy.type, t6.bestPubTime, t6.bestTauGain,
                 t6.coastStart);
           }
         }
         summaries.add(summary);
-        if(print == true) {
+        if (print == true) {
           t6.printSummary(summary);
         }
       }
@@ -266,13 +267,13 @@ public class SimRunner {
           }
           if (i == 0 || t7.maxTauPerHour > summary.tauPerHour) {
             bestPubMulti = t7.getSummary().pubMulti;
-            summary = new Summary(t7.maxTauPerHour,
-                t7.bestPubMulti, t7.strategy.name, t7.bestPubTime, t7.bestTauGain,
+            summary = new Summary(7, t7.maxTauPerHour,
+                t7.bestPubMulti, t7.strategy.name, t7.strategy.type, t7.bestPubTime, t7.bestTauGain,
                 t7.coastStart);
           }
         }
         summaries.add(summary);
-        if(print == true) {
+        if (print == true) {
           t7.printSummary(summary);
         }
 
@@ -304,13 +305,13 @@ public class SimRunner {
           }
           if (i == 0 || t8.maxTauPerHour > summary.tauPerHour) {
             bestPubMulti = t8.getSummary().pubMulti;
-            summary = new Summary(t8.maxTauPerHour,
-                t8.bestPubMulti, t8.strategy.name, t8.bestPubTime, t8.bestTauGain,
+            summary = new Summary(8, t8.maxTauPerHour,
+                t8.bestPubMulti, t8.strategy.name, t8.strategy.type, t8.bestPubTime, t8.bestTauGain,
                 t8.coastStart);
           }
         }
         summaries.add(summary);
-        if(print == true) {
+        if (print == true) {
           t8.printSummary(summary);
         }
 
@@ -344,14 +345,15 @@ public class SimRunner {
           }
           if (i == 0 || weierStrass.maxTauPerHour > summary.tauPerHour) {
             bestPubMulti = weierStrass.getSummary().pubMulti;
-            summary = new Summary(weierStrass.maxTauPerHour,
-                weierStrass.bestPubMulti, weierStrass.strategy.name, weierStrass.bestPubTime,
+            summary = new Summary(10, weierStrass.maxTauPerHour,
+                weierStrass.bestPubMulti, weierStrass.strategy.name, weierStrass.strategy.type,
+                 weierStrass.bestPubTime,
                 weierStrass.bestTauGain,
                 weierStrass.coastStart);
           }
         }
         summaries.add(summary);
-        if(print == true) {
+        if (print == true) {
           weierStrass.printSummary(summary);
         }
 
@@ -382,13 +384,13 @@ public class SimRunner {
           }
           if (i == 0 || SL.maxTauPerHour > summary.tauPerHour) {
             bestPubMulti = SL.getSummary().pubMulti;
-            summary = new Summary(SL.maxTauPerHour,
-                SL.bestPubMulti, SL.strategy.name, SL.bestPubTime, SL.bestTauGain,
+            summary = new Summary(11, SL.maxTauPerHour,
+                SL.bestPubMulti, SL.strategy.name, SL.strategy.type, SL.bestPubTime, SL.bestTauGain,
                 SL.coastStart);
           }
         }
         summaries.add(summary);
-        if(print == true) {
+        if (print == true) {
           SL.printSummary(summary);
         }
       }
@@ -396,80 +398,168 @@ public class SimRunner {
 
     double finish = System.currentTimeMillis();
     double seconds = (finish - start) / 1000.0;
-    //System.out.println("Elapsed time: " + seconds + " seconds.");
+    // System.out.println("Elapsed time: " + seconds + " seconds.");
     return summaries;
   }
 
   public static void printSummaryHeader() {
     System.out.print("Tau/d\t\t" + "PubMulti\t\t" + "Strategy\t\t" + "PubTime\t\t" + "TauGain\t\t"
-    + "CoastM\n");
-}
+        + "CoastM\n");
+  }
 
   public static void printSummary(Summary summary) {
-    
+
     System.out.print(String.format("%.4f",
-            summary.tauPerHour * 24.0));
+        summary.tauPerHour * 24.0));
     System.out.print("\t\t" + String.format("%.2f", summary.pubMulti) + "\t\t\t");
     System.out.print(String.format("%s", summary.strategy) + "\t\t\t");
     System.out.print(String.format("%.3f", summary.pubTime));
     System.out.print("\t\t" + String.format("%.4f", summary.tauGain));
     System.out.print("\t\t" + String.format("%.4f", summary.coastStart));
-    //System.out.print("\t\t" + String.format("%.1f", this.publicationMark));
+    // System.out.print("\t\t" + String.format("%.1f", this.publicationMark));
     System.out.println("");
 
-}
+  }
 
 public static void printSummaries(ArrayList<Summary> summaries, String flag) {
 
     printSummaryHeader();
 
+    if(flag == "all") {
     for(int i = 0; i< summaries.size(); i++) {
         printSummary(summaries.get(i));
     }
+    return;
+  } else if(flag == "best") {
+
+
+
+
+    double idleBest = 0;
+    double activeBest = 0;
+    int currentTheoryNumber = 1;
+
+    Summary bestSummaryActive = new Summary();
+    Summary bestSummaryIdle = new Summary();
+
+    for(Summary summary : summaries) {
+      if(summary.strategyType == "active") {
+        if(summary.tauPerHour > activeBest) {
+          bestSummaryActive = summary;
+        }
+      } else if(summary.strategyType == "idle") {
+        if(summary.tauPerHour > idleBest) {
+          bestSummaryIdle = summary;
+        }
+      }
+
+      printSummary(bestSummaryActive);
+      printSummary(bestSummaryIdle);
+
+    }
+
+
+
+
+    int i = 0;
+    ArrayList<Summary> summary1 = new ArrayList<>();
+    ArrayList<Summary> summary2 = new ArrayList<>();
+    ArrayList<Summary> summary3 = new ArrayList<>();
+    ArrayList<Summary> summary4 = new ArrayList<>();
+    ArrayList<Summary> summary5 = new ArrayList<>();
+    ArrayList<Summary> summary6 = new ArrayList<>();
+    ArrayList<Summary> summary7 = new ArrayList<>();
+    ArrayList<Summary> summary8 = new ArrayList<>();
+    ArrayList<Summary> summary10 = new ArrayList<>();
+    ArrayList<Summary> summary11 = new ArrayList<>();
+
+    for(Summary summary : summaries) {
+      switch(summary.theoryNumber) {
+        case 1 : summary1.add(summary);
+        break;
+        case 2 : summary2.add(summary);
+        break;
+        case 3 : summary3.add(summary);
+        break;
+        case 4 : summary4.add(summary);
+        break;
+        case 5 : summary5.add(summary);
+        break;
+        case 6 : summary6.add(summary);
+        break;
+        case 7 : summary7.add(summary);
+        break;
+        case 8 : summary8.add(summary);
+        break;
+        case 10 : summary10.add(summary);
+        break;
+        case 11 : summary11.add(summary);
+        break;
+      }
+    }
+
+    ArrayList<ArrayList<Summary>> summ = new ArrayList<ArrayList<Summary>>();
+    summ.add(summary1);
+    summ.add(summary2);
+    summ.add(summary3);
+    summ.add(summary4);
+    summ.add(summary5);
+    summ.add(summary6);
+    summ.add(summary7);
+    summ.add(summary8);
+    summ.add(summary10);
+    summ.add(summary11);
+
+    for(ArrayList<Summary> summaryArray : summ) {
+
+    }
+
+
+  }
 }
 
-  public static ArrayList<Summary> runAllSim(int studentNumber, String t1Tau, String t2Tau, String t3Tau, String t4Tau, 
-        String t5Tau, String t6Tau, String t7Tau, String t8Tau, String WSPTau, String SLTau) {
+  public static ArrayList<Summary> runAllSim(int studentNumber, String t1Tau, String t2Tau, String t3Tau, String t4Tau,
+      String t5Tau, String t6Tau, String t7Tau, String t8Tau, String WSPTau, String SLTau) {
 
-          ArrayList<Summary> summaries = new ArrayList<>();
+    ArrayList<Summary> summaries = new ArrayList<>();
 
-            String[] taus = {t1Tau, t2Tau, t3Tau, t4Tau, t5Tau, t6Tau, t7Tau, t8Tau, WSPTau, SLTau};
-            double[] tauNumbers = new double[taus.length];
-            String[] mantissas = new String[taus.length];
-            String[] powers = new String[taus.length];
-            try {
-                for(int i = 0; i < taus.length; i++) {
-                    if(taus[i].contains("e")) {
-                        String[] temp = taus[i].split("e");
-                        mantissas[i] = temp[0];
-                        powers[i] = temp[1];
-                        tauNumbers[i] = Math.log10(Double.parseDouble(mantissas[i])) + 
-                            Double.parseDouble(powers[i]);
-                        
-                    } else {
-                        tauNumbers[i] = Double.parseDouble(taus[i]);
-                    }
-                    
-                }
-                
-            } catch (Exception e) {
-                //TODO: handle exception
-            }
+    String[] taus = { t1Tau, t2Tau, t3Tau, t4Tau, t5Tau, t6Tau, t7Tau, t8Tau, WSPTau, SLTau };
+    double[] tauNumbers = new double[taus.length];
+    String[] mantissas = new String[taus.length];
+    String[] powers = new String[taus.length];
+    try {
+      for (int i = 0; i < taus.length; i++) {
+        if (taus[i].contains("e")) {
+          String[] temp = taus[i].split("e");
+          mantissas[i] = temp[0];
+          powers[i] = temp[1];
+          tauNumbers[i] = Math.log10(Double.parseDouble(mantissas[i])) +
+              Double.parseDouble(powers[i]);
 
-            for(int i = 0; i < tauNumbers.length; i++) {
-              int CTOffset = 1;
-              if(i > 7) {
-                ArrayList<Summary> tempSummaries = runDetailedSim(studentNumber, i + 1 + CTOffset, tauNumbers[i], false);
-                summaries.addAll(tempSummaries);
-              } else {
-                ArrayList<Summary> tempSummaries = runDetailedSim(studentNumber, i + 1, tauNumbers[i], false);
-                summaries.addAll(tempSummaries);
-              }
-            }
+        } else {
+          tauNumbers[i] = Double.parseDouble(taus[i]);
+        }
 
-            printSummaries(summaries, "nice");
-            return summaries;
+      }
+
+    } catch (Exception e) {
+      // TODO: handle exception
     }
+
+    for (int i = 0; i < tauNumbers.length; i++) {
+      int CTOffset = 1;
+      if (i > 7) {
+        ArrayList<Summary> tempSummaries = runDetailedSim(studentNumber, i + 1 + CTOffset, tauNumbers[i], false);
+        summaries.addAll(tempSummaries);
+      } else {
+        ArrayList<Summary> tempSummaries = runDetailedSim(studentNumber, i + 1, tauNumbers[i], false);
+        summaries.addAll(tempSummaries);
+      }
+    }
+
+    printSummaries(summaries, "nice");
+    return summaries;
+  }
 
   public static void runIndividualSim(int studentNumber, int theoryNumber, double pubMark,
       boolean print) {
@@ -508,8 +598,8 @@ public static void printSummaries(ArrayList<Summary> summaries, String flag) {
           }
           if (i == 0 || t1.maxTauPerHour > summary.tauPerHour) {
             bestPubMulti = t1.getSummary().pubMulti;
-            summary = new Summary(t1.maxTauPerHour,
-                t1.bestPubMulti, t1.strategy.name, t1.bestPubTime, t1.bestTauGain,
+            summary = new Summary(1, t1.maxTauPerHour,
+                t1.bestPubMulti, t1.strategy.name, t1.strategy.type, t1.bestPubTime, t1.bestTauGain,
                 t1.coastStart);
           }
         }
@@ -541,8 +631,8 @@ public static void printSummaries(ArrayList<Summary> summaries, String flag) {
           }
           if (i == 0 || t2.maxTauPerHour > summary.tauPerHour) {
             bestPubMulti = t2.getSummary().pubMulti;
-            summary = new Summary(t2.maxTauPerHour,
-                t2.bestPubMulti, t2.strategy.name, t2.bestPubTime, t2.bestTauGain,
+            summary = new Summary(2, t2.maxTauPerHour,
+                t2.bestPubMulti, t2.strategy.name, t2.strategy.type, t2.bestPubTime, t2.bestTauGain,
                 t2.coastStart);
           }
         }
@@ -574,8 +664,8 @@ public static void printSummaries(ArrayList<Summary> summaries, String flag) {
           }
           if (i == 0 || t3.maxTauPerHour > summary.tauPerHour) {
             bestPubMulti = t3.getSummary().pubMulti;
-            summary = new Summary(t3.maxTauPerHour,
-                t3.bestPubMulti, t3.strategy.name, t3.bestPubTime, t3.bestTauGain,
+            summary = new Summary(3, t3.maxTauPerHour,
+                t3.bestPubMulti, t3.strategy.name, t3.strategy.type, t3.bestPubTime, t3.bestTauGain,
                 t3.coastStart);
           }
         }
@@ -613,18 +703,17 @@ public static void printSummaries(ArrayList<Summary> summaries, String flag) {
           }
           if (i == 0 || t4.maxTauPerHour > summary.tauPerHour) {
             bestPubMulti = t4.getSummary().pubMulti;
-            summary = new Summary(t4.maxTauPerHour,
-                t4.bestPubMulti, t4.strategy.name, t4.bestPubTime, t4.bestTauGain,
+            summary = new Summary(4, t4.maxTauPerHour,
+                t4.bestPubMulti, t4.strategy.name, t4.strategy.type, t4.bestPubTime, t4.bestTauGain,
                 t4.coastStart);
           }
         }
         t4.printSummary(summary);
       }
 
-      } else if(theoryNumber == 5) {
-        strategies.add(new Strategy("T5Play", "active"));
+    } else if (theoryNumber == 5) {
+      strategies.add(new Strategy("T5Play", "active"));
       strategies.add(new Strategy("T5", "idle"));
-      
 
       Theory5 t5 = new Theory5(pubMark);
       double bestPubMulti = 0;
@@ -647,14 +736,14 @@ public static void printSummaries(ArrayList<Summary> summaries, String flag) {
           }
           if (i == 0 || t5.maxTauPerHour > summary.tauPerHour) {
             bestPubMulti = t5.getSummary().pubMulti;
-            summary = new Summary(t5.maxTauPerHour,
-                t5.bestPubMulti, t5.strategy.name, t5.bestPubTime, t5.bestTauGain,
+            summary = new Summary(5, t5.maxTauPerHour,
+                t5.bestPubMulti, t5.strategy.name, t5.strategy.type, t5.bestPubTime, t5.bestTauGain,
                 t5.coastStart);
           }
         }
         t5.printSummary(summary);
       }
-      
+
     } else if (theoryNumber == 6) {
       strategies.add(new Strategy("T6Play", "active"));
       strategies.add(new Strategy("T6C5", "idle"));
@@ -681,8 +770,8 @@ public static void printSummaries(ArrayList<Summary> summaries, String flag) {
           }
           if (i == 0 || t6.maxTauPerHour > summary.tauPerHour) {
             bestPubMulti = t6.getSummary().pubMulti;
-            summary = new Summary(t6.maxTauPerHour,
-                t6.bestPubMulti, t6.strategy.name, t6.bestPubTime, t6.bestTauGain,
+            summary = new Summary(6, t6.maxTauPerHour,
+                t6.bestPubMulti, t6.strategy.name, t6.strategy.type, t6.bestPubTime, t6.bestTauGain,
                 t6.coastStart);
           }
         }
@@ -714,8 +803,8 @@ public static void printSummaries(ArrayList<Summary> summaries, String flag) {
           }
           if (i == 0 || t7.maxTauPerHour > summary.tauPerHour) {
             bestPubMulti = t7.getSummary().pubMulti;
-            summary = new Summary(t7.maxTauPerHour,
-                t7.bestPubMulti, t7.strategy.name, t7.bestPubTime, t7.bestTauGain,
+            summary = new Summary(7, t7.maxTauPerHour,
+                t7.bestPubMulti, t7.strategy.name, t7.strategy.type, t7.bestPubTime, t7.bestTauGain,
                 t7.coastStart);
           }
         }
@@ -748,8 +837,8 @@ public static void printSummaries(ArrayList<Summary> summaries, String flag) {
           }
           if (i == 0 || t8.maxTauPerHour > summary.tauPerHour) {
             bestPubMulti = t8.getSummary().pubMulti;
-            summary = new Summary(t8.maxTauPerHour,
-                t8.bestPubMulti, t8.strategy.name, t8.bestPubTime, t8.bestTauGain,
+            summary = new Summary(8, t8.maxTauPerHour,
+                t8.bestPubMulti, t8.strategy.name, t8.strategy.type, t8.bestPubTime, t8.bestTauGain,
                 t8.coastStart);
           }
         }
@@ -785,8 +874,9 @@ public static void printSummaries(ArrayList<Summary> summaries, String flag) {
           }
           if (i == 0 || weierStrass.maxTauPerHour > summary.tauPerHour) {
             bestPubMulti = weierStrass.getSummary().pubMulti;
-            summary = new Summary(weierStrass.maxTauPerHour,
-                weierStrass.bestPubMulti, weierStrass.strategy.name, weierStrass.bestPubTime,
+            summary = new Summary(10, weierStrass.maxTauPerHour,
+                weierStrass.bestPubMulti, weierStrass.strategy.name, weierStrass.strategy.type,
+                weierStrass.bestPubTime,
                 weierStrass.bestTauGain,
                 weierStrass.coastStart);
           }
@@ -820,8 +910,9 @@ public static void printSummaries(ArrayList<Summary> summaries, String flag) {
           }
           if (i == 0 || SL.maxTauPerHour > summary.tauPerHour) {
             bestPubMulti = SL.getSummary().pubMulti;
-            summary = new Summary(SL.maxTauPerHour,
-                SL.bestPubMulti, SL.strategy.name, SL.bestPubTime, SL.bestTauGain,
+            summary = new Summary(11, SL.maxTauPerHour,
+                SL.bestPubMulti, SL.strategy.name, SL.strategy.type, 
+                SL.bestPubTime, SL.bestTauGain,
                 SL.coastStart);
           }
         }

@@ -78,7 +78,7 @@ public class Theory implements Simmable {
         this.tickCount = 0;
         this.rho = 0;
         this.rhodot = 0;
-        this.tickFrequency = 10.0; // seconds per tick
+        this.tickFrequency = 0.1; // seconds per tick
 
         if(Theory.studentNumber < 65) {
             Theory.research9Level = 0;
@@ -324,7 +324,8 @@ public class Theory implements Simmable {
     }
 
     public Summary getSummary() {
-        Summary summary = new Summary(this.maxTauPerHour, this.bestPubMulti, this.strategy.name,
+        Summary summary = new Summary(Theory.theoryNumber, this.maxTauPerHour, this.bestPubMulti,
+         this.strategy.name, this.strategy.type,
          this.bestPubTime, this.bestTauGain, this.coastStart);
 
          return summary;
