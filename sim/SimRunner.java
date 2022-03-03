@@ -28,12 +28,12 @@ public class SimRunner {
       double bestPubMulti = 0;
       Summary summary = new Summary();
       for (Strategy strategy : strategies) {
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 10; i++) {
           t1 = new Theory1(pubMark);
           t1.strategy = strategy;
 
           if (i > 0) {
-            t1.coastingPub = bestPubMulti - 0.17 * i * bestPubMulti;
+            t1.coastingPub = bestPubMulti - 0.09 * i * bestPubMulti;
           }
 
           while (t1.finishCoasting == false) {
@@ -64,12 +64,12 @@ public class SimRunner {
       double bestPubMulti = 0;
       Summary summary = new Summary();
       for (Strategy strategy : strategies) {
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 6; i++) {
           t2 = new Theory2(pubMark);
           t2.strategy = strategy;
 
           if (i > 0) {
-            t2.coastingPub = bestPubMulti - 0.30 * i * bestPubMulti;
+            t2.coastingPub = bestPubMulti - 0.15 * i * bestPubMulti;
           }
 
           while (t2.finishCoasting == false) {
@@ -171,6 +171,7 @@ public class SimRunner {
     } else if (theoryNumber == 5) {
       strategies.add(new Strategy("T5Play", "active"));
       strategies.add(new Strategy("T5", "idle"));
+      strategies.add(new Strategy("T5PlayI", "idle"));
 
       Theory5 t5 = new Theory5(pubMark);
       double bestPubMulti = 0;
@@ -393,6 +394,43 @@ public class SimRunner {
         summaries.add(summary);
         if (print == true) {
           SL.printSummary(summary);
+        }
+      }
+    } else if(theoryNumber == 12) {
+      strategies.add(new Strategy("CSRPlay", "active"));
+      strategies.add(new Strategy("CSR2d", "active"));
+      strategies.add(new Strategy("CSR2", "idle"));
+      
+      
+
+      Convergence_Square_Root CSR2 = new Convergence_Square_Root(pubMark);
+      double bestPubMulti = 0;
+      Summary summary = new Summary();
+      for (Strategy strategy : strategies) {
+        for (int i = 0; i < 5; i++) {
+          CSR2 = new Convergence_Square_Root(pubMark);
+          CSR2.strategy = strategy;
+          if (i > 0) {
+            CSR2.coastingPub = bestPubMulti - 0.10 * i * bestPubMulti;
+          }
+
+          while (CSR2.finishCoasting == false) {
+            CSR2.runEpoch();
+          }
+          if (printHeaderCounter == 0 && print == true) {
+            CSR2.printSummaryHeader();
+            printHeaderCounter = 1;
+          }
+          if (i == 0 || CSR2.maxTauPerHour > summary.tauPerHour) {
+            bestPubMulti = CSR2.getSummary().pubMulti;
+            summary = new Summary(11, CSR2.maxTauPerHour,
+                CSR2.bestPubMulti, CSR2.strategy.name, CSR2.strategy.type, CSR2.bestPubTime, CSR2.bestTauGain,
+                CSR2.coastStart);
+          }
+        }
+        summaries.add(summary);
+        if (print == true) {
+          CSR2.printSummary(summary);
         }
       }
     }

@@ -278,13 +278,13 @@ public class Theory1 extends Theory {
             coefficient = Math.log10(coefficient);
           
             if(i == 0) {
-                this.variableWeights[i] = 10 + 1.20 * coefficient;
+                this.variableWeights[i] = 9.9 + 1.20 * coefficient;
             } else if(i == 1) {
-                this.variableWeights[i] = 10 + 1.2 * coefficient;
+                this.variableWeights[i] = 10.1 + 1.2 * coefficient;
             } else if(i == 4) {
-                this.variableWeights[i] = 10 + 1.6 * coefficient;
+                this.variableWeights[i] = 9.9 + 1.6 * coefficient;
             } else if(i == 5) {
-                this.variableWeights[i] = 10 + 1.2 * coefficient;
+                this.variableWeights[i] = 10.0 + 1.2 * coefficient;
             }
             //this.variableWeights[0] = 11.2;
             //this.variableWeights[1] = 10.0;
@@ -333,7 +333,7 @@ public class Theory1 extends Theory {
          * double term3Ratio = term3 / Variable.add(term2, term3);
          */
 
-        if (this.publicationMultiplier > 4.5) {
+        if (this.publicationMultiplier > this.coastingPub) {
             for (int j = 0; j < this.variables.length; j++) {
                 this.variables[j].deactivate(); // autobuy for the variable off.
                 this.isCoasting = true;

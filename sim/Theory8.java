@@ -118,9 +118,9 @@ public class Theory8 extends Theory {
         this.ydot = 500 * this.x + 50 * this.y;
         this.zdot = 50 + 500 * this.z * (this.x - 14);
 
-        double term1 = this.variables[2].value * 1.15 + Math.log10(Math.pow(this.xdot, 2));
+        double term1 = this.variables[2].value  + Math.log10(Math.pow(this.xdot, 2));
         double term2 = this.variables[3].value * 1.15 + Math.log10(Math.pow(this.ydot, 2));
-        double term3 = this.variables[4].value * 1.15 + Math.log10(Math.pow(this.zdot, 2));
+        double term3 = this.variables[4].value  + Math.log10(Math.pow(this.zdot, 2));
 
         this.rhodot = 0.5 * (Variable.add(term3, Variable.add(term1, term2))) +
                 this.variables[0].value + this.variables[1].value - Math.log10(100) +

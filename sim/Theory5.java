@@ -151,7 +151,7 @@ public class Theory5 extends Theory {
         for (int i = 0; i < this.variables.length; i++) {
             this.variables[i].update();
             if (this.variables[i].isActive == 1) {
-                while (this.variables[i].cost < this.publicationMark * 0.8) {
+                while (this.variables[i].cost < this.publicationMark * 0.9) {
                     this.variables[i].level += 1;
                     this.variables[i].update();
                     this.q = this.variables[4].value * 1.1 + this.variables[3].value;
@@ -248,6 +248,15 @@ public class Theory5 extends Theory {
                 this.variableWeights[3] = 10.0;
                 this.variableWeights[4] = 10.0;
 
+            } else if(this.strategy.name == "T5PlayI") {
+                this.variableWeights[0] = 10.0;
+                this.variableWeights[1] = 10.0;
+                this.variableWeights[2] = 10.0;
+                this.variableWeights[3] = 10.0;
+                this.variableWeights[4] = 10.0;
+                if(this.publicationMultiplier > 0.1) {
+                    this.variableWeights[2] = 100.0;
+                }
             }
 
         }

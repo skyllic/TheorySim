@@ -48,7 +48,12 @@ public class TheoryRunner {
             }
         }
 
-        SimRunner.runDetailedSim(300, 6, 1100, true);
+        //SimRunner.runDetailedSim(100, 1, 400, true);
+        //SimRunner.runDetailedSim(150, 1, 500, true);
+        //SimRunner.runDetailedSim(200, 1, 550, true);
+        //SimRunner.runDetailedSim(300, 1, 625, true);
+        SimRunner.runDetailedSim(65, 12, 720, true);
+       
   
 
     }

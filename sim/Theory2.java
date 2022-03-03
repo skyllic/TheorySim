@@ -23,7 +23,7 @@ public class Theory2 extends Theory {
     public int[] milestoneLevels = new int[4];
     
     
-    public double coastingPub = 250;
+    public double coastingPub = 800;
 
     
 
@@ -234,7 +234,7 @@ public class Theory2 extends Theory {
                     this.variables[1].deactivate();
                     this.variables[5].deactivate();
                 }
-                if (this.publicationMultiplier > 1500) {
+                if (this.publicationMultiplier > 2000) {
                     this.variables[0].deactivate();
                     this.variables[4].deactivate();
                 }

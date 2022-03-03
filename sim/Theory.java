@@ -133,6 +133,10 @@ public class Theory implements Simmable {
             this.totalMultiplier = 0.15 * this.publicationMark;
             this.pubCoefficient = 0.15;
         }
+        else if(Theory.theoryNumber == 12) {
+            this.totalMultiplier = 0.222 * this.publicationMark - Math.log10(50);
+            this.pubCoefficient = 0.222;
+        }
        else {
            this.totalMultiplier = 1; 
        }
@@ -154,6 +158,8 @@ public class Theory implements Simmable {
         if(this.coastStart > this.bestPubMulti) {
             this.coastStart = this.bestPubMulti;
         }
+        //Compiles various parameters when there's a new fastest tau/hour so that we can print them 
+        //to the user later.
         if ((this.maxRho - this.publicationMark) / (this.seconds / 3600.0) > this.maxTauPerHour) {
             this.maxTauPerHour = (this.maxRho - this.publicationMark) / (this.seconds / 3600.0);
             this.bestPubMulti = this.publicationMultiplier;
