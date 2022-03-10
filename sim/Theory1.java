@@ -67,8 +67,11 @@ public class Theory1 extends Theory {
 
         double term1 = this.variables[2].value * 1.15 + this.variables[3].value +
                 Math.log10(Variable.add(1, this.rho * Math.log(10) / 100.0));
+                
         double term2 = this.variables[4].value + this.rho * 0.2;
         double term3 = this.variables[5].value + this.rho * 0.3;
+
+        
 
         this.rhodot = Variable.add(term3, Variable.add(term1, term2)) +
                 this.variables[0].value + this.variables[1].value +
@@ -81,8 +84,11 @@ public class Theory1 extends Theory {
     public double calculateRhodot() {
         double term1 = this.variables[2].value * 1.15 + this.variables[3].value +
                 Math.log10(Variable.add(1, this.rho * Math.log(10) / 100.0));
+                
         double term2 = this.variables[4].value + this.rho * 0.2;
         double term3 = this.variables[5].value + this.rho * 0.3;
+
+       
 
         double rhodot = Variable.add(term3, Variable.add(term1, term2)) +
                 this.variables[0].value + this.variables[1].value +

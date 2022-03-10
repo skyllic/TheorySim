@@ -1,5 +1,8 @@
 package sim;
 import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * A TheoryRunner class containing the main method used to run to theory
@@ -48,12 +51,22 @@ public class TheoryRunner {
             }
         }
 
+        ArrayList<Double> summaryList = new ArrayList<>();
         //SimRunner.runDetailedSim(100, 1, 400, true);
         //SimRunner.runDetailedSim(150, 1, 500, true);
         //SimRunner.runDetailedSim(200, 1, 550, true);
         //SimRunner.runDetailedSim(300, 1, 625, true);
-        SimRunner.runDetailedSim(65, 12, 720, true);
-       
+        //SimRunner.runLongSim(300, 3, 600, 700);
+
+        
+        for(int i = 500; i < 800; i=i+10) {
+            summaryList.add(SimRunner.runDetailedSim(300, 3, i, true).get(0).tauPerHour);
+        }
+        
+        for(Double element : summaryList) {
+            System.out.println(element);
+        }
+        
   
 
     }

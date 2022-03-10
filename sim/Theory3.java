@@ -28,7 +28,8 @@ public class Theory3 extends Theory {
     public double term33;
 
     public String strategyType = "active";
-    public double coastingPub = 2.3;
+    public double coastingPub = 2.5;
+    public double recoveryPub = 1.0;
 
 
     public boolean isCoasting;
@@ -71,7 +72,7 @@ public class Theory3 extends Theory {
   
         
 
-        //Order of variable is q1, q2, r1, r2, c1, c2, c3, c4, c5 (same as in game when read top to bottom)
+        //Order of variable is b1, b2, b3, c11, c12, c13, c21, c22, c23, c31, c32, c33.
         this.variables[0] = new Variable(1.18099, 10, Math.pow(2, 0.1), 0, false, true, false, true, false, new double[2]);
         this.variables[1] = new Variable(1.308, 10, Math.pow(2, 0.1), 0, false, true, false, false, false, new double[2]);
         this.variables[2] = new Variable(1.675, 3000, Math.pow(2, 0.1), 0, false, true, false, false, false, new double[2]);
@@ -296,9 +297,49 @@ public class Theory3 extends Theory {
             100, 10.5, 10.1, 
             10, 10.1, 11.1*/
 
-            if(this.strategy.name == "T3Play2"){
+            if(this.variables[i].isActive == 1){
     
-            if(this.variables[i].isActive == 1) {
+            if(this.strategy.name == "T3Play2") {
+                this.variableWeights[0] = 10.9 + (0.028*(this.variables[i].level % 10) - 0.14); //b1
+                this.variableWeights[1] = 10.80 + (0.028*(this.variables[i].level % 10) - 0.14); //b2
+                this.variableWeights[2] = 11.00 + (0.028*(this.variables[i].level % 10) - 0.14); //b3
+                
+                this.variableWeights[7] = 10.5; //c22 8x
+                this.variableWeights[10] = 10.1; //c32 auto
+
+                //Sandbag on c12 since we don't need to buy them yet.
+                if(this.publicationMultiplier < 1.0) {
+                    this.variableWeights[4] = 12.1;
+                } else {
+                    this.variableWeights[4] = 10.1;
+                }
+                //Coasting is different for theory 3, as there are other currencies we would never coast with.
+                if(this.publicationMultiplier > 0.1) {
+
+                    this.variables[0].deactivate();
+                    this.variables[3].deactivate();
+                    this.variables[6].deactivate();
+                    this.variables[9].deactivate();                            
+               }
+               if(this.publicationMultiplier > 1.0) {
+                    this.variableWeights[7] = 11.0; //c22 8x
+                    this.variableWeights[10] = 11.0; //c32 8x
+
+                    this.variableWeights[11] = 120.0;//After c12 autobuy, c33 off.   
+               }
+               if(this.publicationMultiplier > 2.0) {
+                   this.variableWeights[1] = 10.1; // b2 autobuy
+                   this.variableWeights[4] = 10.1;//c12 autobuy
+                   this.variableWeights[7] = 13.1; //c22 OFF
+                   this.variableWeights[10] = 13.1; //c32 OFF
+
+                   this.variableWeights[2] = 10.1;//b3 autobuy as c23 is bad
+                   this.variableWeights[8] = 10.1;//c23
+               }
+
+                
+              
+            } else if(this.strategy.name == "T3PlayX") {
                 this.variableWeights[0] = 10.9 + (0.028*(this.variables[i].level % 10) - 0.14);
                 this.variableWeights[1] = 10.80 + (0.028*(this.variables[i].level % 10) - 0.14);
                 this.variableWeights[2] = 11.00 + (0.028*(this.variables[i].level % 10) - 0.14);
@@ -310,7 +351,7 @@ public class Theory3 extends Theory {
 
 
                 //Sandbag on c12 since we don't need to buy them yet.
-                if(this.publicationMultiplier < 1.0) {
+                if(this.publicationMultiplier < this.recoveryPub * 1.2) {
                     this.variableWeights[4] = 12.1;
                 } else {
                     this.variableWeights[4] = 10.1;
@@ -318,7 +359,7 @@ public class Theory3 extends Theory {
              
                 
                 //Coasting is different for theory 3, as there are other vcurrencies we would never coast with.
-                if(this.publicationMultiplier > 0.5) {
+                if(this.publicationMultiplier > 0.1) {
 
                     this.variables[0].deactivate();
                     this.variables[3].deactivate();
@@ -328,7 +369,7 @@ public class Theory3 extends Theory {
                     
                 
                }
-               if(this.publicationMultiplier > 1.0) {
+               if(this.publicationMultiplier > this.recoveryPub * 1.2) {
 
 
                     this.variableWeights[1] = 11.0; // b2 8x
@@ -341,7 +382,7 @@ public class Theory3 extends Theory {
 
                    
                }
-               if(this.publicationMultiplier > 2.0) {
+               if(this.publicationMultiplier > 2) {
                 
                 
 
@@ -354,25 +395,21 @@ public class Theory3 extends Theory {
                    this.variableWeights[8] = 10.1;//c23
                    
                }
-              
-               if(this.publicationMultiplier > this.coastingPub) {
-                    /**for(int j = 0; j < this.variables.length; j++) {
-                        this.variables[j].deactivate();
-                    }*/
-
-                    this.variables[7].deactivate();
-                    this.variables[10].deactivate();
-                    
-                    this.isCoasting = true;
-                   
-               }
-               
-               //this.variableWeights[6] = 11.1 + (0.032*(this.variables[i].level % 10) - 0.16);
-
-                
-              
             }
-        }
+        } 
+        if(this.publicationMultiplier > this.coastingPub) {
+            /**for(int j = 0; j < this.variables.length; j++) {
+                this.variables[j].deactivate();
+            }*/
+
+            this.variables[7].deactivate();
+            this.variables[10].deactivate();
+            
+            this.isCoasting = true;
+           
+       }
+
+        
         
     }
 

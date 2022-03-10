@@ -219,6 +219,7 @@ public class Variable {
      * @return - the sum (in log format) of the 2 input values
      */
     public static double add(double value1, double value2) {
+        //Split into scientific format. value1 = fractionalPart * 10^wholepart
         double wholePart1 = Math.floor(value1);
         double fractionalPart1 = Math.pow(10, value1 - wholePart1);
         double wholePart2 = Math.floor(value2);
@@ -228,7 +229,7 @@ public class Variable {
         double wholePart;
 
        
-        //if the powers are the same
+        //if the powers are the same, add the fractional parts together. 
         if(Math.abs(wholePart1 - wholePart2) < 0.01) {
             if(fractionalPart1 + fractionalPart2 >= 10) {
                 wholePart = wholePart1 + 1;
@@ -237,7 +238,7 @@ public class Variable {
                 wholePart = wholePart1;
                 fractionalPart = fractionalPart1 + fractionalPart2;
             }
-        // if the powers are vastly different
+        // if the powers are vastly different, ignore the smaller number.
         } else if(Math.abs(wholePart1 - wholePart2) > 12) {
             if(wholePart1 > wholePart2) {
                 wholePart = wholePart1;
@@ -246,9 +247,10 @@ public class Variable {
                 wholePart = wholePart2;
                 fractionalPart = fractionalPart2;
             }
-        // otherwise
+        // otherwise, adjusts the powers until they are the same. For every power increment, multiply/divide 
+        // the fractional part by 10
         } else {
-            if(wholePart1 > wholePart2) {
+            if(wholePart1 > wholePart2) {//first number higher than second number
                 fractionalPart2 = fractionalPart2/Math.pow(10, wholePart1-wholePart2);
                 wholePart2 = wholePart1;
                 if(fractionalPart1 + fractionalPart2 >= 10) {
@@ -259,7 +261,7 @@ public class Variable {
                     fractionalPart = fractionalPart1 + fractionalPart2;
                 }
                 
-            } else {
+            } else {// second number higher than first number.
                 fractionalPart1 = fractionalPart1/Math.pow(10, wholePart2-wholePart1);
                 wholePart1 = wholePart2;
                 if(fractionalPart1 + fractionalPart2 >= 10) {

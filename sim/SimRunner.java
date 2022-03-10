@@ -7,6 +7,20 @@ public class SimRunner {
 
   }
 
+  public static double runLongSim(int studentNumber, int theoryNumber, double startPub, double endPub) {
+
+    double totalTime = 0;
+    double currentPub = startPub;
+    while(currentPub < endPub) {
+      ArrayList<Summary> summaries = runDetailedSim(studentNumber, theoryNumber, currentPub, true);
+      currentPub = currentPub + summaries.get(0).tauGain;
+      totalTime = totalTime + summaries.get(0).pubTime;
+    }
+
+    System.out.println(totalTime);
+    return totalTime;
+  }
+
   public static ArrayList<Summary> runDetailedSim(int studentNumber, int theoryNumber, double pubMark,
       boolean print) {
     //double start = System.currentTimeMillis();
@@ -93,19 +107,24 @@ public class SimRunner {
       }
     } else if (theoryNumber == 3) {
       strategies.add(new Strategy("T3Play2", "active"));
+      strategies.add(new Strategy("T3PlayX", "active"));
 
       Theory3 t3 = new Theory3(pubMark);
 
       double bestPubMulti = 0;
       Summary summary = new Summary();
       for (Strategy strategy : strategies) {
+        for(int j = 0; j < 1; j++) {
         for (int i = 0; i < 3; i++) {
+          
           t3 = new Theory3(pubMark);
           t3.strategy = strategy;
 
           if (i > 0) {
             t3.coastingPub = bestPubMulti - 0.15 * i * bestPubMulti;
           }
+
+          t3.recoveryPub = Math.pow(Math.E, -0.2 * j) * 1.3;
 
           while (t3.finishCoasting == false) {
             t3.runEpoch();
@@ -125,6 +144,7 @@ public class SimRunner {
         if (print == true) {
           t3.printSummary(summary);
         }
+      }
       }
     }
 
@@ -407,7 +427,7 @@ public class SimRunner {
       double bestPubMulti = 0;
       Summary summary = new Summary();
       for (Strategy strategy : strategies) {
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 9; i++) {
           CSR2 = new Convergence_Square_Root(pubMark);
           CSR2.strategy = strategy;
           if (i > 0) {
