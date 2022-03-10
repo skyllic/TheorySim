@@ -443,7 +443,7 @@ public class SimRunner {
           }
           if (i == 0 || CSR2.maxTauPerHour > summary.tauPerHour) {
             bestPubMulti = CSR2.getSummary().pubMulti;
-            summary = new Summary(11, CSR2.maxTauPerHour,
+            summary = new Summary(12, CSR2.maxTauPerHour,
                 CSR2.bestPubMulti, CSR2.strategy.name, CSR2.strategy.type, CSR2.bestPubTime, CSR2.bestTauGain,
                 CSR2.coastStart);
           }
@@ -451,6 +451,43 @@ public class SimRunner {
         summaries.add(summary);
         if (print == true) {
           CSR2.printSummary(summary);
+        }
+      }
+    } else if(theoryNumber == 13) {
+      strategies.add(new Strategy("BTd", "active"));
+      strategies.add(new Strategy("BT", "idle"));
+     
+      
+      
+
+      Basic BT = new Basic(pubMark);
+      double bestPubMulti = 0;
+      Summary summary = new Summary();
+      for (Strategy strategy : strategies) {
+        for (int i = 0; i < 9; i++) {
+          BT = new Basic(pubMark);
+          BT.strategy = strategy;
+          if (i > 0) {
+            BT.coastingPub = bestPubMulti - 0.10 * i * bestPubMulti;
+          }
+
+          while (BT.finishCoasting == false) {
+            BT.runEpoch();
+          }
+          if (printHeaderCounter == 0 && print == true) {
+            BT.printSummaryHeader();
+            printHeaderCounter = 1;
+          }
+          if (i == 0 || BT.maxTauPerHour > summary.tauPerHour) {
+            bestPubMulti = BT.getSummary().pubMulti;
+            summary = new Summary(13, BT.maxTauPerHour,
+                BT.bestPubMulti, BT.strategy.name, BT.strategy.type, BT.bestPubTime, BT.bestTauGain,
+                BT.coastStart);
+          }
+        }
+        summaries.add(summary);
+        if (print == true) {
+          BT.printSummary(summary);
         }
       }
     }

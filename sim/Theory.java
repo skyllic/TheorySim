@@ -79,7 +79,7 @@ public class Theory implements Simmable {
         this.tickCount = 0;
         this.rho = 0;
         this.rhodot = 0;
-        this.tickFrequency = 10.0; // seconds per tick
+        this.tickFrequency = 1.0; // seconds per tick
 
         if(Theory.studentNumber < 65) {
             Theory.research9Level = 0;
@@ -136,6 +136,10 @@ public class Theory implements Simmable {
         else if(Theory.theoryNumber == 12) {
             this.totalMultiplier = 0.222 * this.publicationMark - Math.log10(50);
             this.pubCoefficient = 0.222;
+        }
+        else if(Theory.theoryNumber == 13) {
+            this.totalMultiplier = 0.5 * this.publicationMark;
+            this.pubCoefficient = 0.5;
         }
        else {
            this.totalMultiplier = 1; 

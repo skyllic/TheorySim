@@ -58,14 +58,18 @@ public class TheoryRunner {
         //SimRunner.runDetailedSim(300, 1, 625, true);
         //SimRunner.runLongSim(300, 3, 600, 700);
 
-        
-        for(int i = 500; i < 800; i=i+10) {
-            summaryList.add(SimRunner.runDetailedSim(300, 3, i, true).get(0).tauPerHour);
+        double i = 150;
+        double totalTime = 0;
+        while(i < 900) {
+            Summary summary = SimRunner.runDetailedSim(300, 13, i, true).get(0);
+            i = i + summary.tauGain;
+            totalTime += summary.pubTime;
+             
         }
+
+        System.out.println(totalTime);
         
-        for(Double element : summaryList) {
-            System.out.println(element);
-        }
+      
         
   
 
