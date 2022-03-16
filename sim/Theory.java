@@ -80,6 +80,9 @@ public class Theory implements Simmable {
         this.rho = 0;
         this.rhodot = 0;
         this.tickFrequency = 1.0; // seconds per tick
+        if(theoryNumber == 2) {
+            this.tickFrequency = 10.0;
+        }
 
         if(Theory.studentNumber < 65) {
             Theory.research9Level = 0;

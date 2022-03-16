@@ -14,12 +14,12 @@ public class TheoryRunner {
 
     public static void main(String[] args) {
 
-        if (args.length == 3) {
+        if (args.length == 4) {
             try {
                 int studentNumber = Integer.parseInt(args[0]);
                 int theoryNumber = Integer.parseInt(args[1]);
                 double pubMark = Double.parseDouble(args[2]);
-                SimRunner.runDetailedSim(studentNumber, theoryNumber, pubMark, true);
+                SimRunner.runDetailedSim(studentNumber, theoryNumber, pubMark, true, "strategy=0");
             } catch (Exception e) {
                 // TODO: handle exception
             }
@@ -31,9 +31,9 @@ public class TheoryRunner {
                 for (int i = 1; i < args.length; i++) {
                     double pubMark = Double.parseDouble(args[i]);
                     if(i < 9) {
-                        summaries.addAll(SimRunner.runDetailedSim(studentNumber, i, pubMark, true));
+                        summaries.addAll(SimRunner.runDetailedSim(studentNumber, i, pubMark, true, ""));
                     } else {
-                        summaries.addAll(SimRunner.runDetailedSim(studentNumber, i + 1, pubMark, true));
+                        summaries.addAll(SimRunner.runDetailedSim(studentNumber, i + 1, pubMark, true, ""));
                     }
                 }
                 for(int i = 0; i < summaries.size(); i++) {
@@ -52,22 +52,34 @@ public class TheoryRunner {
         }
 
         ArrayList<Double> summaryList = new ArrayList<>();
-        //SimRunner.runDetailedSim(100, 1, 400, true);
+        /**SimRunner.runDetailedSim(300, 3, 680, true);
+        SimRunner.runDetailedSim(300, 3, 682, true);
+        SimRunner.runDetailedSim(300, 3, 684, true);
+        SimRunner.runDetailedSim(300, 3, 686, true);
+        SimRunner.runDetailedSim(300, 3, 688, true);
+        SimRunner.runDetailedSim(300, 3, 690, true);
+        SimRunner.runDetailedSim(300, 3, 692, true);*/
         //SimRunner.runDetailedSim(150, 1, 500, true);
         //SimRunner.runDetailedSim(200, 1, 550, true);
         //SimRunner.runDetailedSim(300, 1, 625, true);
         //SimRunner.runLongSim(300, 3, 600, 700);
+        SimRunner.runDetailedSim(300, 12, 400, true, "strate=0, ").get(0);
 
-        double i = 150;
+        double i = 300;
         double totalTime = 0;
-        while(i < 900) {
-            Summary summary = SimRunner.runDetailedSim(300, 13, i, true).get(0);
-            i = i + summary.tauGain;
-            totalTime += summary.pubTime;
+        while(i < 2000) {
+            Summary summary = SimRunner.runDetailedSim(300, 6, i, true, "strategy=0, ").get(0);
+            i = i + 1;
+            summaryList.add(summary.pubTime);
+            if(summary.tauPerHour < 1) {
+                break;
+            }
              
         }
 
-        System.out.println(totalTime);
+        for(Double element : summaryList) {
+            System.out.println(element);
+        }
         
       
         

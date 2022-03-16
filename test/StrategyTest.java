@@ -16,7 +16,7 @@ public class StrategyTest {
     @Test
     public void testFindStrategyStrengthT1() {
         
-        SimRunner.runDetailedSim(300, 1, 600, true);
+        SimRunner.runDetailedSim(300, 1, 600, true, "");
     }
 
     @Test

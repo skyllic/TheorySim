@@ -87,9 +87,7 @@ public class Theory2 extends Theory {
     public void moveTick() {
 
         this.updateEquation();
-        if(this.publicationMultiplier > 1) {
-            this.tickFrequency = 1.0;
-        }
+        
         super.moveTick();
 
         this.publicationMultiplier = Math.pow(10, 0.198 * (this.maxRho - this.publicationMark));

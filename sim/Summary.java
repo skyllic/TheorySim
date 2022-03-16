@@ -13,7 +13,7 @@ public class Summary {
   public double coastStart;
 
   public Summary(int theoryNumber, double tauPerHour, double pubMulti, String strategy, String strategyType, 
-  double pubTime, double tauGain, double coastStart) {
+  double pubTime, double recoveryTime, double tauGain, double coastStart) {
     this.theoryNumber = theoryNumber;
     this.tauPerHour = tauPerHour;
     this.pubMulti = pubMulti;

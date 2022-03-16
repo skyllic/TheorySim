@@ -28,7 +28,7 @@ public class Theory3 extends Theory {
     public double term33;
 
     public String strategyType = "active";
-    public double coastingPub = 2.5;
+    public double coastingPub = 4.5;
     public double recoveryPub = 1.0;
 
 
@@ -308,26 +308,26 @@ public class Theory3 extends Theory {
                 this.variableWeights[10] = 10.1; //c32 auto
 
                 //Sandbag on c12 since we don't need to buy them yet.
-                if(this.publicationMultiplier < 1.0) {
-                    this.variableWeights[4] = 12.1;
+                if(this.publicationMultiplier < 0.6) {
+                    this.variableWeights[4] = 14.1;
                 } else {
                     this.variableWeights[4] = 10.1;
                 }
                 //Coasting is different for theory 3, as there are other currencies we would never coast with.
-                if(this.publicationMultiplier > 0.1) {
+                if(this.publicationMultiplier > 0.6) {
 
                     this.variables[0].deactivate();
                     this.variables[3].deactivate();
                     this.variables[6].deactivate();
                     this.variables[9].deactivate();                            
                }
-               if(this.publicationMultiplier > 1.0) {
+               if(this.publicationMultiplier > 0.6) {
                     this.variableWeights[7] = 11.0; //c22 8x
                     this.variableWeights[10] = 11.0; //c32 8x
 
                     this.variableWeights[11] = 120.0;//After c12 autobuy, c33 off.   
                }
-               if(this.publicationMultiplier > 2.0) {
+               if(this.publicationMultiplier > 2.4) {
                    this.variableWeights[1] = 10.1; // b2 autobuy
                    this.variableWeights[4] = 10.1;//c12 autobuy
                    this.variableWeights[7] = 13.1; //c22 OFF
@@ -340,60 +340,53 @@ public class Theory3 extends Theory {
                 
               
             } else if(this.strategy.name == "T3PlayX") {
-                this.variableWeights[0] = 10.9 + (0.028*(this.variables[i].level % 10) - 0.14);
-                this.variableWeights[1] = 10.80 + (0.028*(this.variables[i].level % 10) - 0.14);
-                this.variableWeights[2] = 11.00 + (0.028*(this.variables[i].level % 10) - 0.14);
 
-                
+                double c12NextCost = this.variables[4].nextCost;
+                double costThreshold = this.publicationMark + 0.147 * 2.0;
+
+                this.variableWeights[0] = 10.9 + (0.028*(this.variables[i].level % 10) - 0.14); //b1
+                this.variableWeights[1] = 10.80 + (0.028*(this.variables[i].level % 10) - 0.14); //b2
+                this.variableWeights[2] = 11.00 + (0.028*(this.variables[i].level % 10) - 0.14); //b3
                 
                 this.variableWeights[7] = 10.5; //c22 8x
                 this.variableWeights[10] = 10.1; //c32 auto
 
-
                 //Sandbag on c12 since we don't need to buy them yet.
-                if(this.publicationMultiplier < this.recoveryPub * 1.2) {
-                    this.variableWeights[4] = 12.1;
+                if(this.publicationMultiplier < 0.6) {
+                    this.variableWeights[4] = 14.1;
                 } else {
                     this.variableWeights[4] = 10.1;
                 }
-             
-                
-                //Coasting is different for theory 3, as there are other vcurrencies we would never coast with.
-                if(this.publicationMultiplier > 0.1) {
+                //Coasting is different for theory 3, as there are other currencies we would never coast with.
+                if(this.publicationMultiplier > 0.6) {
 
                     this.variables[0].deactivate();
                     this.variables[3].deactivate();
                     this.variables[6].deactivate();
-                    this.variables[9].deactivate();
-                    //this.variableWeights[11] = 10.3;
-                    
-                
+                    this.variables[9].deactivate();                            
                }
-               if(this.publicationMultiplier > this.recoveryPub * 1.2) {
-
-
-                    this.variableWeights[1] = 11.0; // b2 8x
-                    this.variableWeights[4] = 10.1;//c12 autobuy
-                    this.variableWeights[7] = 11.0; //c22 8x
-                    this.variableWeights[10] = 11.0; //c32 8x
-
-
-                    this.variableWeights[11] = 120.0;//After c12 autobuy, c33 off.
-
-                   
-               }
-               if(this.publicationMultiplier > 2) {
-                
-                
-
-                   this.variableWeights[1] = 10.1; // b2 autobuy
+               
+               if(this.publicationMultiplier > 0.6) {
+                   this.variableWeights[1] = 10.8 + (0.028*(this.variables[i].level % 10) - 0.14); // b2 autobuy
                    this.variableWeights[4] = 10.1;//c12 autobuy
-                   this.variableWeights[7] = 13.1; //c22 OFF
-                   this.variableWeights[10] = 13.1; //c32 OFF
+                   this.variableWeights[7] = 10.8; //c22 OFF
+                   this.variableWeights[10] = 11.1; //c32 OFF
+                   this.variableWeights[11] = 12.1;
 
-                   this.variableWeights[2] = 10.1;//b3 autobuy as c23 is bad
+                   this.variableWeights[2] = 11.0 + (0.028*(this.variables[i].level % 10) - 0.14);//b3 autobuy as c23 is bad
                    this.variableWeights[8] = 10.1;//c23
-                   
+               }
+
+               if(c12NextCost > costThreshold) {
+                    this.variableWeights[1] = 10.1; // b2 autobuy
+                   this.variableWeights[4] = 10.1;//c12 autobuy
+
+                   this.variableWeights[7] = 12.1; //c22 OFF
+                   this.variableWeights[10] = 12.1; //c32 OFF
+                   this.variableWeights[11] = 20.0; //c33 OFF
+
+                   this.variableWeights[2] = 10.1;//b3 autobuy
+                   this.variableWeights[8] = 10.1;//c23
                }
             }
         } 

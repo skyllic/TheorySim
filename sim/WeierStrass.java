@@ -274,6 +274,7 @@ public class WeierStrass extends Theory {
                 this.variableWeights[3] = 15;
                 this.variableWeights[4] = 10.0;
 
+              
                 if(this.publicationMultiplier > 5) {
                     this.variableWeights[2] = 9.75;
                 }
