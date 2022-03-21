@@ -63,23 +63,27 @@ public class TheoryRunner {
         //SimRunner.runDetailedSim(200, 1, 550, true);
         //SimRunner.runDetailedSim(300, 1, 625, true);
         //SimRunner.runLongSim(300, 3, 600, 700);
-        SimRunner.runDetailedSim(300, 12, 400, true, "strate=0, ").get(0);
+        //SimRunner.runDetailedSim(300, 12, 400, true, "strate=0, ").get(0);
 
-        double i = 300;
+        double i = 1178;
         double totalTime = 0;
-        while(i < 2000) {
-            Summary summary = SimRunner.runDetailedSim(300, 6, i, true, "strategy=0, ").get(0);
-            i = i + 1;
-            summaryList.add(summary.pubTime);
-            if(summary.tauPerHour < 1) {
+        SimRunner.runLongSim(305, 10, 969+Math.log10(1.0), 999);
+        /**while(i < 1200) {
+            Summary summary = SimRunner.runDetailedSim(305, 10, i, true, "strategy=0, ").get(0);
+            i = i + summary.tauGain;
+            //summaryList.add(summary.pubTime);
+            totalTime += summary.pubTime;
+
+            if(summary.tauPerHour > 1000000.0) {
                 break;
             }
              
         }
 
         for(Double element : summaryList) {
-            System.out.println(element);
+            //System.out.println(element);
         }
+        System.out.println(totalTime);*/
         
       
         

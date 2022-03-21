@@ -9,6 +9,7 @@ public class Summary {
   public String strategy;
   public String strategyType;
   public double pubTime;
+  public double recoveryTime;
   public double tauGain;
   public double coastStart;
 
@@ -20,6 +21,7 @@ public class Summary {
     this.strategy = strategy;
     this.strategyType = strategyType;
     this.pubTime = pubTime;
+    this.recoveryTime = recoveryTime;
     this.tauGain = tauGain;
     this.coastStart = coastStart;
   }

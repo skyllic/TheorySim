@@ -65,7 +65,8 @@ public class SimRunner {
           if (i == 0 || t1.maxTauPerHour > summary.tauPerHour) {
             bestPubMulti = t1.getSummary().pubMulti;
             summary = new Summary(1, t1.maxTauPerHour,
-                t1.bestPubMulti, t1.strategy.name, t1.strategy.type, t1.bestPubTime, t1.bestTauGain,
+                t1.bestPubMulti, t1.strategy.name, t1.strategy.type, t1.bestPubTime, t1.bestRecoveryTime,
+                 t1.bestTauGain,
                 t1.coastStart);
           }
         }
@@ -104,7 +105,8 @@ public class SimRunner {
           if (i == 0 || t2.maxTauPerHour > summary.tauPerHour) {
             bestPubMulti = t2.getSummary().pubMulti;
             summary = new Summary(2, t2.maxTauPerHour,
-                t2.bestPubMulti, t2.strategy.name, t2.strategy.type, t2.bestPubTime, t2.bestTauGain,
+                t2.bestPubMulti, t2.strategy.name, t2.strategy.type, t2.bestPubTime,
+                t2.bestRecoveryTime, t2.bestTauGain,
                 t2.coastStart);
           }
         }
@@ -147,7 +149,8 @@ public class SimRunner {
             if (i == 0 || t3.maxTauPerHour > summary.tauPerHour) {
               bestPubMulti = t3.getSummary().pubMulti;
               summary = new Summary(3, t3.maxTauPerHour,
-                  t3.bestPubMulti, t3.strategy.name, t3.strategy.type, t3.bestPubTime, t3.bestTauGain,
+                  t3.bestPubMulti, t3.strategy.name, t3.strategy.type, t3.bestPubTime,
+                  t3.bestRecoveryTime, t3.bestTauGain,
                   t3.coastStart);
             }
           }
@@ -192,7 +195,8 @@ public class SimRunner {
           if (i == 0 || t4.maxTauPerHour > summary.tauPerHour) {
             bestPubMulti = t4.getSummary().pubMulti;
             summary = new Summary(4, t4.maxTauPerHour,
-                t4.bestPubMulti, t4.strategy.name, t4.strategy.type, t4.bestPubTime, t4.bestTauGain,
+                t4.bestPubMulti, t4.strategy.name, t4.strategy.type, t4.bestPubTime, t4.bestRecoveryTime,
+                 t4.bestTauGain,
                 t4.coastStart);
           }
         }
@@ -233,7 +237,8 @@ public class SimRunner {
           if (i == 0 || t5.maxTauPerHour > summary.tauPerHour) {
             bestPubMulti = t5.getSummary().pubMulti;
             summary = new Summary(5, t5.maxTauPerHour,
-                t5.bestPubMulti, t5.strategy.name, t5.strategy.type, t5.bestPubTime, t5.bestTauGain,
+                t5.bestPubMulti, t5.strategy.name, t5.strategy.type, t5.bestPubTime, 
+                t5.bestRecoveryTime, t5.bestTauGain,
                 t5.coastStart);
           }
         }
@@ -276,7 +281,8 @@ public class SimRunner {
           if (i == 0 || t6.maxTauPerHour > summary.tauPerHour) {
             bestPubMulti = t6.getSummary().pubMulti;
             summary = new Summary(6, t6.maxTauPerHour,
-                t6.bestPubMulti, t6.strategy.name, t6.strategy.type, t6.bestPubTime, t6.bestTauGain,
+                t6.bestPubMulti, t6.strategy.name, t6.strategy.type, t6.bestPubTime,
+                t6.bestRecoveryTime, t6.bestTauGain,
                 t6.coastStart);
           }
         }
@@ -315,7 +321,8 @@ public class SimRunner {
           if (i == 0 || t7.maxTauPerHour > summary.tauPerHour) {
             bestPubMulti = t7.getSummary().pubMulti;
             summary = new Summary(7, t7.maxTauPerHour,
-                t7.bestPubMulti, t7.strategy.name, t7.strategy.type, t7.bestPubTime, t7.bestTauGain,
+                t7.bestPubMulti, t7.strategy.name, t7.strategy.type, t7.bestPubTime,
+                t7.bestRecoveryTime, t7.bestTauGain,
                 t7.coastStart);
           }
         }
@@ -357,7 +364,8 @@ public class SimRunner {
           if (i == 0 || t8.maxTauPerHour > summary.tauPerHour) {
             bestPubMulti = t8.getSummary().pubMulti;
             summary = new Summary(8, t8.maxTauPerHour,
-                t8.bestPubMulti, t8.strategy.name, t8.strategy.type, t8.bestPubTime, t8.bestTauGain,
+                t8.bestPubMulti, t8.strategy.name, t8.strategy.type, t8.bestPubTime,
+                t8.bestRecoveryTime, t8.bestTauGain,
                 t8.coastStart);
           }
         }
@@ -404,6 +412,7 @@ public class SimRunner {
             summary = new Summary(10, weierStrass.maxTauPerHour,
                 weierStrass.bestPubMulti, weierStrass.strategy.name, weierStrass.strategy.type,
                 weierStrass.bestPubTime,
+                weierStrass.bestRecoveryTime,
                 weierStrass.bestTauGain,
                 weierStrass.coastStart);
           }
@@ -445,7 +454,9 @@ public class SimRunner {
           if (i == 0 || SL.maxTauPerHour > summary.tauPerHour) {
             bestPubMulti = SL.getSummary().pubMulti;
             summary = new Summary(11, SL.maxTauPerHour,
-                SL.bestPubMulti, SL.strategy.name, SL.strategy.type, SL.bestPubTime, SL.bestTauGain,
+                SL.bestPubMulti, SL.strategy.name, SL.strategy.type, SL.bestPubTime,
+                SL.bestRecoveryTime,
+                 SL.bestTauGain,
                 SL.coastStart);
           }
         }
@@ -484,7 +495,9 @@ public class SimRunner {
           if (i == 0 || CSR2.maxTauPerHour > summary.tauPerHour) {
             bestPubMulti = CSR2.getSummary().pubMulti;
             summary = new Summary(12, CSR2.maxTauPerHour,
-                CSR2.bestPubMulti, CSR2.strategy.name, CSR2.strategy.type, CSR2.bestPubTime, CSR2.bestTauGain,
+                CSR2.bestPubMulti, CSR2.strategy.name, CSR2.strategy.type, CSR2.bestPubTime,
+                CSR2.bestRecoveryTime,
+                 CSR2.bestTauGain,
                 CSR2.coastStart);
           }
         }
@@ -522,7 +535,9 @@ public class SimRunner {
           if (i == 0 || BT.maxTauPerHour > summary.tauPerHour) {
             bestPubMulti = BT.getSummary().pubMulti;
             summary = new Summary(13, BT.maxTauPerHour,
-                BT.bestPubMulti, BT.strategy.name, BT.strategy.type, BT.bestPubTime, BT.bestTauGain,
+                BT.bestPubMulti, BT.strategy.name, BT.strategy.type, BT.bestPubTime,
+                BT.bestRecoveryTime,
+                 BT.bestTauGain,
                 BT.coastStart);
           }
         }
@@ -739,7 +754,9 @@ public class SimRunner {
           if (i == 0 || t1.maxTauPerHour > summary.tauPerHour) {
             bestPubMulti = t1.getSummary().pubMulti;
             summary = new Summary(1, t1.maxTauPerHour,
-                t1.bestPubMulti, t1.strategy.name, t1.strategy.type, t1.bestPubTime, t1.bestTauGain,
+                t1.bestPubMulti, t1.strategy.name, t1.strategy.type, t1.bestPubTime,
+                t1.bestRecoveryTime,
+                 t1.bestTauGain,
                 t1.coastStart);
           }
         }
@@ -772,7 +789,9 @@ public class SimRunner {
           if (i == 0 || t2.maxTauPerHour > summary.tauPerHour) {
             bestPubMulti = t2.getSummary().pubMulti;
             summary = new Summary(2, t2.maxTauPerHour,
-                t2.bestPubMulti, t2.strategy.name, t2.strategy.type, t2.bestPubTime, t2.bestTauGain,
+                t2.bestPubMulti, t2.strategy.name, t2.strategy.type, t2.bestPubTime,
+                t2.bestRecoveryTime,
+                 t2.bestTauGain,
                 t2.coastStart);
           }
         }
@@ -805,7 +824,9 @@ public class SimRunner {
           if (i == 0 || t3.maxTauPerHour > summary.tauPerHour) {
             bestPubMulti = t3.getSummary().pubMulti;
             summary = new Summary(3, t3.maxTauPerHour,
-                t3.bestPubMulti, t3.strategy.name, t3.strategy.type, t3.bestPubTime, t3.bestTauGain,
+                t3.bestPubMulti, t3.strategy.name, t3.strategy.type, t3.bestPubTime,
+                t3.bestRecoveryTime,
+                 t3.bestTauGain,
                 t3.coastStart);
           }
         }
@@ -844,7 +865,9 @@ public class SimRunner {
           if (i == 0 || t4.maxTauPerHour > summary.tauPerHour) {
             bestPubMulti = t4.getSummary().pubMulti;
             summary = new Summary(4, t4.maxTauPerHour,
-                t4.bestPubMulti, t4.strategy.name, t4.strategy.type, t4.bestPubTime, t4.bestTauGain,
+                t4.bestPubMulti, t4.strategy.name, t4.strategy.type, t4.bestPubTime,
+                t4.bestRecoveryTime,
+                 t4.bestTauGain,
                 t4.coastStart);
           }
         }
@@ -877,7 +900,9 @@ public class SimRunner {
           if (i == 0 || t5.maxTauPerHour > summary.tauPerHour) {
             bestPubMulti = t5.getSummary().pubMulti;
             summary = new Summary(5, t5.maxTauPerHour,
-                t5.bestPubMulti, t5.strategy.name, t5.strategy.type, t5.bestPubTime, t5.bestTauGain,
+                t5.bestPubMulti, t5.strategy.name, t5.strategy.type, t5.bestPubTime,
+                t5.bestRecoveryTime,
+                 t5.bestTauGain,
                 t5.coastStart);
           }
         }
@@ -911,7 +936,9 @@ public class SimRunner {
           if (i == 0 || t6.maxTauPerHour > summary.tauPerHour) {
             bestPubMulti = t6.getSummary().pubMulti;
             summary = new Summary(6, t6.maxTauPerHour,
-                t6.bestPubMulti, t6.strategy.name, t6.strategy.type, t6.bestPubTime, t6.bestTauGain,
+                t6.bestPubMulti, t6.strategy.name, t6.strategy.type, t6.bestPubTime,
+                t6.bestRecoveryTime,
+                 t6.bestTauGain,
                 t6.coastStart);
           }
         }
@@ -944,7 +971,9 @@ public class SimRunner {
           if (i == 0 || t7.maxTauPerHour > summary.tauPerHour) {
             bestPubMulti = t7.getSummary().pubMulti;
             summary = new Summary(7, t7.maxTauPerHour,
-                t7.bestPubMulti, t7.strategy.name, t7.strategy.type, t7.bestPubTime, t7.bestTauGain,
+                t7.bestPubMulti, t7.strategy.name, t7.strategy.type, t7.bestPubTime,
+                t7.bestRecoveryTime,
+                 t7.bestTauGain,
                 t7.coastStart);
           }
         }
@@ -978,7 +1007,9 @@ public class SimRunner {
           if (i == 0 || t8.maxTauPerHour > summary.tauPerHour) {
             bestPubMulti = t8.getSummary().pubMulti;
             summary = new Summary(8, t8.maxTauPerHour,
-                t8.bestPubMulti, t8.strategy.name, t8.strategy.type, t8.bestPubTime, t8.bestTauGain,
+                t8.bestPubMulti, t8.strategy.name, t8.strategy.type, t8.bestPubTime,
+                t8.bestRecoveryTime,
+                 t8.bestTauGain,
                 t8.coastStart);
           }
         }
@@ -1017,6 +1048,7 @@ public class SimRunner {
             summary = new Summary(10, weierStrass.maxTauPerHour,
                 weierStrass.bestPubMulti, weierStrass.strategy.name, weierStrass.strategy.type,
                 weierStrass.bestPubTime,
+                weierStrass.bestRecoveryTime,
                 weierStrass.bestTauGain,
                 weierStrass.coastStart);
           }
@@ -1052,7 +1084,9 @@ public class SimRunner {
             bestPubMulti = SL.getSummary().pubMulti;
             summary = new Summary(11, SL.maxTauPerHour,
                 SL.bestPubMulti, SL.strategy.name, SL.strategy.type,
-                SL.bestPubTime, SL.bestTauGain,
+                SL.bestPubTime,
+                SL.bestRecoveryTime,
+                 SL.bestTauGain,
                 SL.coastStart);
           }
         }

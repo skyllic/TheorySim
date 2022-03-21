@@ -50,6 +50,10 @@ public class Theory implements Simmable {
     public double tauGainActive;
     public double tauGainIdle;
 
+    public double recoveryTime;
+    public double bestRecoveryTime;
+    public boolean recoveryFlag = false;
+
     public final double totalMultiplier; //e.g. for T6 = T6^0.196 / 50
     public double publicationMultiplier; // current multiplier. e.g. for T6 usually publishes at about 10-30 multi
     public final double publicationMark; // Rho at which you can publish e.g. 2.75e965 etc
@@ -159,6 +163,13 @@ public class Theory implements Simmable {
         this.seconds += this.tickFrequency;
         this.tickCount += 1;
 
+        
+        
+        if(this.publicationMultiplier > 1 && recoveryFlag == false) {
+            this.recoveryTime = this.seconds / 3600.0;
+            recoveryFlag = true;
+        }
+
         if (this.rho > this.maxRho) {
             this.maxRho = this.rho;
         }
@@ -172,6 +183,7 @@ public class Theory implements Simmable {
             this.bestPubMulti = this.publicationMultiplier;
             this.bestPubTime = this.seconds / 3600.0;
             this.bestTauGain = this.maxRho - this.publicationMark;
+            this.bestRecoveryTime = this.recoveryTime;
             
         }    
     }
@@ -318,7 +330,7 @@ public class Theory implements Simmable {
     public Summary getSummary() {
         Summary summary = new Summary(Theory.theoryNumber, this.maxTauPerHour, this.bestPubMulti,
          this.strategy.name, this.strategy.type,
-         this.bestPubTime, this.bestTauGain, this.coastStart);
+         this.bestPubTime, this.bestRecoveryTime, this.bestTauGain, this.coastStart);
 
          return summary;
     }
