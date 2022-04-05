@@ -75,7 +75,7 @@ public class Basic extends Theory {
     public void updateEquation() {
 
       this.rhodot = this.totalMultiplier + Math.log10(Theory.adBonus) + Math.log10(this.tickFrequency) + 
-        this.variables[0].value * (1 + 3 * 0.08) + this.variables[1].value * (1 + 3 * 0.077);
+        this.variables[0].value * (1 + 3 * 0.08) + this.variables[1].value * (1.234);
 
       this.rho = Variable.add(this.rho, this.rhodot);
 
@@ -191,7 +191,11 @@ public class Basic extends Theory {
 
         if (this.variables[i].isActive == 1) {
 
-            if (this.strategy.name == "BTd") {
+            if(this.strategy.name == "BTPlay") {
+                this.variableWeights[0] = 11.20 + (0.030 * (this.variables[i].level % 10) - 0.20);
+                this.variableWeights[1] = 10.0;
+            }
+             else if (this.strategy.name == "BTd") {
                 this.variableWeights[0] = 11.0;
                 this.variableWeights[1] = 10.0;
             } else if(this.strategy.name == "BT") {

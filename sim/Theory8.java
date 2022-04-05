@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 /**
- * An implementation of Theory 6 (Integral Calculus) from the game Exponential
+ * An implementation of Theory 8 (Chaos Theory) from the game Exponential
  * Idle.
  */
 public class Theory8 extends Theory {
@@ -31,7 +31,7 @@ public class Theory8 extends Theory {
     public double coastingPub = 3.0;
     public boolean isCoasting;
 
-    // public double[] variableWeights = {1000,1000,10,10,10,10,11.1,10.20};
+    
     public double[] variableWeights = { 10, 10, 10, 10, 10 };
 
     public Theory8[] t8Clones = new Theory8[5];
@@ -49,8 +49,7 @@ public class Theory8 extends Theory {
         this.variables = new Variable[5];
         this.strategy = new Strategy("T8AI", "AI");
 
-        // Order of variable is q1, q2, r1, r2, c1, c2, c3, c4, c5 (same as in game when
-        // read top to bottom)
+        // Order of variable is c1, c2, c3, c4, c5
         this.variables[0] = new Variable(1.5172, 10, Math.pow(2, 0.1), 0, false, true, false, true, false,
                 new double[2]);
         this.variables[1] = new Variable(64, 20, 2, 1, true, true, false, false, false, new double[2]);
@@ -62,11 +61,13 @@ public class Theory8 extends Theory {
 
     /**
      * Moves the theory by 1 tick (default is 0.1 seconds). Also updates auxillary
-     * variables such as q, r,
-     * qdot, rdot and rho.
+     * variables.
      */
     public void moveTick() {
-        if(this.strategy.name == "T8MS" && (this.tickCount) % 340 == 0 ) {
+        //
+        if(this.strategy.name == "T8MS" && (this.tickCount) % 335 == 0 ) {
+            this.resetStateDefault();
+        } else if(this.strategy.name == "T8MS2" && (this.tickCount) % 335 == 0) {
             this.resetStateDefault();
         }
 
@@ -118,9 +119,9 @@ public class Theory8 extends Theory {
         this.ydot = 500 * this.x + 50 * this.y;
         this.zdot = 50 + 500 * this.z * (this.x - 14);
 
-        double term1 = this.variables[2].value  + Math.log10(Math.pow(this.xdot, 2));
+        double term1 = this.variables[2].value * 1.15 + Math.log10(Math.pow(this.xdot, 2));
         double term2 = this.variables[3].value * 1.15 + Math.log10(Math.pow(this.ydot, 2));
-        double term3 = this.variables[4].value  + Math.log10(Math.pow(this.zdot, 2));
+        double term3 = this.variables[4].value * 1.15 + Math.log10(Math.pow(this.zdot, 2));
 
         this.rhodot = 0.5 * (Variable.add(term3, Variable.add(term1, term2))) +
                 this.variables[0].value + this.variables[1].value - Math.log10(100) +
@@ -233,6 +234,15 @@ public class Theory8 extends Theory {
 
                 this.variableWeights[0] = 10.9 + (0.018 * (this.variables[0].level % 10) - 0.11);
             } 
+            else if(this.strategy.name == "T8MS2") {
+                // this.variableWeights[0] = 11;
+                this.variableWeights[1] = 10.0;
+                this.variableWeights[2] = 10.4;
+                this.variableWeights[3] = 10.0;
+                this.variableWeights[4] = 10.4;
+
+                this.variableWeights[0] = 10.9 + (0.030 * (this.variables[0].level % 10) - 0.11);
+            }
             else if(this.strategy.name == "T8") {
                 this.variableWeights[0] = 10.0;
                 this.variableWeights[1] = 10.0;

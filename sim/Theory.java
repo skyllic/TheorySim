@@ -18,24 +18,58 @@ import java.util.ArrayList;
  */ 
 public class Theory implements Simmable {
 
+    /**Name of theory. */
     public String name;
+
+    /**List of upgrades (non-permanent).  */
     public Variable[] variables;
+
+    /**Current rho in log format. */
     public double rho;
+
+    /**Current rhodot in log format. */
     public double rhodot;
+
+    /**Maximum rho reached in this publication, in log format. */
     public double maxRho;
-    public double seconds; // elapsed time in seconds
-    public int tickCount; // the number of elapsed ticks
-    public double tauPerHour; // current log10(tau) per hour of the theory
-    public double tickFrequency; //second per tick (default 0.1 seconds/tick)
+
+    /**Number of seconds since beginning of publication. */
+    public double seconds;
+
+    /**Number of elapsed ticks since beginning of publication. */
+    public int tickCount; 
+
+    /**Current tau per hour gained in log format.  */
+    public double tauPerHour; 
+
+    /**Seconds per tick. Default is 0.1 seconds per tick (10 ticks/second). */
+    public double tickFrequency;
+
+    /**If sim is currently coasting. Coasting is when the sim stops buying variables and waits until publish. */
     public boolean isCoasting = false;
+
+    /**If sim finishes coasting. */
     public boolean finishCoasting = false;
+
+    /** */
     public double coastingCoefficient = 1.15;
     public int coastingNumber = 0;
+
+    /**Maximum tau per hour during publication. (log format) */
     public double maxTauPerHour;
+
+    /**Current best publication multiplier found by the sim. */
     public double bestPubMulti;
+
+    /**Current best publication time, in seconds found by the sim. */
     public double bestPubTime;
+
+    /**Current best tau gain found by the sim (log format). */
     public double bestTauGain;
+
+    /**Current best publication multiplier to start coasting. */
     public double bestCoastStart;
+    
     public double bestCoastingNumber = 0;
     public int activeFrequency = 10;
 
@@ -312,7 +346,12 @@ public class Theory implements Simmable {
         System.out.print(String.format("%.4f",
                 summary.tauPerHour));
         System.out.print("\t\t" + String.format("%.2f", summary.pubMulti) + "\t\t\t");
-        System.out.print(String.format("%s", summary.strategy) + "\t\t\t");
+        if(summary.strategy.length() > 6) {
+            System.out.print(String.format("%s", summary.strategy) + "\t\t");
+        } else {
+            System.out.print(String.format("%s", summary.strategy) + "\t\t\t");
+        }
+        
         System.out.print(String.format("%.3f", summary.pubTime));
         System.out.print("\t\t" + String.format("%.4f", summary.tauGain));
         System.out.print("\t\t" + String.format("%.4f", summary.coastStart));

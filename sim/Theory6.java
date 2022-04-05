@@ -2,6 +2,7 @@ package sim;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Timer;
 
 /**
  * An implementation of Theory 6 (Integral Calculus) from the game Exponential
@@ -25,6 +26,12 @@ public class Theory6 extends Theory {
     // public double[] variableWeights = {10,10.0,10.0,10,100,100,1000,1000,10};
 
     public Theory6[] t6Clones = new Theory6[9];
+
+
+    long timer1;
+    long timer2;
+    long timer3;
+    long totalTime = 0;
 
     public Theory6(double pubMark) {
         super(6, pubMark);
@@ -65,12 +72,17 @@ public class Theory6 extends Theory {
      * qdot, rdot and rho.
      */
     public void moveTick() {
+        timer1 = System.nanoTime();
 
         this.updateEquation();
 
         super.moveTick();
 
         this.publicationMultiplier = Math.pow(10, 0.196 * (this.maxRho - this.publicationMark));
+
+        timer2 = System.nanoTime();
+
+        totalTime = totalTime + timer2 - timer1;
 
     }
 

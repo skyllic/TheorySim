@@ -298,6 +298,7 @@ public class Theory3 extends Theory {
             10, 10.1, 11.1*/
 
             if(this.variables[i].isActive == 1){
+                
     
             if(this.strategy.name == "T3Play2") {
                 this.variableWeights[0] = 10.9 + (0.028*(this.variables[i].level % 10) - 0.14); //b1
@@ -325,8 +326,11 @@ public class Theory3 extends Theory {
                     this.variableWeights[7] = 11.0; //c22 8x
                     this.variableWeights[10] = 11.0; //c32 8x
 
+                    
+
                     this.variableWeights[11] = 120.0;//After c12 autobuy, c33 off.   
                }
+              
                if(this.publicationMultiplier > 2.4) {
                    this.variableWeights[1] = 10.1; // b2 autobuy
                    this.variableWeights[4] = 10.1;//c12 autobuy
@@ -341,18 +345,16 @@ public class Theory3 extends Theory {
               
             } else if(this.strategy.name == "T3PlayX") {
 
-                double c12NextCost = this.variables[4].nextCost;
-                double costThreshold = this.publicationMark + 0.147 * 2.0;
-
-                this.variableWeights[0] = 10.9 + (0.028*(this.variables[i].level % 10) - 0.14); //b1
-                this.variableWeights[1] = 10.80 + (0.028*(this.variables[i].level % 10) - 0.14); //b2
-                this.variableWeights[2] = 11.00 + (0.028*(this.variables[i].level % 10) - 0.14); //b3
+                this.variableWeights[0] = 11.00 + (0.032*(this.variables[i].level % 10) - 0.14); //b1
+                this.variableWeights[1] = 10.70 + (0.032*(this.variables[i].level % 10) - 0.14); //b2
+                this.variableWeights[2] = 11.00 + (0.032*(this.variables[i].level % 10) - 0.14); //b3
                 
                 this.variableWeights[7] = 10.5; //c22 8x
                 this.variableWeights[10] = 10.1; //c32 auto
+                this.variableWeights[11] = 11.1;
 
                 //Sandbag on c12 since we don't need to buy them yet.
-                if(this.publicationMultiplier < 0.6) {
+                if(this.publicationMultiplier < 0.8) {
                     this.variableWeights[4] = 14.1;
                 } else {
                     this.variableWeights[4] = 10.1;
@@ -365,29 +367,83 @@ public class Theory3 extends Theory {
                     this.variables[6].deactivate();
                     this.variables[9].deactivate();                            
                }
+               if(this.publicationMultiplier > 0.8) {
+                    this.variableWeights[7] = 10.8; //c22 8x
+                    this.variableWeights[10] = 10.8; //c32 8x
+
+                    
+                    this.variableWeights[11] = 13.0;//After c12 autobuy, c33 off.   
+               }
+               if(this.publicationMultiplier > 2.4) {
+                   this.variableWeights[1] = 10.1; // b2 autobuy
+                   this.variableWeights[4] = 10.1;//c12 autobuy
+                   this.variableWeights[7] = 16.1; //c22 OFF
+                   this.variableWeights[10] = 16.1; //c32 OFF
+
+                   this.variableWeights[2] = 10.1;//b3 autobuy as c23 is bad
+                   this.variableWeights[8] = 10.1;//c23
+               }
+            } else if(this.strategy.name == "T3XS") {
+                this.variableWeights[0] = 10.0;
+                this.variableWeights[1] = 10.0;
+                this.variableWeights[2] = 10.0;
+
+                this.variableWeights[4] = 12.0;
+
+                this.variableWeights[4] = 10 + Math.min(2, 1 / this.publicationMultiplier);
+
+                this.variableWeights[7] = 10.0;
+                this.variableWeights[8] = 10.0;
+
+                this.variableWeights[9] = 10.0;
+                this.variableWeights[10] = 10.0;
+                this.variableWeights[11] = 10.0;
+
+                if(this.maxRho > this.publicationMark - Math.log10(2)) {
+                    this.variables[0].deactivate();
+                    this.variables[3].deactivate();
+                    this.variables[6].deactivate();
+                    this.variables[9].deactivate();
+
+                    this.variables[10].deactivate();
+                    this.variables[11].deactivate();
+
+                    this.variables[5].deactivate();
+
+                    this.variableWeights[4] = 10.0;
+
+                    //this.variableWeights[4] = 10.0;
+                }
+
                
-               if(this.publicationMultiplier > 0.6) {
-                   this.variableWeights[1] = 10.8 + (0.028*(this.variables[i].level % 10) - 0.14); // b2 autobuy
-                   this.variableWeights[4] = 10.1;//c12 autobuy
-                   this.variableWeights[7] = 10.8; //c22 OFF
-                   this.variableWeights[10] = 11.1; //c32 OFF
-                   this.variableWeights[11] = 12.1;
+            } else if(this.strategy.name == "T3PlayI") {
+                this.variableWeights[1] = 10.0;
+                this.variableWeights[2] = 10.0;
 
-                   this.variableWeights[2] = 11.0 + (0.028*(this.variables[i].level % 10) - 0.14);//b3 autobuy as c23 is bad
-                   this.variableWeights[8] = 10.1;//c23
-               }
+                this.variableWeights[4] = 12.0;
 
-               if(c12NextCost > costThreshold) {
-                    this.variableWeights[1] = 10.1; // b2 autobuy
-                   this.variableWeights[4] = 10.1;//c12 autobuy
+                this.variableWeights[7] = 10.0;
+                this.variableWeights[8] = 10.0;
 
-                   this.variableWeights[7] = 12.1; //c22 OFF
-                   this.variableWeights[10] = 12.1; //c32 OFF
-                   this.variableWeights[11] = 20.0; //c33 OFF
+                this.variableWeights[10] = 10.0;
+                this.variableWeights[11] = 10.0;
 
-                   this.variableWeights[2] = 10.1;//b3 autobuy
-                   this.variableWeights[8] = 10.1;//c23
-               }
+                if(this.maxRho > this.publicationMark) {
+                    this.variableWeights[4] = 10.0;
+                    this.variables[11].deactivate();
+                }
+            } else if(this.strategy.name == "T3OldI") {
+                this.variableWeights[0] = 10.0;
+                this.variableWeights[1] = 10.0;
+                this.variableWeights[2] = 10.0;
+
+                this.variableWeights[4] = 10.0;
+
+                this.variableWeights[7] = 10.0;
+                this.variableWeights[8] = 10.0;
+
+                this.variableWeights[9] = 10.0;
+                this.variableWeights[10] = 10.0;
             }
         } 
         if(this.publicationMultiplier > this.coastingPub) {

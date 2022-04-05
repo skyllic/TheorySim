@@ -285,7 +285,7 @@ public class Variable {
      /**
      * Calculates the difference of 2 numbers in log format. e.g. an input of 320.5 is meant to represent 10^320.5.
      * 
-     * If the 2 inputs differ by more than 10^8 magnitude, return the higher of the 2 numbers.
+     * If the 2 inputs differ by more than 10^8 magnitude, returns the higher of the 2 numbers.
      * 
      * @param value1 - the first value in log format
      * @param value2 - the second value in log format

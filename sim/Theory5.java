@@ -24,7 +24,7 @@ public class Theory5 extends Theory {
     public Theory5(double pubMark) {
         super(5, pubMark);
 
-        this.name = "Logistics Function";
+        this.name = "Logistic Function";
 
         this.seconds = 0;
         this.tickCount = 0;

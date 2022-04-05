@@ -61,20 +61,122 @@ public class TheoryRunner {
         SimRunner.runDetailedSim(300, 3, 692, true);*/
         //SimRunner.runDetailedSim(150, 1, 500, true);
         //SimRunner.runDetailedSim(200, 1, 550, true);
-        //SimRunner.runDetailedSim(300, 1, 625, true);
+        //SimRunner.runDetailedSim(300, 13, 900, true, "stra=0");
         //SimRunner.runLongSim(300, 3, 600, 700);
-        //SimRunner.runDetailedSim(300, 12, 400, true, "strate=0, ").get(0);
+        //SimRunner.runDetailedSim(300, 3, 300, true, "strate=0, ").get(0);
+        //SimRunner.runDetailedSim(300, 3, 400, true, "strate=0, ").get(0);
+        //SimRunner.runDetailedSim(300, 3, 500, true, "strate=0, ").get(0);
+        SimRunner.runDetailedSim(300, 7, 580, true, "strate=0, ").get(0);
+        //SimRunner.runDetailedSim(300, 3, 650, true, "strate=0, ").get(0);
+        /**SimRunner.runDetailedSim(300, 3, 600, true, "strate=0, ").get(0);
+        SimRunner.runDetailedSim(300, 3, 650, true, "strate=0, ").get(0);
+        SimRunner.runDetailedSim(300, 3, 700, true, "strate=0, ").get(0);*/
+   
+        
 
-        double i = 1178;
-        double totalTime = 0;
-        SimRunner.runLongSim(305, 10, 969+Math.log10(1.0), 999);
-        /**while(i < 1200) {
-            Summary summary = SimRunner.runDetailedSim(305, 10, i, true, "strategy=0, ").get(0);
+        double i = 1000;
+        double totalTime1 = 0;
+        double totalTime2 = 0;
+        double totalTime3 = 0;
+        double totalTime4 = 0;
+        double totalTime5 = 0;
+        double totalTime6 = 0;
+        double totalTime7 = 0;
+        double totalTime8 = 0;
+        /**
+        //Snaeky's distribution.
+        totalTime1 += SimRunner.runLongSim(300, 1, 400, 630 + Math.log10(7.3));
+        totalTime2 += SimRunner.runLongSim(300, 2, 300, 562 + Math.log10(1.28));
+        totalTime3 += SimRunner.runLongSim(300, 3, 400, 644 + Math.log10(2.81));
+        totalTime4 += SimRunner.runLongSim(300, 4, 600, 751 + Math.log10(1.0));
+        totalTime5 += SimRunner.runLongSim(300, 5, 800, 950 + Math.log10(8.72));
+        totalTime6 += SimRunner.runLongSim(300, 6, 800, 1121 + Math.log10(8.6));
+        totalTime7 += SimRunner.runLongSim(300, 7, 400, 604 + Math.log10(5.03));
+        totalTime8 += SimRunner.runLongSim(300, 8, 400, 519 + Math.log10(4.72));*/
+
+        /**
+        //XLII's distribution.
+        totalTime1 -= SimRunner.runLongSim(300, 1, 400, 646 + Math.log10(1.36));
+        totalTime2 -= SimRunner.runLongSim(300, 2, 300, 568 + Math.log10(1.22));
+        totalTime3 -= SimRunner.runLongSim(300, 3, 400, 645 + Math.log10(2.40));
+        totalTime4 -= SimRunner.runLongSim(300, 4, 600, 732 + Math.log10(1.90));
+        totalTime5 -= SimRunner.runLongSim(300, 5, 800, 945 + Math.log10(4.13));
+        totalTime6 -= SimRunner.runLongSim(300, 6, 800, 1095 + Math.log10(8.0));
+        totalTime7 -= SimRunner.runLongSim(300, 7, 400, 595 + Math.log10(2.69));
+        totalTime8 -= SimRunner.runLongSim(300, 8, 400, 512 + Math.log10(1.80));*/
+
+        /**
+        //Spqcey's distribution.
+        totalTime1 -= SimRunner.runLongSim(300, 1, 400, 640 + Math.log10(1.0));
+        totalTime2 -= SimRunner.runLongSim(300, 2, 300, 566 + Math.log10(1.0));
+        totalTime3 -= SimRunner.runLongSim(300, 3, 400, 649 + Math.log10(1.00));
+        totalTime4 -= SimRunner.runLongSim(300, 4, 600, 742 + Math.log10(1.00));
+        totalTime5 -= SimRunner.runLongSim(300, 5, 800, 954 + Math.log10(1.00));
+        totalTime6 -= SimRunner.runLongSim(300, 6, 800, 1094 + Math.log10(1.0));
+        totalTime7 -= SimRunner.runLongSim(300, 7, 400, 603 + Math.log10(1.0));
+        totalTime8 -= SimRunner.runLongSim(300, 8, 400, 516 + Math.log10(1.0));*/
+
+        /**
+        //Playspout's distribution.
+        totalTime1 += SimRunner.runLongSim(305, 1, 400, 640 + Math.log10(2.45));
+        totalTime2 += SimRunner.runLongSim(305, 2, 300, 598 + Math.log10(3.50));
+        totalTime3 += SimRunner.runLongSim(305, 3, 400, 642 + Math.log10(2.12));
+        totalTime4 += SimRunner.runLongSim(305, 4, 600, 767 + Math.log10(1.57));
+        totalTime5 += SimRunner.runLongSim(305, 5, 800, 953 + Math.log10(4.60));
+        totalTime6 += SimRunner.runLongSim(305, 6, 800, 1201 + Math.log10(4.2));
+        totalTime7 += SimRunner.runLongSim(305, 7, 400, 605 + Math.log10(1.04));
+        totalTime8 += SimRunner.runLongSim(305, 8, 400, 519 + Math.log10(1.37));
+
+        
+        //Afuro's distribution.
+        totalTime1 -= SimRunner.runLongSim(305, 1, 400, 632 + Math.log10(7.14));
+        totalTime2 -= SimRunner.runLongSim(305, 2, 300, 580 + Math.log10(1.03));
+        totalTime3 -= SimRunner.runLongSim(305, 3, 400, 617 + Math.log10(1.17));
+        totalTime4 -= SimRunner.runLongSim(305, 4, 600, 777 + Math.log10(1.04));
+        totalTime5 -= SimRunner.runLongSim(305, 5, 800, 1000 + Math.log10(1.0));
+        totalTime6 -= SimRunner.runLongSim(305, 6, 800, 1172 + Math.log10(1.6));
+        totalTime7 -= SimRunner.runLongSim(305, 7, 400, 614 + Math.log10(1.70));
+        totalTime8 -= SimRunner.runLongSim(305, 8, 400, 524 + Math.log10(3.76));
+        */
+
+        /**
+        //Nubest's distribution.
+        totalTime1 -= SimRunner.runLongSim(300, 1, 400, 655 + Math.log10(1.0));
+        totalTime2 -= SimRunner.runLongSim(300, 2, 300, 565 + Math.log10(2.65));
+        totalTime3 -= SimRunner.runLongSim(300, 3, 400, 609 + Math.log10(1.68));
+        totalTime4 -= SimRunner.runLongSim(300, 4, 600, 743 + Math.log10(4.53));
+        totalTime5 -= SimRunner.runLongSim(300, 5, 800, 980 + Math.log10(1.35));
+        totalTime6 -= SimRunner.runLongSim(300, 6, 800, 1127 + Math.log10(1.3));
+        totalTime7 -= SimRunner.runLongSim(300, 7, 400, 600 + Math.log10(1.53));
+        totalTime8 -= SimRunner.runLongSim(300, 8, 400, 518 + Math.log10(2.65));*/
+
+        //Gen's distribution.
+        /**
+        totalTime1 -= SimRunner.runLongSim(305, 1, 400, 663 + Math.log10(1.11));
+        totalTime2 -= SimRunner.runLongSim(305, 2, 300, 581 + Math.log10(4.86));
+        totalTime3 -= SimRunner.runLongSim(305, 3, 400, 659 + Math.log10(1.32));
+        totalTime4 -= SimRunner.runLongSim(305, 4, 600, 763 + Math.log10(2.11));
+        totalTime5 -= SimRunner.runLongSim(305, 5, 800, 983 + Math.log10(6.02));
+        totalTime6 -= SimRunner.runLongSim(305, 6, 800, 1173 + Math.log10(2.5));
+        totalTime7 -= SimRunner.runLongSim(305, 7, 400, 619 + Math.log10(5.17));
+        totalTime8 -= SimRunner.runLongSim(305, 8, 400, 524 + Math.log10(1.33));*/
+
+        /**
+        System.out.println(totalTime1);
+        System.out.println(totalTime2);
+        System.out.println(totalTime3);
+        System.out.println(totalTime4);
+        System.out.println(totalTime5);
+        System.out.println(totalTime6);
+        System.out.println(totalTime7);
+        System.out.println(totalTime8);*/
+        /**while(i < 12000) {
+            Summary summary = SimRunner.runDetailedSim(305, 11, i, true, "strategy=0, ").get(0);
             i = i + summary.tauGain;
             //summaryList.add(summary.pubTime);
             totalTime += summary.pubTime;
 
-            if(summary.tauPerHour > 1000000.0) {
+            if(totalTime > 24 * 365) {
                 break;
             }
              
@@ -83,9 +185,9 @@ public class TheoryRunner {
         for(Double element : summaryList) {
             //System.out.println(element);
         }
-        System.out.println(totalTime);*/
+        System.out.println(totalTime);
         
-      
+      */
         
   
 

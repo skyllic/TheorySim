@@ -219,7 +219,7 @@ public class Theory2 extends Theory {
 
         if (this.variables[i].isActive == 1) {
 
-            if (this.strategy.name == "T2Coast") {
+            if (this.strategy.name == "T2AI") {
                 if (this.publicationMultiplier > 800) {
                     this.variables[3].deactivate();
                     this.variables[7].deactivate();
@@ -237,16 +237,10 @@ public class Theory2 extends Theory {
                     this.variables[4].deactivate();
                 }
 
-                this.variableWeights[i] = 10 + (0.032 * (this.variables[i].level % 10) - 0.16);
+                this.variableWeights[i] = 10 + (0.032 * (this.variables[i].level % 10) - 0.14);
 
-            } else if(this.strategy.name == "T2MS") {
-                if(this.publicationMark < 25) {
-                    for(int j = 0; j < this.milestoneLevels.length; j++) {
-                        this.milestoneLevels[j] = 0;
-                    }
-                } else if(this.publicationMark< 50) {
-                    this.milestoneLevels[0] = 1;
-                }
+            } else if(this.strategy.name == "T2") {
+                this.variableWeights[i] = 10.0;
             }
 
         }

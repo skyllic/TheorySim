@@ -204,6 +204,15 @@ public class Theory7 extends Theory {
                 this.variableWeights[5] = 10.6;
                 this.variableWeights[6] = 10.0;
 
+            } else if(this.strategy.name == "T7PlaySpqcey") {
+                this.variableWeights[0] = 10.6 + (0.018 * (this.variables[0].level % 10) - 0.11);
+                this.variables[1].deactivate();
+                this.variables[2].deactivate();
+                this.variableWeights[3] = 11.0;
+                this.variableWeights[4] = 11.0;
+                this.variableWeights[5] = 10.6;
+                this.variableWeights[6] = 10.0;
+
             } else if(this.strategy.name == "T7C456") {
                 this.variableWeights[0] = 10.0;
                 this.variables[1].deactivate();

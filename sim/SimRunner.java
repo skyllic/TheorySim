@@ -8,6 +8,19 @@ public class SimRunner {
 
   }
 
+  /**
+   * Simulates a theory from starting rho to end rho. E.g. if start rho is 400, end rho is 1000, then 
+   * the method will start from e400 rho and publish at known optimal multipliers until its rho reaches end rho.
+   * </br>
+   * If during a publication the rho reaches the end rho, the method will not stop until the the theory reaches
+   * optimal publication multiplier and publishes. E.g. if final rho is 1000, and current theory rho is at 
+   * 997, with supposed optimal publication at 1003, the theory will continue until it reaches 1003.
+   * @param studentNumber - Number of students. Dynamically adjusts to the appropriate level of Research 9.
+   * @param theoryNumber - Theory number. Custom theory numbers start at 10, ordered by release dates. 
+   * @param startPub - Starting rho in log format.
+   * @param endPub - Goal rho in log format.
+   * @return - Total time required in hours.
+   */
   public static double runLongSim(int studentNumber, int theoryNumber, double startPub, double endPub) {
 
     double totalTime = 0;
@@ -77,10 +90,10 @@ public class SimRunner {
       }
     } else if (theoryNumber == 2) {
       if(flag.contains("strategy=0")) {
-        strategies.add(new Strategy("T2Coast", "idle"));
+        strategies.add(new Strategy("T2AI", "active"));
       } else {
-      strategies.add(new Strategy("T2Coast", "idle"));
-      strategies.add(new Strategy("T2MS", "active"));
+      strategies.add(new Strategy("T2AI", "active"));
+      strategies.add(new Strategy("T2", "idle"));
       }
       Theory2 t2 = new Theory2(pubMark);
 
@@ -121,6 +134,9 @@ public class SimRunner {
       } else {
         strategies.add(new Strategy("T3Play2", "active"));
         strategies.add(new Strategy("T3PlayX", "active"));
+        strategies.add(new Strategy("T3XS", "idle"));
+        strategies.add(new Strategy("T3PlayI", "idle"));
+        strategies.add(new Strategy("T3OldI", "idle"));
       }
       Theory3 t3 = new Theory3(pubMark);
 
@@ -128,7 +144,7 @@ public class SimRunner {
       Summary summary = new Summary();
       for (Strategy strategy : strategies) {
         for (int j = 0; j < 1; j++) {
-          for (int i = 0; i < 3; i++) {
+          for (int i = 0; i < 6; i++) {
 
             t3 = new Theory3(pubMark);
             t3.strategy = strategy;
@@ -137,7 +153,7 @@ public class SimRunner {
               t3.coastingPub = bestPubMulti - 0.15 * i * bestPubMulti;
             }
 
-            t3.recoveryPub = Math.pow(Math.E, -0.2 * j) * 1.3;
+            t3.recoveryPub = Math.pow(Math.E, -0.2 * j) * 1.0;
 
             while (t3.finishCoasting == false) {
               t3.runEpoch();
@@ -263,7 +279,7 @@ public class SimRunner {
       double bestPubMulti = 0;
       Summary summary = new Summary();
       for (Strategy strategy : strategies) {
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 6; i++) {
           t6 = new Theory6(pubMark);
           t6.strategy = strategy;
 
@@ -293,8 +309,9 @@ public class SimRunner {
       }
     } else if (theoryNumber == 7) {
       if(flag.contains("strategy=0")) {
-        strategies.add(new Strategy("T7Play", "active"));
+        strategies.add(new Strategy("T7PlaySpqcey", "active"));
       } else {
+      strategies.add(new Strategy("T7PlaySpqcey", "active"));
       strategies.add(new Strategy("T7Play", "active"));
       strategies.add(new Strategy("T7C456", "idle"));
       }
@@ -334,8 +351,9 @@ public class SimRunner {
       }
     } else if (theoryNumber == 8) {
       if(flag.contains("strategy=0")) {
-        strategies.add(new Strategy("T8MS", "active"));
+        strategies.add(new Strategy("T8MS2", "active"));
       } else {
+        strategies.add(new Strategy("T8MS2", "active"));
       strategies.add(new Strategy("T8MS", "active"));
       strategies.add(new Strategy("T8Play", "active"));
       strategies.add(new Strategy("T8", "idle"));
@@ -346,7 +364,7 @@ public class SimRunner {
       double bestPubMulti = 0;
       Summary summary = new Summary();
       for (Strategy strategy : strategies) {
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 1; i++) {
           t8 = new Theory8(pubMark);
           t8.strategy = strategy;
 
@@ -437,7 +455,7 @@ public class SimRunner {
       double bestPubMulti = 0;
       Summary summary = new Summary();
       for (Strategy strategy : strategies) {
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 10; i++) {
           SL = new Sequential_Limit(pubMark);
           SL.strategy = strategy;
           if (i > 0) {
@@ -508,8 +526,9 @@ public class SimRunner {
       }
     } else if (theoryNumber == 13) {
       if(flag.contains("strategy=0")) {
-        strategies.add(new Strategy("BTd", "active"));
+        strategies.add(new Strategy("BTPlay", "active"));
       } else {
+        strategies.add(new Strategy("BTPlay", "active"));
       strategies.add(new Strategy("BTd", "active"));
       strategies.add(new Strategy("BT", "idle"));
       }
@@ -518,11 +537,11 @@ public class SimRunner {
       double bestPubMulti = 0;
       Summary summary = new Summary();
       for (Strategy strategy : strategies) {
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < 8; i++) {
           BT = new Basic(pubMark);
           BT.strategy = strategy;
           if (i > 0) {
-            BT.coastingPub = bestPubMulti - 0.10 * i * bestPubMulti;
+            BT.coastingPub = bestPubMulti - 0.07 * i * bestPubMulti;
           }
 
           while (BT.finishCoasting == false) {
