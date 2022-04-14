@@ -69,6 +69,11 @@ public class Theory implements Simmable {
 
     /**Current best publication multiplier to start coasting. */
     public double bestCoastStart;
+
+
+
+
+
     
     public double bestCoastingNumber = 0;
     public int activeFrequency = 10;
@@ -106,7 +111,11 @@ public class Theory implements Simmable {
     /**
      * 
      * @param theoryNumber - theory number to generate. Default theories are 1-8. First CT is theory 10. 
-     * @param pubMark - the last pub mark of the theory in log format. e.g. if last pub mark was at 2e600 then 
+     * Use 10 to generate Weierstrass Sine Product. <p>
+     * Use 11 to generate Sequential Limit. <p>
+     * Use 12 to generate Convergence to Square Root 2. <p>
+     * Use 13 to generate Basic Theory.
+     * @param pubMark - The last pub mark of the theory in log format. e.g. if last pub mark was at 2e600 then 
      *  pubMark = log10(2) + 600. For CT pubmarks, use the RHO rather than tau. 
      */
     public Theory(int theoryNumber, double pubMark) {
@@ -117,11 +126,12 @@ public class Theory implements Simmable {
         this.tickCount = 0;
         this.rho = 0;
         this.rhodot = 0;
-        this.tickFrequency = 1.0; // seconds per tick
+        this.tickFrequency = 1.0; // seconds per tick, NOT ticks per second.
         if(theoryNumber == 2) {
-            this.tickFrequency = 10.0;
+            this.tickFrequency = 10.0; // To reduce T2 sim time.
         }
 
+        //Research 9 implications.
         if(Theory.studentNumber < 65) {
             Theory.research9Level = 0;
         } else if(Theory.studentNumber < 75) {
@@ -181,6 +191,9 @@ public class Theory implements Simmable {
         else if(Theory.theoryNumber == 13) {
             this.totalMultiplier = 0.5 * this.publicationMark;
             this.pubCoefficient = 0.5;
+        } else if(Theory.theoryNumber == 14) {
+            this.totalMultiplier = 0.169 * this.publicationMark - Math.log10(45);
+            this.pubCoefficient = 0.169;
         }
        else {
            this.totalMultiplier = 1; 
@@ -346,7 +359,7 @@ public class Theory implements Simmable {
         System.out.print(String.format("%.4f",
                 summary.tauPerHour));
         System.out.print("\t\t" + String.format("%.2f", summary.pubMulti) + "\t\t\t");
-        if(summary.strategy.length() > 6) {
+        if(summary.strategy.length() > 7) {
             System.out.print(String.format("%s", summary.strategy) + "\t\t");
         } else {
             System.out.print(String.format("%s", summary.strategy) + "\t\t\t");
@@ -369,7 +382,7 @@ public class Theory implements Simmable {
     public Summary getSummary() {
         Summary summary = new Summary(Theory.theoryNumber, this.maxTauPerHour, this.bestPubMulti,
          this.strategy.name, this.strategy.type,
-         this.bestPubTime, this.bestRecoveryTime, this.bestTauGain, this.coastStart);
+         this.bestPubTime, this.bestRecoveryTime, this.bestTauGain, this.coastStart, this.variables);
 
          return summary;
     }

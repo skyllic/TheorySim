@@ -52,25 +52,22 @@ public class TheoryRunner {
         }
 
         ArrayList<Double> summaryList = new ArrayList<>();
-        /**SimRunner.runDetailedSim(300, 3, 680, true);
-        SimRunner.runDetailedSim(300, 3, 682, true);
-        SimRunner.runDetailedSim(300, 3, 684, true);
-        SimRunner.runDetailedSim(300, 3, 686, true);
-        SimRunner.runDetailedSim(300, 3, 688, true);
-        SimRunner.runDetailedSim(300, 3, 690, true);
-        SimRunner.runDetailedSim(300, 3, 692, true);*/
-        //SimRunner.runDetailedSim(150, 1, 500, true);
-        //SimRunner.runDetailedSim(200, 1, 550, true);
-        //SimRunner.runDetailedSim(300, 13, 900, true, "stra=0");
-        //SimRunner.runLongSim(300, 3, 600, 700);
-        //SimRunner.runDetailedSim(300, 3, 300, true, "strate=0, ").get(0);
-        //SimRunner.runDetailedSim(300, 3, 400, true, "strate=0, ").get(0);
-        //SimRunner.runDetailedSim(300, 3, 500, true, "strate=0, ").get(0);
-        SimRunner.runDetailedSim(300, 7, 580, true, "strate=0, ").get(0);
-        //SimRunner.runDetailedSim(300, 3, 650, true, "strate=0, ").get(0);
-        /**SimRunner.runDetailedSim(300, 3, 600, true, "strate=0, ").get(0);
-        SimRunner.runDetailedSim(300, 3, 650, true, "strate=0, ").get(0);
-        SimRunner.runDetailedSim(300, 3, 700, true, "strate=0, ").get(0);*/
+        
+        
+      
+        //SimRunner.runDetailedSim(100, 2, 360 + Math.log10(1.00), true, "strate=0, ").get(0);
+        //SimRunner.runDetailedSim(300, 7, 550, true, "strate=0, ").get(0);
+        SimRunner.runDetailedSim(305, 3, 657+Math.log10(1.00), true, "strate=0, ").get(0);
+      
+        /**SimRunner.runDetailedSim(300, 1, 500, true, "strate=0, ").get(0);
+        SimRunner.runDetailedSim(300, 1, 525, true, "strate=0, ").get(0);
+        SimRunner.runDetailedSim(300, 1, 550, true, "strate=0, ").get(0);
+        SimRunner.runDetailedSim(300, 1, 575, true, "strate=0, ").get(0);
+        SimRunner.runDetailedSim(300, 1, 600, true, "strate=0, ").get(0);
+        SimRunner.runDetailedSim(300, 1, 625, true, "strate=0, ").get(0);
+        SimRunner.runDetailedSim(300, 1, 650, true, "strate=0, ").get(0);*/
+        
+        
    
         
 
@@ -83,6 +80,15 @@ public class TheoryRunner {
         double totalTime6 = 0;
         double totalTime7 = 0;
         double totalTime8 = 0;
+
+        /**totalTime1 += SimRunner.runLongSim(210, 1, 200, 519 + Math.log10(1.00));
+        totalTime2 += SimRunner.runLongSim(210, 2, 200, 441 + Math.log10(1.28));
+        totalTime3 += SimRunner.runLongSim(210, 3, 200, 524 + Math.log10(2.81));
+        totalTime4 += SimRunner.runLongSim(210, 4, 200, 532 + Math.log10(1.0));
+        totalTime5 += SimRunner.runLongSim(210, 5, 200, 803 + Math.log10(8.72));
+        totalTime6 += SimRunner.runLongSim(210, 6, 200, 795 + Math.log10(8.6));
+        totalTime7 += SimRunner.runLongSim(210, 7, 200, 494 + Math.log10(5.03));
+        totalTime8 += SimRunner.runLongSim(210, 8, 200, 450 + Math.log10(4.72));*/
         /**
         //Snaeky's distribution.
         totalTime1 += SimRunner.runLongSim(300, 1, 400, 630 + Math.log10(7.3));
@@ -161,15 +167,18 @@ public class TheoryRunner {
         totalTime7 -= SimRunner.runLongSim(305, 7, 400, 619 + Math.log10(5.17));
         totalTime8 -= SimRunner.runLongSim(305, 8, 400, 524 + Math.log10(1.33));*/
 
-        /**
-        System.out.println(totalTime1);
+        
+        /**System.out.println(totalTime1);
         System.out.println(totalTime2);
         System.out.println(totalTime3);
         System.out.println(totalTime4);
         System.out.println(totalTime5);
         System.out.println(totalTime6);
         System.out.println(totalTime7);
-        System.out.println(totalTime8);*/
+        System.out.println(totalTime8);
+        double totalTime = totalTime1 + totalTime2 + totalTime3 + totalTime4 + 
+            totalTime5 + totalTime6 + totalTime7 + totalTime8;
+        System.out.println(totalTime);*/
         /**while(i < 12000) {
             Summary summary = SimRunner.runDetailedSim(305, 11, i, true, "strategy=0, ").get(0);
             i = i + summary.tauGain;
@@ -191,6 +200,22 @@ public class TheoryRunner {
         
   
 
+    }
+
+    public static void findDataForGraph(int studentNumber, int theoryNumber, double start, double finish, String flag) {
+        if(flag.equalsIgnoreCase("variableBuyFrequency")) {
+            int variableSumCounter = 0;
+            while(true) {
+                Variable[] variables = SimRunner.runDetailedSim(studentNumber, theoryNumber, start, false, flag)
+                .get(0).variables;
+
+                for(int i = 0; i < variables.length; i++) {
+                    if(variables[i].cost > start) {
+
+                    }
+                }
+            }
+        }
     }
 
     public static void runOvernightComparison(int studentNumber, int theoryNumber, double pubMark, double pubMulti,

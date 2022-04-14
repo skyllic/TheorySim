@@ -237,7 +237,9 @@ public class Theory2 extends Theory {
                     this.variables[4].deactivate();
                 }
 
-                this.variableWeights[i] = 10 + (0.032 * (this.variables[i].level % 10) - 0.14);
+                this.variableWeights[i] = 10 + (0.030 * (this.variables[i].level % 10) - 0.16);
+
+               
 
             } else if(this.strategy.name == "T2") {
                 this.variableWeights[i] = 10.0;

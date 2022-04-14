@@ -1,5 +1,6 @@
 package sim;
 
+import java.util.ArrayList;
 
 public class Summary {
 
@@ -13,8 +14,10 @@ public class Summary {
   public double tauGain;
   public double coastStart;
 
+  public Variable[] variables;
+
   public Summary(int theoryNumber, double tauPerHour, double pubMulti, String strategy, String strategyType, 
-  double pubTime, double recoveryTime, double tauGain, double coastStart) {
+  double pubTime, double recoveryTime, double tauGain, double coastStart, Variable[] variables) {
     this.theoryNumber = theoryNumber;
     this.tauPerHour = tauPerHour;
     this.pubMulti = pubMulti;
@@ -24,6 +27,8 @@ public class Summary {
     this.recoveryTime = recoveryTime;
     this.tauGain = tauGain;
     this.coastStart = coastStart;
+
+    this.variables = variables;
   }
 
   public Summary() {

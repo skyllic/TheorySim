@@ -80,7 +80,8 @@ public class SimRunner {
             summary = new Summary(1, t1.maxTauPerHour,
                 t1.bestPubMulti, t1.strategy.name, t1.strategy.type, t1.bestPubTime, t1.bestRecoveryTime,
                  t1.bestTauGain,
-                t1.coastStart);
+                t1.coastStart, 
+                t1.variables);
           }
         }
         summaries.add(summary);
@@ -120,7 +121,8 @@ public class SimRunner {
             summary = new Summary(2, t2.maxTauPerHour,
                 t2.bestPubMulti, t2.strategy.name, t2.strategy.type, t2.bestPubTime,
                 t2.bestRecoveryTime, t2.bestTauGain,
-                t2.coastStart);
+                t2.coastStart, 
+                t2.variables);
           }
         }
         summaries.add(summary);
@@ -167,7 +169,8 @@ public class SimRunner {
               summary = new Summary(3, t3.maxTauPerHour,
                   t3.bestPubMulti, t3.strategy.name, t3.strategy.type, t3.bestPubTime,
                   t3.bestRecoveryTime, t3.bestTauGain,
-                  t3.coastStart);
+                  t3.coastStart, 
+                  t3.variables);
             }
           }
           summaries.add(summary);
@@ -182,6 +185,7 @@ public class SimRunner {
       if(flag.contains("strategy=0")) {
         strategies.add(new Strategy("T4Sol2", "active"));
       } else {
+      strategies.add(new Strategy("T4PlaySpqcey", "active"));
       strategies.add(new Strategy("T4SolC", "active"));
       strategies.add(new Strategy("T4Sol2", "active"));
       strategies.add(new Strategy("T4Solar", "active"));
@@ -213,7 +217,8 @@ public class SimRunner {
             summary = new Summary(4, t4.maxTauPerHour,
                 t4.bestPubMulti, t4.strategy.name, t4.strategy.type, t4.bestPubTime, t4.bestRecoveryTime,
                  t4.bestTauGain,
-                t4.coastStart);
+                t4.coastStart, 
+                t4.variables);
           }
         }
         summaries.add(summary);
@@ -255,7 +260,8 @@ public class SimRunner {
             summary = new Summary(5, t5.maxTauPerHour,
                 t5.bestPubMulti, t5.strategy.name, t5.strategy.type, t5.bestPubTime, 
                 t5.bestRecoveryTime, t5.bestTauGain,
-                t5.coastStart);
+                t5.coastStart, 
+                t5.variables);
           }
         }
         summaries.add(summary);
@@ -299,7 +305,8 @@ public class SimRunner {
             summary = new Summary(6, t6.maxTauPerHour,
                 t6.bestPubMulti, t6.strategy.name, t6.strategy.type, t6.bestPubTime,
                 t6.bestRecoveryTime, t6.bestTauGain,
-                t6.coastStart);
+                t6.coastStart, 
+                t6.variables);
           }
         }
         summaries.add(summary);
@@ -340,7 +347,8 @@ public class SimRunner {
             summary = new Summary(7, t7.maxTauPerHour,
                 t7.bestPubMulti, t7.strategy.name, t7.strategy.type, t7.bestPubTime,
                 t7.bestRecoveryTime, t7.bestTauGain,
-                t7.coastStart);
+                t7.coastStart, 
+                t7.variables);
           }
         }
         summaries.add(summary);
@@ -384,7 +392,8 @@ public class SimRunner {
             summary = new Summary(8, t8.maxTauPerHour,
                 t8.bestPubMulti, t8.strategy.name, t8.strategy.type, t8.bestPubTime,
                 t8.bestRecoveryTime, t8.bestTauGain,
-                t8.coastStart);
+                t8.coastStart,
+                t8.variables);
           }
         }
         summaries.add(summary);
@@ -432,7 +441,8 @@ public class SimRunner {
                 weierStrass.bestPubTime,
                 weierStrass.bestRecoveryTime,
                 weierStrass.bestTauGain,
-                weierStrass.coastStart);
+                weierStrass.coastStart, 
+                weierStrass.variables);
           }
         }
         summaries.add(summary);
@@ -475,7 +485,8 @@ public class SimRunner {
                 SL.bestPubMulti, SL.strategy.name, SL.strategy.type, SL.bestPubTime,
                 SL.bestRecoveryTime,
                  SL.bestTauGain,
-                SL.coastStart);
+                SL.coastStart, 
+                SL.variables);
           }
         }
         summaries.add(summary);
@@ -516,7 +527,8 @@ public class SimRunner {
                 CSR2.bestPubMulti, CSR2.strategy.name, CSR2.strategy.type, CSR2.bestPubTime,
                 CSR2.bestRecoveryTime,
                  CSR2.bestTauGain,
-                CSR2.coastStart);
+                CSR2.coastStart, 
+                CSR2.variables);
           }
         }
         summaries.add(summary);
@@ -557,7 +569,8 @@ public class SimRunner {
                 BT.bestPubMulti, BT.strategy.name, BT.strategy.type, BT.bestPubTime,
                 BT.bestRecoveryTime,
                  BT.bestTauGain,
-                BT.coastStart);
+                BT.coastStart, 
+                BT.variables);
           }
         }
         summaries.add(summary);
@@ -776,7 +789,8 @@ public class SimRunner {
                 t1.bestPubMulti, t1.strategy.name, t1.strategy.type, t1.bestPubTime,
                 t1.bestRecoveryTime,
                  t1.bestTauGain,
-                t1.coastStart);
+                t1.coastStart,
+                t1.variables);
           }
         }
         t1.printSummary(summary);
@@ -811,7 +825,8 @@ public class SimRunner {
                 t2.bestPubMulti, t2.strategy.name, t2.strategy.type, t2.bestPubTime,
                 t2.bestRecoveryTime,
                  t2.bestTauGain,
-                t2.coastStart);
+                t2.coastStart, 
+                t2.variables);
           }
         }
         t2.printSummary(summary);
@@ -846,7 +861,8 @@ public class SimRunner {
                 t3.bestPubMulti, t3.strategy.name, t3.strategy.type, t3.bestPubTime,
                 t3.bestRecoveryTime,
                  t3.bestTauGain,
-                t3.coastStart);
+                t3.coastStart, 
+                t3.variables);
           }
         }
         t3.printSummary(summary);
@@ -887,7 +903,8 @@ public class SimRunner {
                 t4.bestPubMulti, t4.strategy.name, t4.strategy.type, t4.bestPubTime,
                 t4.bestRecoveryTime,
                  t4.bestTauGain,
-                t4.coastStart);
+                t4.coastStart, 
+                t4.variables);
           }
         }
         t4.printSummary(summary);
@@ -922,7 +939,8 @@ public class SimRunner {
                 t5.bestPubMulti, t5.strategy.name, t5.strategy.type, t5.bestPubTime,
                 t5.bestRecoveryTime,
                  t5.bestTauGain,
-                t5.coastStart);
+                t5.coastStart, 
+                t5.variables);
           }
         }
         t5.printSummary(summary);
@@ -958,7 +976,8 @@ public class SimRunner {
                 t6.bestPubMulti, t6.strategy.name, t6.strategy.type, t6.bestPubTime,
                 t6.bestRecoveryTime,
                  t6.bestTauGain,
-                t6.coastStart);
+                t6.coastStart, 
+                t6.variables);
           }
         }
         t6.printSummary(summary);
@@ -993,7 +1012,8 @@ public class SimRunner {
                 t7.bestPubMulti, t7.strategy.name, t7.strategy.type, t7.bestPubTime,
                 t7.bestRecoveryTime,
                  t7.bestTauGain,
-                t7.coastStart);
+                t7.coastStart, 
+                t7.variables);
           }
         }
         t7.printSummary(summary);
@@ -1029,7 +1049,8 @@ public class SimRunner {
                 t8.bestPubMulti, t8.strategy.name, t8.strategy.type, t8.bestPubTime,
                 t8.bestRecoveryTime,
                  t8.bestTauGain,
-                t8.coastStart);
+                t8.coastStart, 
+                t8.variables);
           }
         }
         t8.printSummary(summary);
@@ -1069,7 +1090,8 @@ public class SimRunner {
                 weierStrass.bestPubTime,
                 weierStrass.bestRecoveryTime,
                 weierStrass.bestTauGain,
-                weierStrass.coastStart);
+                weierStrass.coastStart, 
+                weierStrass.variables);
           }
         }
         weierStrass.printSummary(summary);
@@ -1106,7 +1128,8 @@ public class SimRunner {
                 SL.bestPubTime,
                 SL.bestRecoveryTime,
                  SL.bestTauGain,
-                SL.coastStart);
+                SL.coastStart, 
+                SL.variables);
           }
         }
         SL.printSummary(summary);

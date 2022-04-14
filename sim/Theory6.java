@@ -202,8 +202,8 @@ public class Theory6 extends Theory {
                     this.variableWeights[5] = 10;
                     this.variableWeights[8] = 10;
                 } else {
-                    this.variableWeights[4] = 10000;
-                    this.variableWeights[5] = 10000;
+                    this.variableWeights[4] = 12.5 + (0.022 * (this.variables[0].level % 10) - 0.12) ;
+                    this.variableWeights[5] = 11.5;
                     this.variableWeights[8] = 10;
                 }
               

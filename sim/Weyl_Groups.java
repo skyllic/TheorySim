@@ -6,7 +6,7 @@ import java.util.Collections;
  * An implementation of Theory 6 (Integral Calculus) from the game Exponential
  * Idle.
  */
-public class Theory4 extends Theory {
+public class Weyl_Groups extends Theory {
 
 
     public double qdot;
@@ -27,8 +27,8 @@ public class Theory4 extends Theory {
 
     public Theory4[] t2Clones = new Theory4[8];
 
-    public Theory4(double pubMark) {
-        super(4, pubMark);
+    public Weyl_Groups(double pubMark) {
+        super(13, pubMark);
         this.name = "Polynomials";
 
         
