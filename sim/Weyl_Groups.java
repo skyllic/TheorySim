@@ -28,8 +28,8 @@ public class Weyl_Groups extends Theory {
     public Theory4[] t2Clones = new Theory4[8];
 
     public Weyl_Groups(double pubMark) {
-        super(13, pubMark);
-        this.name = "Polynomials";
+        super(14, pubMark);
+        this.name = "Weyl_Groups";
 
         
 
@@ -52,11 +52,7 @@ public class Weyl_Groups extends Theory {
         this.variables[1] = new Variable(3.75, 20, 2, 1, true, true, false, false, false, new double[2]);
         this.variables[2] = new Variable(2.468, 2000, 2, 1, true, true, false, false, false, new double[2]);
         this.variables[3] = new Variable(4.85, Math.pow(10, 4), 3, 1, true, true, false, false, false, new double[2]);
-        this.variables[4] = new Variable(12.5, Math.pow(10, 8), 5, 1, true, true, false, false, false, new double[2]);
-        this.variables[5] = new Variable(58, Math.pow(10, 10), 10, 1, true, true, false, false, false, new double[2]);
-        this.variables[6] = new Variable(100, 1000, Math.pow(2, 0.1), 0, false, true, false, false, false,
-                new double[2]);
-        this.variables[7] = new Variable(1000, Math.pow(10, 4), 2, 1, true, true, false, false, false, new double[2]);
+        
 
     }
 
@@ -455,9 +451,9 @@ public class Weyl_Groups extends Theory {
     }
 
     /** Idles the input theory until its rho exceeds the input rho */
-    public void idleUntil(Theory4 theory4, double variableCost) {
-        while (theory4.rho < variableCost) {
-            theory4.moveTick();
+    public void idleUntil(Weyl_Groups weyl_Groups, double variableCost) {
+        while (weyl_Groups.rho < variableCost) {
+            weyl_Groups.moveTick();
         }
     }
 

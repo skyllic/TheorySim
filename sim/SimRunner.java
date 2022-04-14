@@ -21,12 +21,12 @@ public class SimRunner {
    * @param endPub - Goal rho in log format.
    * @return - Total time required in hours.
    */
-  public static double runLongSim(int studentNumber, int theoryNumber, double startPub, double endPub) {
+  public static double runLongSim(int studentNumber, int theoryNumber, double startPub, double endPub, String flag) {
 
     double totalTime = 0;
     double currentPub = startPub;
     while (currentPub < endPub) {
-      ArrayList<Summary> summaries = runDetailedSim(studentNumber, theoryNumber, currentPub, true, "");
+      ArrayList<Summary> summaries = runDetailedSim(studentNumber, theoryNumber, currentPub, true, flag);
       currentPub = currentPub + summaries.get(0).tauGain;
       totalTime = totalTime + summaries.get(0).pubTime;
     }
@@ -92,9 +92,16 @@ public class SimRunner {
     } else if (theoryNumber == 2) {
       if(flag.contains("strategy=0")) {
         strategies.add(new Strategy("T2AI", "active"));
+      } else if(flag.contains("strategy=T2MS")) {
+        strategies.add((new Strategy("T2MS", "active")));
+      } else if(flag.contains("strategy=T2NoMS")) {
+        strategies.add(new Strategy("T2NoMS", "idle"));
+      
       } else {
       strategies.add(new Strategy("T2AI", "active"));
       strategies.add(new Strategy("T2", "idle"));
+      strategies.add(new Strategy("T2MS", "active"));
+      strategies.add(new Strategy("T2NoMS", "idle"));
       }
       Theory2 t2 = new Theory2(pubMark);
 

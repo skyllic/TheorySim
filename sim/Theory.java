@@ -128,7 +128,12 @@ public class Theory implements Simmable {
         this.rhodot = 0;
         this.tickFrequency = 1.0; // seconds per tick, NOT ticks per second.
         if(theoryNumber == 2) {
-            this.tickFrequency = 10.0; // To reduce T2 sim time.
+            if(this.publicationMark < 250) {
+                this.tickFrequency = 0.1;
+            } else {
+                this.tickFrequency = 10.0;
+            }
+            
         }
 
         //Research 9 implications.
