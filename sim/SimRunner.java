@@ -9,16 +9,24 @@ public class SimRunner {
   }
 
   /**
-   * Simulates a theory from starting rho to end rho. E.g. if start rho is 400, end rho is 1000, then 
-   * the method will start from e400 rho and publish at known optimal multipliers until its rho reaches end rho.
+   * Simulates a theory from starting rho to end rho. E.g. if start rho is 400,
+   * end rho is 1000, then
+   * the method will start from e400 rho and publish at known optimal multipliers
+   * until its rho reaches end rho.
    * </br>
-   * If during a publication the rho reaches the end rho, the method will not stop until the the theory reaches
-   * optimal publication multiplier and publishes. E.g. if final rho is 1000, and current theory rho is at 
-   * 997, with supposed optimal publication at 1003, the theory will continue until it reaches 1003.
-   * @param studentNumber - Number of students. Dynamically adjusts to the appropriate level of Research 9.
-   * @param theoryNumber - Theory number. Custom theory numbers start at 10, ordered by release dates. 
-   * @param startPub - Starting rho in log format.
-   * @param endPub - Goal rho in log format.
+   * If during a publication the rho reaches the end rho, the method will not stop
+   * until the the theory reaches
+   * optimal publication multiplier and publishes. E.g. if final rho is 1000, and
+   * current theory rho is at
+   * 997, with supposed optimal publication at 1003, the theory will continue
+   * until it reaches 1003.
+   * 
+   * @param studentNumber - Number of students. Dynamically adjusts to the
+   *                      appropriate level of Research 9.
+   * @param theoryNumber  - Theory number. Custom theory numbers start at 10,
+   *                      ordered by release dates.
+   * @param startPub      - Starting rho in log format.
+   * @param endPub        - Goal rho in log format.
    * @return - Total time required in hours.
    */
   public static double runLongSim(int studentNumber, int theoryNumber, double startPub, double endPub, String flag) {
@@ -48,7 +56,10 @@ public class SimRunner {
     if (theoryNumber == 1) {
       if (flag.contains("strategy=0")) {
         strategies.add(new Strategy("T1Play", "active"));
-      } else {
+      } else if(flag.contains("strategy=T1Play2")) {
+        strategies.add(new Strategy("T1Play2", "active"));
+      } 
+      else {
         strategies.add(new Strategy("T1Play", "active"));
         strategies.add(new Strategy("T1Play2", "active"));
         strategies.add(new Strategy("T1C34", "idle"));
@@ -79,8 +90,8 @@ public class SimRunner {
             bestPubMulti = t1.getSummary().pubMulti;
             summary = new Summary(1, t1.maxTauPerHour,
                 t1.bestPubMulti, t1.strategy.name, t1.strategy.type, t1.bestPubTime, t1.bestRecoveryTime,
-                 t1.bestTauGain,
-                t1.coastStart, 
+                t1.bestTauGain,
+                t1.coastStart,
                 t1.variables);
           }
         }
@@ -90,18 +101,18 @@ public class SimRunner {
         }
       }
     } else if (theoryNumber == 2) {
-      if(flag.contains("strategy=0")) {
+      if (flag.contains("strategy=0")) {
         strategies.add(new Strategy("T2AI", "active"));
-      } else if(flag.contains("strategy=T2MS")) {
+      } else if (flag.contains("strategy=T2MS")) {
         strategies.add((new Strategy("T2MS", "active")));
-      } else if(flag.contains("strategy=T2NoMS")) {
+      } else if (flag.contains("strategy=T2NoMS")) {
         strategies.add(new Strategy("T2NoMS", "idle"));
-      
+
       } else {
-      strategies.add(new Strategy("T2AI", "active"));
-      strategies.add(new Strategy("T2", "idle"));
-      strategies.add(new Strategy("T2MS", "active"));
-      strategies.add(new Strategy("T2NoMS", "idle"));
+        strategies.add(new Strategy("T2AI", "active"));
+        strategies.add(new Strategy("T2", "idle"));
+        strategies.add(new Strategy("T2MS", "active"));
+        strategies.add(new Strategy("T2NoMS", "idle"));
       }
       Theory2 t2 = new Theory2(pubMark);
 
@@ -128,7 +139,7 @@ public class SimRunner {
             summary = new Summary(2, t2.maxTauPerHour,
                 t2.bestPubMulti, t2.strategy.name, t2.strategy.type, t2.bestPubTime,
                 t2.bestRecoveryTime, t2.bestTauGain,
-                t2.coastStart, 
+                t2.coastStart,
                 t2.variables);
           }
         }
@@ -138,7 +149,7 @@ public class SimRunner {
         }
       }
     } else if (theoryNumber == 3) {
-      if(flag.contains("strategy=0")) {
+      if (flag.contains("strategy=0")) {
         strategies.add(new Strategy("T3Play2", "active"));
       } else {
         strategies.add(new Strategy("T3Play2", "active"));
@@ -176,7 +187,7 @@ public class SimRunner {
               summary = new Summary(3, t3.maxTauPerHour,
                   t3.bestPubMulti, t3.strategy.name, t3.strategy.type, t3.bestPubTime,
                   t3.bestRecoveryTime, t3.bestTauGain,
-                  t3.coastStart, 
+                  t3.coastStart,
                   t3.variables);
             }
           }
@@ -189,16 +200,16 @@ public class SimRunner {
     }
 
     else if (theoryNumber == 4) {
-      if(flag.contains("strategy=0")) {
+      if (flag.contains("strategy=0")) {
         strategies.add(new Strategy("T4Sol2", "active"));
       } else {
-      strategies.add(new Strategy("T4PlaySpqcey", "active"));
-      strategies.add(new Strategy("T4SolC", "active"));
-      strategies.add(new Strategy("T4Sol2", "active"));
-      strategies.add(new Strategy("T4Solar", "active"));
-      strategies.add(new Strategy("T4Gold", "active"));
-      strategies.add(new Strategy("T4C3d", "active"));
-      strategies.add(new Strategy("T4C3", "idle"));
+        strategies.add(new Strategy("T4PlaySpqcey", "active"));
+        strategies.add(new Strategy("T4SolC", "active"));
+        strategies.add(new Strategy("T4Sol2", "active"));
+        strategies.add(new Strategy("T4Solar", "active"));
+        strategies.add(new Strategy("T4Gold", "active"));
+        strategies.add(new Strategy("T4C3d", "active"));
+        strategies.add(new Strategy("T4C3", "idle"));
       }
       Theory4 t4 = new Theory4(pubMark);
       double bestPubMulti = 0;
@@ -223,8 +234,8 @@ public class SimRunner {
             bestPubMulti = t4.getSummary().pubMulti;
             summary = new Summary(4, t4.maxTauPerHour,
                 t4.bestPubMulti, t4.strategy.name, t4.strategy.type, t4.bestPubTime, t4.bestRecoveryTime,
-                 t4.bestTauGain,
-                t4.coastStart, 
+                t4.bestTauGain,
+                t4.coastStart,
                 t4.variables);
           }
         }
@@ -235,12 +246,12 @@ public class SimRunner {
       }
 
     } else if (theoryNumber == 5) {
-      if(flag.contains("strategy=0")) {
+      if (flag.contains("strategy=0")) {
         strategies.add(new Strategy("T5Play", "active"));
       } else {
-      strategies.add(new Strategy("T5Play", "active"));
-      strategies.add(new Strategy("T5", "idle"));
-      strategies.add(new Strategy("T5PlayI", "idle"));
+        strategies.add(new Strategy("T5Play", "active"));
+        strategies.add(new Strategy("T5", "idle"));
+        strategies.add(new Strategy("T5PlayI", "idle"));
       }
 
       Theory5 t5 = new Theory5(pubMark);
@@ -265,9 +276,9 @@ public class SimRunner {
           if (i == 0 || t5.maxTauPerHour > summary.tauPerHour) {
             bestPubMulti = t5.getSummary().pubMulti;
             summary = new Summary(5, t5.maxTauPerHour,
-                t5.bestPubMulti, t5.strategy.name, t5.strategy.type, t5.bestPubTime, 
+                t5.bestPubMulti, t5.strategy.name, t5.strategy.type, t5.bestPubTime,
                 t5.bestRecoveryTime, t5.bestTauGain,
-                t5.coastStart, 
+                t5.coastStart,
                 t5.variables);
           }
         }
@@ -278,14 +289,14 @@ public class SimRunner {
       }
 
     } else if (theoryNumber == 6) {
-      if(flag.contains("strategy=0")) {
+      if (flag.contains("strategy=0")) {
         strategies.add(new Strategy("T6Play", "active"));
       } else {
-      strategies.add(new Strategy("T6Play", "active"));
-      strategies.add(new Strategy("T6C5d", "active"));
-      strategies.add(new Strategy("T6C125d", "active"));
-      strategies.add(new Strategy("T6C5", "idle"));
-      strategies.add(new Strategy("T6C125", "idle"));
+        strategies.add(new Strategy("T6Play", "active"));
+        strategies.add(new Strategy("T6C5d", "active"));
+        strategies.add(new Strategy("T6C125d", "active"));
+        strategies.add(new Strategy("T6C5", "idle"));
+        strategies.add(new Strategy("T6C125", "idle"));
       }
 
       Theory6 t6 = new Theory6(pubMark);
@@ -312,7 +323,7 @@ public class SimRunner {
             summary = new Summary(6, t6.maxTauPerHour,
                 t6.bestPubMulti, t6.strategy.name, t6.strategy.type, t6.bestPubTime,
                 t6.bestRecoveryTime, t6.bestTauGain,
-                t6.coastStart, 
+                t6.coastStart,
                 t6.variables);
           }
         }
@@ -322,12 +333,12 @@ public class SimRunner {
         }
       }
     } else if (theoryNumber == 7) {
-      if(flag.contains("strategy=0")) {
+      if (flag.contains("strategy=0")) {
         strategies.add(new Strategy("T7PlaySpqcey", "active"));
       } else {
-      strategies.add(new Strategy("T7PlaySpqcey", "active"));
-      strategies.add(new Strategy("T7Play", "active"));
-      strategies.add(new Strategy("T7C456", "idle"));
+        strategies.add(new Strategy("T7PlaySpqcey", "active"));
+        strategies.add(new Strategy("T7Play", "active"));
+        strategies.add(new Strategy("T7C456", "idle"));
       }
       Theory7 t7 = new Theory7(pubMark);
 
@@ -354,7 +365,7 @@ public class SimRunner {
             summary = new Summary(7, t7.maxTauPerHour,
                 t7.bestPubMulti, t7.strategy.name, t7.strategy.type, t7.bestPubTime,
                 t7.bestRecoveryTime, t7.bestTauGain,
-                t7.coastStart, 
+                t7.coastStart,
                 t7.variables);
           }
         }
@@ -365,13 +376,16 @@ public class SimRunner {
 
       }
     } else if (theoryNumber == 8) {
-      if(flag.contains("strategy=0")) {
+      if (flag.contains("strategy=0")) {
         strategies.add(new Strategy("T8MS2", "active"));
+      } else if (flag.contains("strategy=T8Baby")) {
+        strategies.add(new Strategy("T8Baby", "active"));
       } else {
         strategies.add(new Strategy("T8MS2", "active"));
-      strategies.add(new Strategy("T8MS", "active"));
-      strategies.add(new Strategy("T8Play", "active"));
-      strategies.add(new Strategy("T8", "idle"));
+        strategies.add(new Strategy("T8MS", "active"));
+        strategies.add(new Strategy("T8Play", "active"));
+        strategies.add(new Strategy("T8", "idle"));
+        strategies.add(new Strategy("T8Baby", "active"));
 
       }
       Theory8 t8 = new Theory8(pubMark);
@@ -412,15 +426,15 @@ public class SimRunner {
 
     } else if (theoryNumber == 10) {
 
-      if(flag.contains("strategy=0")) {
+      if (flag.contains("strategy=0")) {
         strategies.add(new Strategy("WSPlay2", "active"));
-        
+
       } else {
-      strategies.add(new Strategy("WSPlay2", "active"));
-      strategies.add(new Strategy("WSPlay", "active"));
-      strategies.add(new Strategy("WSPd", "active"));
-      strategies.add(new Strategy("WSPStC1", "idle"));
-      strategies.add(new Strategy("WSP", "idle"));
+        strategies.add(new Strategy("WSPlay2", "active"));
+        strategies.add(new Strategy("WSPlay", "active"));
+        strategies.add(new Strategy("WSPd", "active"));
+        strategies.add(new Strategy("WSPStC1", "idle"));
+        strategies.add(new Strategy("WSP", "idle"));
 
       }
       WeierStrass weierStrass = new WeierStrass(pubMark);
@@ -448,7 +462,7 @@ public class SimRunner {
                 weierStrass.bestPubTime,
                 weierStrass.bestRecoveryTime,
                 weierStrass.bestTauGain,
-                weierStrass.coastStart, 
+                weierStrass.coastStart,
                 weierStrass.variables);
           }
         }
@@ -459,13 +473,13 @@ public class SimRunner {
 
       }
     } else if (theoryNumber == 11) {
-      if(flag.contains("strategy=0")) {
+      if (flag.contains("strategy=0")) {
         strategies.add(new Strategy("SLPlay2", "active"));
       } else {
-      strategies.add(new Strategy("SLPlay2", "active"));
-      strategies.add(new Strategy("SLPlay", "active"));
-      strategies.add(new Strategy("SLst", "idle"));
-      strategies.add(new Strategy("SLd", "active"));
+        strategies.add(new Strategy("SLPlay2", "active"));
+        strategies.add(new Strategy("SLPlay", "active"));
+        strategies.add(new Strategy("SLst", "idle"));
+        strategies.add(new Strategy("SLd", "active"));
       }
 
       Sequential_Limit SL = new Sequential_Limit(pubMark);
@@ -491,8 +505,8 @@ public class SimRunner {
             summary = new Summary(11, SL.maxTauPerHour,
                 SL.bestPubMulti, SL.strategy.name, SL.strategy.type, SL.bestPubTime,
                 SL.bestRecoveryTime,
-                 SL.bestTauGain,
-                SL.coastStart, 
+                SL.bestTauGain,
+                SL.coastStart,
                 SL.variables);
           }
         }
@@ -502,12 +516,12 @@ public class SimRunner {
         }
       }
     } else if (theoryNumber == 12) {
-      if(flag.contains("strategy=0")) {
+      if (flag.contains("strategy=0")) {
         strategies.add(new Strategy("CSRPlay", "active"));
       } else {
-      strategies.add(new Strategy("CSRPlay", "active"));
-      strategies.add(new Strategy("CSR2d", "active"));
-      strategies.add(new Strategy("CSR2", "idle"));
+        strategies.add(new Strategy("CSRPlay", "active"));
+        strategies.add(new Strategy("CSR2d", "active"));
+        strategies.add(new Strategy("CSR2", "idle"));
       }
 
       Convergence_Square_Root CSR2 = new Convergence_Square_Root(pubMark);
@@ -533,8 +547,8 @@ public class SimRunner {
             summary = new Summary(12, CSR2.maxTauPerHour,
                 CSR2.bestPubMulti, CSR2.strategy.name, CSR2.strategy.type, CSR2.bestPubTime,
                 CSR2.bestRecoveryTime,
-                 CSR2.bestTauGain,
-                CSR2.coastStart, 
+                CSR2.bestTauGain,
+                CSR2.coastStart,
                 CSR2.variables);
           }
         }
@@ -544,12 +558,12 @@ public class SimRunner {
         }
       }
     } else if (theoryNumber == 13) {
-      if(flag.contains("strategy=0")) {
+      if (flag.contains("strategy=0")) {
         strategies.add(new Strategy("BTPlay", "active"));
       } else {
         strategies.add(new Strategy("BTPlay", "active"));
-      strategies.add(new Strategy("BTd", "active"));
-      strategies.add(new Strategy("BT", "idle"));
+        strategies.add(new Strategy("BTd", "active"));
+        strategies.add(new Strategy("BT", "idle"));
       }
 
       Basic BT = new Basic(pubMark);
@@ -575,8 +589,8 @@ public class SimRunner {
             summary = new Summary(13, BT.maxTauPerHour,
                 BT.bestPubMulti, BT.strategy.name, BT.strategy.type, BT.bestPubTime,
                 BT.bestRecoveryTime,
-                 BT.bestTauGain,
-                BT.coastStart, 
+                BT.bestTauGain,
+                BT.coastStart,
                 BT.variables);
           }
         }
@@ -795,7 +809,7 @@ public class SimRunner {
             summary = new Summary(1, t1.maxTauPerHour,
                 t1.bestPubMulti, t1.strategy.name, t1.strategy.type, t1.bestPubTime,
                 t1.bestRecoveryTime,
-                 t1.bestTauGain,
+                t1.bestTauGain,
                 t1.coastStart,
                 t1.variables);
           }
@@ -831,8 +845,8 @@ public class SimRunner {
             summary = new Summary(2, t2.maxTauPerHour,
                 t2.bestPubMulti, t2.strategy.name, t2.strategy.type, t2.bestPubTime,
                 t2.bestRecoveryTime,
-                 t2.bestTauGain,
-                t2.coastStart, 
+                t2.bestTauGain,
+                t2.coastStart,
                 t2.variables);
           }
         }
@@ -867,8 +881,8 @@ public class SimRunner {
             summary = new Summary(3, t3.maxTauPerHour,
                 t3.bestPubMulti, t3.strategy.name, t3.strategy.type, t3.bestPubTime,
                 t3.bestRecoveryTime,
-                 t3.bestTauGain,
-                t3.coastStart, 
+                t3.bestTauGain,
+                t3.coastStart,
                 t3.variables);
           }
         }
@@ -909,8 +923,8 @@ public class SimRunner {
             summary = new Summary(4, t4.maxTauPerHour,
                 t4.bestPubMulti, t4.strategy.name, t4.strategy.type, t4.bestPubTime,
                 t4.bestRecoveryTime,
-                 t4.bestTauGain,
-                t4.coastStart, 
+                t4.bestTauGain,
+                t4.coastStart,
                 t4.variables);
           }
         }
@@ -945,8 +959,8 @@ public class SimRunner {
             summary = new Summary(5, t5.maxTauPerHour,
                 t5.bestPubMulti, t5.strategy.name, t5.strategy.type, t5.bestPubTime,
                 t5.bestRecoveryTime,
-                 t5.bestTauGain,
-                t5.coastStart, 
+                t5.bestTauGain,
+                t5.coastStart,
                 t5.variables);
           }
         }
@@ -982,8 +996,8 @@ public class SimRunner {
             summary = new Summary(6, t6.maxTauPerHour,
                 t6.bestPubMulti, t6.strategy.name, t6.strategy.type, t6.bestPubTime,
                 t6.bestRecoveryTime,
-                 t6.bestTauGain,
-                t6.coastStart, 
+                t6.bestTauGain,
+                t6.coastStart,
                 t6.variables);
           }
         }
@@ -1018,8 +1032,8 @@ public class SimRunner {
             summary = new Summary(7, t7.maxTauPerHour,
                 t7.bestPubMulti, t7.strategy.name, t7.strategy.type, t7.bestPubTime,
                 t7.bestRecoveryTime,
-                 t7.bestTauGain,
-                t7.coastStart, 
+                t7.bestTauGain,
+                t7.coastStart,
                 t7.variables);
           }
         }
@@ -1055,8 +1069,8 @@ public class SimRunner {
             summary = new Summary(8, t8.maxTauPerHour,
                 t8.bestPubMulti, t8.strategy.name, t8.strategy.type, t8.bestPubTime,
                 t8.bestRecoveryTime,
-                 t8.bestTauGain,
-                t8.coastStart, 
+                t8.bestTauGain,
+                t8.coastStart,
                 t8.variables);
           }
         }
@@ -1097,7 +1111,7 @@ public class SimRunner {
                 weierStrass.bestPubTime,
                 weierStrass.bestRecoveryTime,
                 weierStrass.bestTauGain,
-                weierStrass.coastStart, 
+                weierStrass.coastStart,
                 weierStrass.variables);
           }
         }
@@ -1134,8 +1148,8 @@ public class SimRunner {
                 SL.bestPubMulti, SL.strategy.name, SL.strategy.type,
                 SL.bestPubTime,
                 SL.bestRecoveryTime,
-                 SL.bestTauGain,
-                SL.coastStart, 
+                SL.bestTauGain,
+                SL.coastStart,
                 SL.variables);
           }
         }

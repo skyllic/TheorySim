@@ -16,20 +16,24 @@ public class Theory8 extends Theory {
     public double ydot;
     public double zdot;
 
-    public double dt = 0.00014;// rossler
+    public double[] dt = new double[3];
+    
+    public double preE60SwapTau = 48;
 
-    public double xAverage = 1;
-    public double xMin = -20;
-    public double xMax = 22;
-    public double yAverage = -1.5;
-    public double yMin = -21;
-    public double yMax = 18;
-    public double zAverage = 8;
-    public double zMin = 0;
-    public double zMax = 37;
+    public double[] xAverage = {0, 0.5, 1};
+    public double[] xMin = {-20, -23, -20};
+    public double[] xMax = {20, 24, 22};
+    public double[] yAverage = {0, 1, -1.5};
+    public double[] yMin = {-27, -25, -21};
+    public double[] yMax = {27, 27, 18};
+    public double[] zAverage = {24.5, 20.5, 8};
+    public double[] zMin = {1, 1, 0};
+    public double[] zMax = {48, 40, 37};
 
     public double coastingPub = 3.0;
     public boolean isCoasting;
+
+    public int[] milestoneLevels = new int[4];
 
     
     public double[] variableWeights = { 10, 10, 10, 10, 10 };
@@ -46,8 +50,22 @@ public class Theory8 extends Theory {
 
         this.isCoasting = false;
 
+        
+
         this.variables = new Variable[5];
         this.strategy = new Strategy("T8AI", "AI");
+
+        this.milestoneLevels[0] = 2;
+        this.milestoneLevels[1] = 3;
+        this.milestoneLevels[2] = 3;
+        this.milestoneLevels[3] = 3;
+
+        this.milestoneSwapCheck();
+        this.resetStateDefault();
+
+        this.dt[0] = 0.02; // lorentz
+        this.dt[1] = 0.002; // chen
+        this.dt[2] = 0.00014;// rossler
 
         // Order of variable is c1, c2, c3, c4, c5
         this.variables[0] = new Variable(1.5172, 10, Math.pow(2, 0.1), 0, false, true, false, true, false,
@@ -69,13 +87,93 @@ public class Theory8 extends Theory {
             this.resetStateDefault();
         } else if(this.strategy.name == "T8MS2" && (this.tickCount) % 335 == 0) {
             this.resetStateDefault();
+        } else if(this.strategy.name == "T8Baby" && (this.tickCount) % 335 == 0 
+            && this.maxRho > 40 && this.maxRho < preE60SwapTau
+                 && this.publicationMark > 40 && this.publicationMark < preE60SwapTau) {
+            this.resetStateDefault();
         }
 
         this.updateEquation();
+        this.milestoneSwapCheck();
         super.moveTick();
 
         this.publicationMultiplier = Math.pow(10, 0.15 * (this.maxRho - this.publicationMark));
 
+    }
+
+
+    public void milestoneSwapCheck() {
+        if(this.strategy.name == "T8Baby") {
+            if(this.maxRho < 20 && this.publicationMark < 20) {
+                this.milestoneLevels[0] = 0;
+                this.milestoneLevels[1] = 0;
+                this.milestoneLevels[2] = 0;
+                this.milestoneLevels[3] = 0;
+            } else if(this.maxRho < 40 && this.publicationMark < 40) {
+                this.milestoneLevels[0] = 1;
+                this.milestoneLevels[1] = 0;
+                this.milestoneLevels[2] = 0;
+                this.milestoneLevels[3] = 0;
+                
+            } else if(this.maxRho < preE60SwapTau && this.publicationMark < preE60SwapTau) {
+                this.milestoneLevels[0] = 2;
+                this.milestoneLevels[1] = 0;
+                this.milestoneLevels[2] = 0;
+                this.milestoneLevels[3] = 0;
+            } else if(this.maxRho < 60 && this.publicationMark< 60) {
+                this.milestoneLevels[0] = 0;
+                this.milestoneLevels[1] = 0;
+                this.milestoneLevels[2] = 0;
+                this.milestoneLevels[3] = 2;
+            } 
+            else if(this.maxRho < 80 && this.publicationMark < 80) {
+                this.milestoneLevels[0] = 0;
+                this.milestoneLevels[1] = 0;
+                this.milestoneLevels[2] = 0;
+                this.milestoneLevels[3] = 3;
+            } else if(this.maxRho < 100 && this.publicationMark < 100) {
+                this.milestoneLevels[0] = 1;
+                this.milestoneLevels[1] = 0;
+                this.milestoneLevels[2] = 0;
+                this.milestoneLevels[3] = 3;
+            } else if(this.maxRho < 120 && this.publicationMark < 120) {
+                this.milestoneLevels[0] = 2;
+                this.milestoneLevels[1] = 0;
+                this.milestoneLevels[2] = 3;
+                this.milestoneLevels[3] = 0;
+            } else if(this.maxRho < 140 && this.publicationMark < 140) {
+                this.milestoneLevels[0] = 2;
+                this.milestoneLevels[1] = 1;
+                this.milestoneLevels[2] = 3;
+                this.milestoneLevels[3] = 0;
+            } else if(this.maxRho < 160 && this.publicationMark < 160) {
+                this.milestoneLevels[0] = 2;
+                this.milestoneLevels[1] = 2;
+                this.milestoneLevels[2] = 3;
+                this.milestoneLevels[3] = 0;
+            } else if(this.maxRho < 180 && this.publicationMark < 180) {
+                this.milestoneLevels[0] = 2;
+                this.milestoneLevels[1] = 3;
+                this.milestoneLevels[2] = 3;
+                this.milestoneLevels[3] = 0;
+            } else if(this.maxRho < 200 && this.publicationMark < 200) {
+                this.milestoneLevels[0] = 2;
+                this.milestoneLevels[1] = 3;
+                this.milestoneLevels[2] = 3;
+                this.milestoneLevels[3] = 1;
+            } else if(this.maxRho < 220 && this.publicationMark < 220) {
+                this.milestoneLevels[0] = 2;
+                this.milestoneLevels[1] = 3;
+                this.milestoneLevels[2] = 3;
+                this.milestoneLevels[3] = 2;
+            } else {
+                this.milestoneLevels[0] = 2;
+                this.milestoneLevels[1] = 3;
+                this.milestoneLevels[2] = 3;
+                this.milestoneLevels[3] = 3;
+            }
+        }
+        
     }
 
     /**
@@ -84,12 +182,18 @@ public class Theory8 extends Theory {
      */
     public void updateEquation() {
 
-        double xLowerBound = (xMin - xAverage) * 5 + xAverage;
-        double xUpperBound = (xMax - xAverage) * 5 + xAverage;
-        double yLowerBound = (yMin - yAverage) * 5 + yAverage;
-        double yUpperBound = (yMax - yAverage) * 5 + yAverage;
-        double zLowerBound = (zMin - zAverage) * 5 + zAverage;
-        double zUpperBound = (zMax - zAverage) * 5 + zAverage;
+        double xLowerBound = (xMin[this.milestoneLevels[0]] - xAverage[this.milestoneLevels[0]]) 
+            * 5 + xAverage[this.milestoneLevels[0]];
+        double xUpperBound = (xMax[this.milestoneLevels[0]] - xAverage[this.milestoneLevels[0]])
+             * 5 + xAverage[this.milestoneLevels[0]];
+        double yLowerBound = (yMin[this.milestoneLevels[0]] - yAverage[this.milestoneLevels[0]])
+             * 5 + yAverage[this.milestoneLevels[0]];
+        double yUpperBound = (yMax[this.milestoneLevels[0]] - yAverage[this.milestoneLevels[0]])
+             * 5 + yAverage[this.milestoneLevels[0]];
+        double zLowerBound = (zMin[this.milestoneLevels[0]] - zAverage[this.milestoneLevels[0]])
+             * 5 + zAverage[this.milestoneLevels[0]];
+        double zUpperBound = (zMax[this.milestoneLevels[0]] - zAverage[this.milestoneLevels[0]])
+             * 5 + zAverage[this.milestoneLevels[0]];
 
         if (this.x < xLowerBound || this.x > xUpperBound ||
                 this.y < yLowerBound || this.y > yUpperBound ||
@@ -97,31 +201,92 @@ public class Theory8 extends Theory {
             this.resetStateDefault();
         }
 
-        this.xdot = -500 * (this.y + this.z);
-        this.ydot = 500 * this.x + 50 * this.y;
-        this.zdot = 50 + 500 * this.z * (this.x - 14);
+        if(this.milestoneLevels[0] == 2) {
+            this.xdot = -500 * (this.y + this.z);
+            this.ydot = 500 * this.x + 50 * this.y;
+            this.zdot = 50 + 500 * this.z * (this.x - 14);
+        } else if(this.milestoneLevels[0] == 1) {
+            this.xdot = 400 * (this.y - this.x);
+            this.ydot = -120 * this.x - 10 * this.x * this.z + 280 * this.y;
+            this.zdot = 10 * this.x * this.y - 30 * this.z;
+        } else {
+            this.xdot = 10 * (this.y - this.x);
+            this.ydot = this.x * (28 - this.z) - this.y;
+            this.zdot = this.x * this.y - this.z * 8.0/3.0;
+        }
+       
+        double midPointX = 0;
+        double midPointY = 0;
+        double midPointZ = 0;
+        if(this.milestoneLevels[0] == 2) {
+            // midpoint
+            midPointX = this.x + this.xdot * dt[2] * 0.5;
+            midPointY = this.y + this.ydot * dt[2] * 0.5;
+            midPointZ = this.z + this.zdot * dt[2] * 0.5;
+        } else if(this.milestoneLevels[0] == 1) {
+            midPointX = this.x + this.xdot * dt[1] * 0.5;
+            midPointY = this.y + this.ydot * dt[1] * 0.5;
+            midPointZ = this.z + this.zdot * dt[1] * 0.5;
+        } else {
+            midPointX = this.x + this.xdot * dt[0] * 0.5;
+            midPointY = this.y + this.ydot * dt[0] * 0.5;
+            midPointZ = this.z + this.zdot * dt[0] * 0.5;
+        }
+        
 
-        // midpoint
-        double midPointX = this.x + this.xdot * dt * 0.5;
-        double midPointY = this.y + this.ydot * dt * 0.5;
-        double midPointZ = this.z + this.zdot * dt * 0.5;
 
-        this.xdot = -500 * (midPointY + midPointZ);
-        this.ydot = 500 * midPointX + 50 * midPointY;
-        this.zdot = 50 + 500 * midPointZ * (midPointX - 14);
+        if(this.milestoneLevels[0] == 2) {
+            this.xdot = -500 * (midPointY + midPointZ);
+            this.ydot = 500 * midPointX + 50 * midPointY;
+            this.zdot = 50 + 500 * midPointZ * (midPointX - 14);
+        } else if(this.milestoneLevels[0] == 1) {
+            this.xdot = 400 * (midPointY - midPointX);
+            this.ydot = -120 * midPointX - 10 * midPointX * midPointZ+ 280 * midPointY;
+            this.zdot = 10 * midPointX * midPointY - 30 * midPointZ;
+        } else {
+            this.xdot = 10 * (midPointY - midPointX);
+            this.ydot = midPointX * (28 - midPointZ) - midPointY;
+            this.zdot = midPointX* midPointY - midPointZ * 8.0/3.0;
+        }
+        
+        if(this.milestoneLevels[0] == 2) {
+            // actual
+            this.x += this.xdot * dt[2];
+            this.y += this.ydot * dt[2];
+            this.z += this.zdot * dt[2];
+        } else if(this.milestoneLevels[0] == 1) {
+            this.x += this.xdot * dt[1];
+            this.y += this.ydot * dt[1];
+            this.z += this.zdot * dt[1];
+        } else {
+            this.x += this.xdot * dt[0];
+            this.y += this.ydot * dt[0];
+            this.z += this.zdot * dt[0];
+        }
 
-        // actual
-        this.x += this.xdot * dt;
-        this.y += this.ydot * dt;
-        this.z += this.zdot * dt;
+        
 
-        this.xdot = -500 * (this.y + this.z);
-        this.ydot = 500 * this.x + 50 * this.y;
-        this.zdot = 50 + 500 * this.z * (this.x - 14);
+        if(this.milestoneLevels[0] == 2) {
+            this.xdot = -500 * (this.y + this.z);
+            this.ydot = 500 * this.x + 50 * this.y;
+            this.zdot = 50 + 500 * this.z * (this.x - 14);
+        } else if(this.milestoneLevels[0] == 1) {
+            this.xdot = 400 * (this.y - this.x);
+            this.ydot = -120 * this.x - 10 * this.x * this.z + 280 * this.y;
+            this.zdot = 10 * this.x * this.y - 30 * this.z;
+        } else {
+            this.xdot = 10 * (this.y - this.x);
+            this.ydot = this.x * (28 - this.z) - this.y;
+            this.zdot = this.x * this.y - this.z * 8.0/3.0;
+        }
+        
 
-        double term1 = this.variables[2].value * 1.15 + Math.log10(Math.pow(this.xdot, 2));
-        double term2 = this.variables[3].value * 1.15 + Math.log10(Math.pow(this.ydot, 2));
-        double term3 = this.variables[4].value * 1.15 + Math.log10(Math.pow(this.zdot, 2));
+        double term1 = this.variables[2].value * (1 + 0.05 * this.milestoneLevels[1]) 
+            + Math.log10(Math.pow(this.xdot, 2));
+        double term2 = this.variables[3].value * (1 + 0.05 * this.milestoneLevels[2]) 
+            + Math.log10(Math.pow(this.ydot, 2));
+        double term3 = this.variables[4].value * (1 + 0.05 * this.milestoneLevels[3]) 
+            + Math.log10(Math.pow(this.zdot, 2));
 
         this.rhodot = 0.5 * (Variable.add(term3, Variable.add(term1, term2))) +
                 this.variables[0].value + this.variables[1].value - Math.log10(100) +
@@ -132,9 +297,20 @@ public class Theory8 extends Theory {
     }
 
     public void resetStateDefault() {
-        this.x = -6;
-        this.y = 15;
-        this.z = 0;
+        if(this.milestoneLevels[0] == 2) {
+            this.x = -6;
+            this.y = 15;
+            this.z = 0;
+        } else if(this.milestoneLevels[0] == 1) {
+            this.x = -10.6;
+            this.y = -4.4;
+            this.z = 28.6;
+        } else {
+            this.x = -6;
+            this.y = -8;
+            this.z = 26;
+        }
+        
     }
 
     /**
@@ -249,6 +425,76 @@ public class Theory8 extends Theory {
                 this.variableWeights[2] = 10.0;
                 this.variableWeights[3] = 10.0;
                 this.variableWeights[4] = 10.0;
+            }
+            else if(this.strategy.name == "T8Baby") {
+                this.variableWeights[0] = 10.0;
+                this.variableWeights[1] = 10.0;
+                this.variableWeights[2] = 10.0;
+                this.variableWeights[3] = 10.0;
+                this.variableWeights[4] = 10.0;
+
+                if(this.maxRho < 20 && this.publicationMark < 20) {
+                    this.variableWeights[0] = 10.9 + (0.030 * (this.variables[0].level % 10) - 0.11);
+                    this.variableWeights[1] = 10.0;
+                    this.variableWeights[2] = 10.0;
+                    this.variableWeights[3] = 10.0;
+                    this.variableWeights[4] = 10.0; 
+                } else if(this.maxRho < 40 && this.publicationMark < 40) {
+                    this.variableWeights[0] = 10.9 + (0.030 * (this.variables[0].level % 10) - 0.11);
+                    this.variableWeights[1] = 10.0;
+                    this.variableWeights[2] = 10.0;
+                    this.variableWeights[3] = 10.0;
+                    this.variableWeights[4] = 10.0; 
+
+                } else if(this.maxRho < preE60SwapTau && this.publicationMark < preE60SwapTau) {
+                    this.variableWeights[0] = 10.9 + (0.030 * (this.variables[0].level % 10) - 0.11);
+                    this.variableWeights[1] = 10.0;
+                    this.variableWeights[2] = 10.4;
+                    this.variableWeights[3] = 10.0;
+                    this.variableWeights[4] = 10.6; 
+                }
+                else if(this.maxRho < 60 && this.publicationMark < 60) {
+                    this.variableWeights[0] = 10.9 + (0.030 * (this.variables[0].level % 10) - 0.11);
+                    this.variableWeights[1] = 10.0;
+                    this.variableWeights[2] = 12.0;
+                    this.variableWeights[3] = 12.0;
+                    this.variableWeights[4] = 10.0; 
+                } else if(this.maxRho < 80 && this.publicationMark < 80) {
+                    this.variableWeights[0] = 10.9 + (0.030 * (this.variables[0].level % 10) - 0.11);
+                    this.variableWeights[1] = 10.0;
+                    this.variableWeights[2] = 12.0;
+                    this.variableWeights[3] = 12.0;
+                    this.variableWeights[4] = 10.0; 
+
+                } else if(this.maxRho < 100 && this.publicationMark < 100) {
+                    this.variableWeights[0] = 10.9 + (0.030 * (this.variables[0].level % 10) - 0.11);
+                    this.variableWeights[1] = 10.0;
+                    this.variableWeights[2] = 12.0;
+                    this.variableWeights[3] = 12.0;
+                    this.variableWeights[4] = 10.0; 
+
+                } else if(this.maxRho < 160 && this.publicationMark < 160) {
+                    this.variableWeights[0] = 10.9 + (0.030 * (this.variables[0].level % 10) - 0.11);
+                    this.variableWeights[1] = 10.0;
+                    this.variableWeights[2] = 12.0;
+                    this.variableWeights[3] = 10.0;
+                    this.variableWeights[4] = 12.0; 
+
+                } else if(this.maxRho < 220 && this.publicationMark < 220) {
+                    this.variableWeights[0] = 10.9 + (0.030 * (this.variables[0].level % 10) - 0.11);
+                    this.variableWeights[1] = 10.0;
+                    this.variableWeights[2] = 10.4;
+                    this.variableWeights[3] = 10.0;
+                    this.variableWeights[4] = 12.0; 
+            
+
+                } else {
+                    this.variableWeights[0] = 10.9 + (0.030 * (this.variables[0].level % 10) - 0.11);
+                    this.variableWeights[1] = 10.0;
+                    this.variableWeights[2] = 10.4;
+                    this.variableWeights[3] = 10.0;
+                    this.variableWeights[4] = 10.6;
+                }
             }
 
         }

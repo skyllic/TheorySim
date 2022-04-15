@@ -57,6 +57,10 @@ public class Theory1 extends Theory {
 
         this.publicationMultiplier = Math.pow(10, 0.164 * (this.maxRho - this.publicationMark));
 
+        if(this.maxRho - this.variables[5].nextCost < 0.01 && this.publicationMultiplier > 2.0) {
+            this.isCoasting = true;
+        }
+
     }
 
     /**
