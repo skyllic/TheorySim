@@ -126,7 +126,12 @@ public class Theory implements Simmable {
         this.tickCount = 0;
         this.rho = 0;
         this.rhodot = 0;
-        this.tickFrequency = 1.0; // seconds per tick, NOT ticks per second.
+        
+        if(this.publicationMark < 250) { // Assume full milestones at e250.
+            this.tickFrequency = 0.1;
+        } else {
+            this.tickFrequency = 1.0;
+        }
         if(theoryNumber == 2) {
             if(this.publicationMark < 250) {
                 this.tickFrequency = 0.1;

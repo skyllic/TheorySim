@@ -202,7 +202,13 @@ public class SimRunner {
     else if (theoryNumber == 4) {
       if (flag.contains("strategy=0")) {
         strategies.add(new Strategy("T4Sol2", "active"));
-      } else {
+      } else if(flag.contains("strategy=T4Baby")) {
+        strategies.add(new Strategy("T4Baby", "active"));
+      } else if(flag.contains("strategy=T4NoMS")) {
+        strategies.add(new Strategy("T4NoMS", "active"));
+      }
+      
+      else {
         strategies.add(new Strategy("T4PlaySpqcey", "active"));
         strategies.add(new Strategy("T4SolC", "active"));
         strategies.add(new Strategy("T4Sol2", "active"));
@@ -210,6 +216,8 @@ public class SimRunner {
         strategies.add(new Strategy("T4Gold", "active"));
         strategies.add(new Strategy("T4C3d", "active"));
         strategies.add(new Strategy("T4C3", "idle"));
+        strategies.add(new Strategy("T4Baby", "active"));
+        strategies.add(new Strategy("T4NoMS", "active"));
       }
       Theory4 t4 = new Theory4(pubMark);
       double bestPubMulti = 0;

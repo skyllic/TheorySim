@@ -51,10 +51,10 @@ public class Theory2 extends Theory {
         this.strategy = new Strategy("T2AI", "AI");
 
         // Default all milestones.
-        milestoneLevels[0] = 2;
-        milestoneLevels[1] = 2;
-        milestoneLevels[2] = 3;
-        milestoneLevels[3] = 3;
+        this.milestoneLevels[0] = 2;
+        this.milestoneLevels[1] = 2;
+        this.milestoneLevels[2] = 3;
+        this.milestoneLevels[3] = 3;
 
         // Order of variable is q1, q2, r1, r2, c1, c2, c3, c4, c5 (same as in game when
         // read top to bottom)
