@@ -13,11 +13,13 @@ public class Summary {
   public double recoveryTime;
   public double tauGain;
   public double coastStart;
+  public double longestIdlePeriod;
 
   public Variable[] variables;
 
   public Summary(int theoryNumber, double tauPerHour, double pubMulti, String strategy, String strategyType, 
-  double pubTime, double recoveryTime, double tauGain, double coastStart, Variable[] variables) {
+  double pubTime, double recoveryTime, double tauGain, double coastStart, Variable[] variables, 
+    double longestIdlePeriod) {
     this.theoryNumber = theoryNumber;
     this.tauPerHour = tauPerHour;
     this.pubMulti = pubMulti;
@@ -29,9 +31,17 @@ public class Summary {
     this.coastStart = coastStart;
 
     this.variables = variables;
+    this.longestIdlePeriod = longestIdlePeriod;
+  }
+
+  public Summary(String flags) {
+    if(flags.contains("")) {
+
+    }
   }
 
   public Summary() {
+    
   }
   
 }

@@ -18,6 +18,8 @@ public class Theory1 extends Theory {
 
     public Theory1[] t1Clones = new Theory1[6];
 
+    public int[] milestoneLevels = new int[4];
+
     public Theory1(double pubMark) {
         super(1, pubMark);
 
@@ -30,6 +32,11 @@ public class Theory1 extends Theory {
 
         this.variables = new Variable[6];
         this.strategy = new Strategy("T1Play", "AI");
+
+        this.milestoneLevels[0] = 3;
+        this.milestoneLevels[1] = 1;
+        this.milestoneLevels[2] = 1;
+        this.milestoneLevels[3] = 1;
 
         // Order of variable is q1, q2, r1, r2, c1, c2, c3, c4, c5 (same as in game when
         // read top to bottom)
@@ -53,14 +60,176 @@ public class Theory1 extends Theory {
 
         this.updateEquation();
 
+        this.milestoneSwapCheck();
+
         super.moveTick();
 
         this.publicationMultiplier = Math.pow(10, 0.164 * (this.maxRho - this.publicationMark));
 
-        if(this.maxRho - this.variables[5].nextCost < 0.01 && this.publicationMultiplier > 2.0) {
+        /**if(this.maxRho - this.variables[5].nextCost < 0.01 && this.publicationMultiplier > 2.0) {
             this.isCoasting = true;
-        }
+        }*/
 
+    }
+
+    public void milestoneSwapCheck() {
+
+        if (this.strategy.name == "T1Baby") {
+            if (this.maxRho < 25 && this.publicationMark < 25) {
+                this.milestoneLevels[0] = 0;
+                this.milestoneLevels[1] = 0;
+                this.milestoneLevels[2] = 0;
+                this.milestoneLevels[3] = 0;
+
+            } else if (this.maxRho < 50 && this.publicationMark < 50) {
+                if (this.tickCount % 100 < 100) {
+                    this.milestoneLevels[0] = 0;
+                    this.milestoneLevels[1] = 0;
+                    this.milestoneLevels[2] = 1;
+                    this.milestoneLevels[3] = 0;
+
+                }
+
+            } else if (this.maxRho < 75 && this.publicationMark < 75) {
+                if (this.tickCount % 100 < 100) {
+                    this.milestoneLevels[0] = 0;
+                    this.milestoneLevels[1] = 0;
+                    this.milestoneLevels[2] = 1;
+                    this.milestoneLevels[3] = 1;
+
+                } else if (this.tickCount % 100 < 100) {
+                    this.milestoneLevels[0] = 0;
+                    this.milestoneLevels[1] = 0;
+                    this.milestoneLevels[2] = 2;
+                }
+            } else if (this.maxRho < 100 && this.publicationMark < 100) {
+                if (this.tickCount % 100 < 100) {
+                    this.milestoneLevels[0] = 0;
+                    this.milestoneLevels[1] = 1;
+                    this.milestoneLevels[2] = 1;
+                    this.milestoneLevels[3] = 1;
+
+                } else if (this.tickCount % 100 < 100) {
+                    this.milestoneLevels[0] = 1;
+                    this.milestoneLevels[1] = 1;
+                    this.milestoneLevels[2] = 1;
+
+                }
+            } else if (this.maxRho < 125 && this.publicationMark < 125) {
+                if (this.tickCount % 100 < 100) {
+                    this.milestoneLevels[0] = 1;
+                    this.milestoneLevels[1] = 1;
+                    this.milestoneLevels[2] = 1;
+                    this.milestoneLevels[3] = 1;
+
+                } else {
+                    this.milestoneLevels[0] = 0;
+                    this.milestoneLevels[1] = 1;
+                    this.milestoneLevels[2] = 3;
+
+                }
+            } else if (this.maxRho < 150 && this.publicationMark < 150) {
+                if (this.tickCount % 100 < 100) {
+                    this.milestoneLevels[0] = 2;
+                    this.milestoneLevels[1] = 1;
+                    this.milestoneLevels[2] = 1;
+                    this.milestoneLevels[3] = 1;
+
+                } else {
+                    this.milestoneLevels[0] = 2;
+                    this.milestoneLevels[1] = 0;
+                    this.milestoneLevels[2] = 3;
+
+                }
+
+            } else {
+                this.milestoneLevels[0] = 3;
+                this.milestoneLevels[1] = 1;
+                this.milestoneLevels[2] = 1;
+                this.milestoneLevels[3] = 1;
+
+            }
+        } else if (this.strategy.name == "T1NoMS") {
+            if (this.maxRho < 25 && this.publicationMark < 25) {
+                this.milestoneLevels[0] = 0;
+                this.milestoneLevels[1] = 0;
+                this.milestoneLevels[2] = 0;
+
+            } else if (this.maxRho < 50 && this.publicationMark < 50) {
+                if (this.tickCount % 100 < 100) {
+                    this.milestoneLevels[0] = 0;// c4q^2 term.
+                    this.milestoneLevels[1] = 1;
+                    this.milestoneLevels[2] = 0;
+
+                }
+
+            } else if (this.maxRho < 75 && this.publicationMark < 75) {
+                if (this.tickCount % 100 < 100) {
+                    this.milestoneLevels[0] = 1;
+                    this.milestoneLevels[1] = 1;
+                    this.milestoneLevels[2] = 0;
+
+                } else if (this.tickCount % 100 < 100) {
+                    this.milestoneLevels[0] = 0;
+                    this.milestoneLevels[1] = 0;
+                    this.milestoneLevels[2] = 2;
+                }
+            } else if (this.maxRho < 100 && this.publicationMark < 100) {
+                if (this.tickCount % 100 < 100) {
+                    this.milestoneLevels[0] = 2;
+                    this.milestoneLevels[1] = 1;
+                    this.milestoneLevels[2] = 0;
+
+                } else if (this.tickCount % 100 < 100) {
+                    this.milestoneLevels[0] = 0;
+                    this.milestoneLevels[1] = 0;
+                    this.milestoneLevels[2] = 3;
+
+                }
+            } else if (this.maxRho < 125 && this.publicationMark < 125) {
+                if (this.tickCount % 100 < 100) {
+                    this.milestoneLevels[0] = 3;
+                    this.milestoneLevels[1] = 0;
+                    this.milestoneLevels[2] = 1;
+
+                } else {
+                    this.milestoneLevels[0] = 0;
+                    this.milestoneLevels[1] = 1;
+                    this.milestoneLevels[2] = 3;
+
+                }
+            } else if (this.maxRho < 150 && this.publicationMark < 150) {
+                if (this.tickCount % 100 < 100) {
+                    this.milestoneLevels[0] = 2;
+                    this.milestoneLevels[1] = 0;
+                    this.milestoneLevels[2] = 3;
+
+                } else {
+                    this.milestoneLevels[0] = 1;
+                    this.milestoneLevels[1] = 1;
+                    this.milestoneLevels[2] = 3;
+
+                }
+            } else if (this.maxRho < 175 && this.publicationMark < 175) {
+                if (this.tickCount % 100 < 100) {
+                    this.milestoneLevels[0] = 2;
+                    this.milestoneLevels[1] = 1;
+                    this.milestoneLevels[2] = 3;
+
+                } else {
+                    this.milestoneLevels[0] = 2;
+                    this.milestoneLevels[1] = 1;
+                    this.milestoneLevels[2] = 3;
+
+                }
+
+            } else {
+                this.milestoneLevels[0] = 3;
+                this.milestoneLevels[1] = 1;
+                this.milestoneLevels[2] = 3;
+
+            }
+        }
     }
 
     /**
@@ -69,11 +238,35 @@ public class Theory1 extends Theory {
      */
     public void updateEquation() {
 
-        double term1 = this.variables[2].value * 1.15 + this.variables[3].value +
-                Math.log10(Variable.add(1, this.rho * Math.log(10) / 100.0));
-                
-        double term2 = this.variables[4].value + this.rho * 0.2;
-        double term3 = this.variables[5].value + this.rho * 0.3;
+        double term1 = 0;
+        double term2 = 0;
+        double term3 = 0;
+
+        term1 = this.variables[2].value * (1 + 0.05 * this.milestoneLevels[0]) + this.variables[3].value;
+             
+        if(this.milestoneLevels[1] == 1) {
+            term1 = term1 + Math.log10(Variable.add(1, this.rho * Math.log(10) / 100.0));
+        } else {
+
+        }
+        if(this.strategy.name == "T1Baby") {
+            System.out.println(this.rhodot);
+            if(Math.abs(this.rhodot - 84.6235) < 0.1) {
+                int a = 0;
+            }
+        }
+        
+        if(this.milestoneLevels[2] == 1) {
+            term2 = this.variables[4].value + this.rho * 0.2;
+        } else {
+            term2 = 0;
+        }
+        if(this.milestoneLevels[3] == 1) {
+            term3 = this.variables[5].value + this.rho * 0.3;
+        } else {
+            term3 = 0;
+        }
+        
 
         
 
@@ -110,16 +303,12 @@ public class Theory1 extends Theory {
      */
     @Override
     public void buyVariable(int variableNumber) {
-        double variableCost = this.variables[variableNumber].nextCost;
-        if (this.rho >= variableCost) {
-            this.variables[variableNumber].level += 1;
-            this.variables[variableNumber].update();
-            this.rho = Variable.subtract(this.rho, variableCost);
+        super.buyVariable(variableNumber);
 
-            // System.out.println(this.getIntegral() + "\t" + this.c);
+        if(this.variableWeights[variableNumber] < 10.11) {
 
         } else {
-            // too poor to buy stuff feelsbadman
+            this.resetIdlePeriod(variableNumber);
         }
 
     }
@@ -317,6 +506,64 @@ public class Theory1 extends Theory {
             this.variables[3].deactivate();
             this.variables[4].deactivate();
             this.variableWeights[5] = 10.0;
+        } else if(this.strategy.name == "T1Baby") {
+            if(this.maxRho < 25 && this.publicationMark < 25) {
+                this.variableWeights[0] = 11.0;
+                this.variableWeights[1] = 10.0;
+                this.variableWeights[2] = 11.0;
+                this.variableWeights[3] = 10.0;
+                this.variableWeights[4] = 10.0;
+                this.variableWeights[5] = 10.0;
+
+            } else if(this.maxRho < 50 && this.publicationMark < 50) {
+                this.variableWeights[0] = 11.0;
+                this.variableWeights[1] = 10.0;
+                this.variableWeights[2] = 11.0;
+                this.variableWeights[3] = 10.0;
+                this.variableWeights[4] = 10.0;
+                this.variableWeights[5] = 10.0;
+
+            } else if(this.maxRho < 75 && this.publicationMark < 75) {
+
+                this.variableWeights[0] = 11.0;
+                this.variableWeights[1] = 10.0;
+                this.variableWeights[2] = 11.0;
+                this.variableWeights[3] = 10.0;
+                this.variableWeights[4] = 10.0;
+                this.variableWeights[5] = 10.0;
+            } else if(this.maxRho < 100 && this.publicationMark < 100) {
+
+                this.variableWeights[0] = 11.0;
+                this.variableWeights[1] = 10.0;
+                this.variableWeights[2] = 11.0;
+                this.variableWeights[3] = 10.0;
+                this.variableWeights[4] = 10.0;
+                this.variableWeights[5] = 10.0;
+            } else if(this.maxRho < 125 && this.publicationMark < 125) {
+
+                this.variableWeights[0] = 11.0;
+                this.variableWeights[1] = 10.0;
+                this.variableWeights[2] = 11.0;
+                this.variableWeights[3] = 10.0;
+                this.variableWeights[4] = 10.0;
+                this.variableWeights[5] = 10.0;
+            } else if(this.maxRho < 150 && this.publicationMark < 150) {
+
+                this.variableWeights[0] = 11.0;
+                this.variableWeights[1] = 10.0;
+                this.variableWeights[2] = 11.0;
+                this.variableWeights[3] = 10.0;
+                this.variableWeights[4] = 10.0;
+                this.variableWeights[5] = 10.0;
+            } else {
+
+                this.variableWeights[0] = 11.0;
+                this.variableWeights[1] = 10.0;
+                this.variableWeights[2] = 11.0;
+                this.variableWeights[3] = 10.0;
+                this.variableWeights[4] = 10.0;
+                this.variableWeights[5] = 10.0;
+            }
         }
 
         /**

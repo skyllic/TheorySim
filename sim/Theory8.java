@@ -83,7 +83,7 @@ public class Theory8 extends Theory {
      */
     public void moveTick() {
         //
-        if(this.strategy.name == "T8MS" && (this.tickCount) % 335 == 0 ) {
+        if(this.strategy.name == "T8SolarS" && (this.tickCount) % 335 == 0 ) {
             this.resetStateDefault();
         } else if(this.strategy.name == "T8MS2" && (this.tickCount) % 335 == 0) {
             this.resetStateDefault();
@@ -310,6 +310,8 @@ public class Theory8 extends Theory {
             this.y = -8;
             this.z = 26;
         }
+
+        this.resetIdlePeriod(2);
         
     }
 
@@ -323,6 +325,12 @@ public class Theory8 extends Theory {
      */
     @Override
     public void buyVariable(int variableNumber) {
+
+        if(this.variableWeights[variableNumber] < 10.11) {
+
+        } else {
+            this.resetIdlePeriod(variableNumber);
+        }
 
         super.buyVariable(variableNumber);
 
@@ -402,7 +410,7 @@ public class Theory8 extends Theory {
 
                 this.variableWeights[0] = 10.9 + (0.018 * (this.variables[0].level % 10) - 0.11);
 
-            } else if(this.strategy.name == "T8MS") {
+            } else if(this.strategy.name == "T8SolarS") {
                 this.variableWeights[1] = 10.0;
                 this.variableWeights[2] = 10.4;
                 this.variableWeights[3] = 10.0;

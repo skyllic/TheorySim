@@ -27,6 +27,7 @@ public class Theory6 extends Theory {
 
     public Theory6[] t6Clones = new Theory6[9];
 
+    public int[] milestoneLevels = new int[4];
 
     long timer1;
     long timer2;
@@ -49,6 +50,12 @@ public class Theory6 extends Theory {
         this.usedMoney = -Double.MAX_VALUE;
         this.c = -Double.MAX_VALUE;
 
+        
+        this.milestoneLevels[0] = 1;
+        this.milestoneLevels[1] = 1;
+        this.milestoneLevels[2] = 1;
+        this.milestoneLevels[3] = 3;
+
         // Order of variable is q1, q2, r1, r2, c1, c2, c3, c4, c5 (same as in game when
         // read top to bottom)
         this.variables[0] = new Variable(3, 15, Math.pow(2, 0.1), 0, false, true, false, true, false, new double[2]);
@@ -66,6 +73,166 @@ public class Theory6 extends Theory {
         this.variables[8] = new Variable(3.9, 15, 2, 1, true, true, false, false, false, new double[2]);
     }
 
+    public void milestoneSwapCheck() {
+
+        if (this.strategy.name == "T6Baby") {
+            if (this.maxRho < 25 && this.publicationMark < 25) {
+                this.milestoneLevels[0] = 0;
+                this.milestoneLevels[1] = 0;
+                this.milestoneLevels[2] = 0;
+                this.milestoneLevels[3] = 0;
+
+            } else if (this.maxRho < 50 && this.publicationMark < 50) {
+                if (this.tickCount % 100 < 100) {
+                    this.milestoneLevels[0] = 0;
+                    this.milestoneLevels[1] = 1;
+                    this.milestoneLevels[2] = 0;
+                    this.milestoneLevels[3] = 0;
+
+                }
+
+            } else if (this.maxRho < 75 && this.publicationMark < 75) {
+                if (this.tickCount % 100 < 100) {
+                    this.milestoneLevels[0] = 1;
+                    this.milestoneLevels[1] = 1;
+                    this.milestoneLevels[2] = 0;
+                    this.milestoneLevels[3] = 0;
+
+                } else if (this.tickCount % 100 < 100) {
+                    this.milestoneLevels[0] = 0;
+                    this.milestoneLevels[1] = 0;
+                    this.milestoneLevels[2] = 2;
+                }
+            } else if (this.maxRho < 100 && this.publicationMark < 100) {
+                if (this.tickCount % 100 < 100) {
+                    this.milestoneLevels[0] = 1;
+                    this.milestoneLevels[1] = 1;
+                    this.milestoneLevels[2] = 1;
+                    this.milestoneLevels[3] = 0;
+
+                } else if (this.tickCount % 100 < 100) {
+                    this.milestoneLevels[0] = 0;
+                    this.milestoneLevels[1] = 0;
+                    this.milestoneLevels[2] = 3;
+
+                }
+            } else if (this.maxRho < 125 && this.publicationMark < 125) {
+                if (this.tickCount % 100 < 100) {
+                    this.milestoneLevels[0] = 1;
+                    this.milestoneLevels[1] = 0;
+                    this.milestoneLevels[2] = 0;
+                    this.milestoneLevels[3] = 3;
+
+                } else {
+                    this.milestoneLevels[0] = 0;
+                    this.milestoneLevels[1] = 1;
+                    this.milestoneLevels[2] = 3;
+
+                }
+            } else if (this.maxRho < 150 && this.publicationMark < 150) {
+                if (this.tickCount % 100 < 100) {
+                    this.milestoneLevels[0] = 1;
+                    this.milestoneLevels[1] = 0;
+                    this.milestoneLevels[2] = 1;
+                    this.milestoneLevels[3] = 3;
+
+                } else {
+                    this.milestoneLevels[0] = 2;
+                    this.milestoneLevels[1] = 0;
+                    this.milestoneLevels[2] = 3;
+
+                }
+
+            } else {
+                this.milestoneLevels[0] = 1;
+                this.milestoneLevels[1] = 1;
+                this.milestoneLevels[2] = 1;
+                this.milestoneLevels[3] = 3;
+
+            }
+        } else if (this.strategy.name == "T6NoMS") {
+            if (this.maxRho < 25 && this.publicationMark < 25) {
+                this.milestoneLevels[0] = 0;
+                this.milestoneLevels[1] = 0;
+                this.milestoneLevels[2] = 0;
+
+            } else if (this.maxRho < 50 && this.publicationMark < 50) {
+                if (this.tickCount % 100 < 100) {
+                    this.milestoneLevels[0] = 0;// c4q^2 term.
+                    this.milestoneLevels[1] = 1;
+                    this.milestoneLevels[2] = 0;
+
+                }
+
+            } else if (this.maxRho < 75 && this.publicationMark < 75) {
+                if (this.tickCount % 100 < 100) {
+                    this.milestoneLevels[0] = 1;
+                    this.milestoneLevels[1] = 1;
+                    this.milestoneLevels[2] = 0;
+
+                } else if (this.tickCount % 100 < 100) {
+                    this.milestoneLevels[0] = 0;
+                    this.milestoneLevels[1] = 0;
+                    this.milestoneLevels[2] = 2;
+                }
+            } else if (this.maxRho < 100 && this.publicationMark < 100) {
+                if (this.tickCount % 100 < 100) {
+                    this.milestoneLevels[0] = 2;
+                    this.milestoneLevels[1] = 1;
+                    this.milestoneLevels[2] = 0;
+
+                } else if (this.tickCount % 100 < 100) {
+                    this.milestoneLevels[0] = 0;
+                    this.milestoneLevels[1] = 0;
+                    this.milestoneLevels[2] = 3;
+
+                }
+            } else if (this.maxRho < 125 && this.publicationMark < 125) {
+                if (this.tickCount % 100 < 100) {
+                    this.milestoneLevels[0] = 3;
+                    this.milestoneLevels[1] = 0;
+                    this.milestoneLevels[2] = 1;
+
+                } else {
+                    this.milestoneLevels[0] = 0;
+                    this.milestoneLevels[1] = 1;
+                    this.milestoneLevels[2] = 3;
+
+                }
+            } else if (this.maxRho < 150 && this.publicationMark < 150) {
+                if (this.tickCount % 100 < 100) {
+                    this.milestoneLevels[0] = 2;
+                    this.milestoneLevels[1] = 0;
+                    this.milestoneLevels[2] = 3;
+
+                } else {
+                    this.milestoneLevels[0] = 1;
+                    this.milestoneLevels[1] = 1;
+                    this.milestoneLevels[2] = 3;
+
+                }
+            } else if (this.maxRho < 175 && this.publicationMark < 175) {
+                if (this.tickCount % 100 < 100) {
+                    this.milestoneLevels[0] = 2;
+                    this.milestoneLevels[1] = 1;
+                    this.milestoneLevels[2] = 3;
+
+                } else {
+                    this.milestoneLevels[0] = 2;
+                    this.milestoneLevels[1] = 1;
+                    this.milestoneLevels[2] = 3;
+
+                }
+
+            } else {
+                this.milestoneLevels[0] = 3;
+                this.milestoneLevels[1] = 1;
+                this.milestoneLevels[2] = 3;
+
+            }
+        }
+    }
+
     /**
      * Moves the theory by 1 tick (default is 0.1 seconds). Also updates auxillary
      * variables such as q, r,
@@ -75,6 +242,8 @@ public class Theory6 extends Theory {
         timer1 = System.nanoTime();
 
         this.updateEquation();
+
+        this.milestoneSwapCheck();
 
         super.moveTick();
 
@@ -91,10 +260,41 @@ public class Theory6 extends Theory {
      * q, qdot etc.
      */
     public void updateEquation() {
-        double rhoTerm1 = this.variables[4].value * 1.15 + this.variables[5].value + this.q + this.r;
-        double rhoTerm2 = this.variables[6].value + 2 * this.q + Math.log10(0.5);
-        double rhoTerm3 = this.variables[7].value + this.r + 3 * this.q + Math.log10(1 / 3.0);
-        double rhoTerm4 = this.variables[8].value + this.q + 2 * this.r + Math.log10(1 / 2.0);
+
+        double rhoTerm1 = 0;
+        double rhoTerm2 = 0;
+        double rhoTerm3 = 0;
+        double rhoTerm4 = 0;
+
+        if (this.milestoneLevels[0] == 1) {
+            rhoTerm1 = this.variables[4].value * (1 + 0.05 * this.milestoneLevels[3]) + this.variables[5].value
+                    + this.q + this.r;
+            rhoTerm2 = this.variables[6].value + 2 * this.q + this.r + Math.log10(0.5);
+            if (this.milestoneLevels[1] == 1) {
+                rhoTerm3 = this.variables[7].value + this.r + 3 * this.q + Math.log10(1 / 3.0);
+            } else {
+                rhoTerm3 = 0;
+            }
+
+            if (this.milestoneLevels[2] == 1) {
+                rhoTerm4 = this.variables[8].value + this.q + 2 * this.r + Math.log10(1 / 2.0);
+            } else {
+                rhoTerm4 = 0;
+            }
+        } else {
+            rhoTerm1 = this.variables[4].value * (1 + 0.05 * this.milestoneLevels[3]) + this.variables[5].value
+                    + this.q;
+            rhoTerm2 = this.variables[6].value + 2 * this.q + Math.log10(0.5);
+            if (this.milestoneLevels[1] == 1) {
+                rhoTerm3 = this.variables[7].value + 3 * this.q + Math.log10(1 / 3.0);
+            } else {
+                rhoTerm3 = 0;
+            }
+
+            rhoTerm4 = 0;
+        }
+
+        // System.out.println(this.q);
 
         this.rho = Variable.add(rhoTerm4, Variable.add(rhoTerm3, Variable.add(rhoTerm1, rhoTerm2))) +
                 this.totalMultiplier;
@@ -118,6 +318,12 @@ public class Theory6 extends Theory {
      */
     @Override
     public void buyVariable(int variableNumber) {
+
+        if(this.variableWeights[variableNumber] < 10.11) {
+
+        } else {
+            this.resetIdlePeriod(variableNumber);
+        }
 
         double variableCost = this.variables[variableNumber].nextCost;
         if (this.rho >= variableCost) {
@@ -158,7 +364,7 @@ public class Theory6 extends Theory {
         for (int i = 0; i < this.variables.length; i++) {
             this.variables[i].update();
             if (this.variables[i].isActive == 1) {
-                while (this.variables[i].cost < this.publicationMark * 0.95) {
+                while (this.variables[i].cost < this.publicationMark * 0.60) {
                     this.variables[i].level += 1;
                     this.variables[i].update();
 
@@ -191,7 +397,7 @@ public class Theory6 extends Theory {
         if (this.variables[i].isActive == 1) {
 
             if (this.strategy.name == "T6Play") {
-                //variableWeights = { 11, 10.0, 10.5, 9.8, 11, 10, 1000, 1000, 10 };
+                // variableWeights = { 11, 10.0, 10.5, 9.8, 11, 10, 1000, 1000, 10 };
 
                 if (this.maxRho < this.publicationMark * 0.981) {
                     this.variableWeights[4] = 11;
@@ -202,14 +408,14 @@ public class Theory6 extends Theory {
                     this.variableWeights[5] = 10;
                     this.variableWeights[8] = 10;
                 } else {
-                    this.variableWeights[4] = 12.5 + (0.022 * (this.variables[0].level % 10) - 0.12) ;
+                    this.variableWeights[4] = 12.5 + (0.022 * (this.variables[0].level % 10) - 0.12);
                     this.variableWeights[5] = 11.5;
                     this.variableWeights[8] = 10;
                 }
-              
+
                 this.variableWeights[0] = 10.9 + (0.022 * (this.variables[0].level % 10) - 0.12);
 
-            }else if(this.strategy.name == "T6C5d") {
+            } else if (this.strategy.name == "T6C5d") {
                 this.variableWeights[0] = 11 + (0.018 * (this.variables[0].level % 10) - 0.11);
                 this.variableWeights[2] = 11.0;
                 this.variableWeights[3] = 10.0;
@@ -218,8 +424,7 @@ public class Theory6 extends Theory {
                 this.variables[6].deactivate();
                 this.variables[7].deactivate();
 
-
-            } else if(this.strategy.name == "T6C125d") {
+            } else if (this.strategy.name == "T6C125d") {
                 this.variableWeights[0] = 11 + (0.018 * (this.variables[0].level % 10) - 0.11);
                 this.variableWeights[2] = 11.0;
                 this.variableWeights[3] = 10.0;
@@ -229,8 +434,7 @@ public class Theory6 extends Theory {
                 this.variables[6].deactivate();
                 this.variables[7].deactivate();
 
-            }
-            else if(this.strategy.name == "T6C5") {
+            } else if (this.strategy.name == "T6C5") {
                 this.variableWeights[0] = 10;
                 this.variableWeights[1] = 10;
                 this.variableWeights[2] = 10;
@@ -240,7 +444,7 @@ public class Theory6 extends Theory {
                 this.variables[5].deactivate();
                 this.variables[6].deactivate();
                 this.variables[7].deactivate();
-            } else if(this.strategy.name == "T6C125") {
+            } else if (this.strategy.name == "T6C125") {
                 this.variableWeights[0] = 10;
                 this.variableWeights[1] = 10;
                 this.variableWeights[2] = 10;
@@ -250,6 +454,28 @@ public class Theory6 extends Theory {
                 this.variableWeights[5] = 10;
                 this.variables[6].deactivate();
                 this.variables[7].deactivate();
+            } else if (this.strategy.name == "T6Baby") {
+                this.variableWeights[0] = 11;
+                this.variableWeights[1] = 10;
+                this.variableWeights[2] = 11;
+                this.variableWeights[3] = 10;
+                this.variableWeights[4] = 11;
+                this.variableWeights[5] = 10;
+                this.variableWeights[6] = 11;
+                this.variableWeights[7] = 10;
+                this.variableWeights[8] = 10;
+
+                if(this.publicationMark < 125 && this.publicationMark >= 100) {
+                    this.variableWeights[0] = 11;
+                    this.variableWeights[1] = 10;
+                    this.variableWeights[2] = 11;
+                    this.variableWeights[3] = 10;
+                    this.variableWeights[4] = 11;
+                    this.variableWeights[5] = 10;
+                    this.variableWeights[6] = 15;
+                    this.variableWeights[7] = 15;
+                    this.variableWeights[8] = 15;
+                }
             }
             if (this.publicationMultiplier > this.coastingPub) {
                 for (int j = 0; j < this.variables.length; j++) {
@@ -287,18 +513,43 @@ public class Theory6 extends Theory {
         }
     }
 
-  
     protected double getIntegral() {
-        double rhoTerm1 = this.variables[4].value * 1.15 + this.variables[5].value + this.q + this.r;
-        double rhoTerm2 = this.variables[6].value + 2 * this.q + Math.log10(0.5);
-        double rhoTerm3 = this.variables[7].value + this.r + 3 * this.q + Math.log10(1 / 3.0);
-        double rhoTerm4 = this.variables[8].value + this.q + 2 * this.r + Math.log10(1 / 2.0);
+        double rhoTerm1 = 0;
+        double rhoTerm2 = 0;
+        double rhoTerm3 = 0;
+        double rhoTerm4 = 0;
+
+        if (this.milestoneLevels[0] == 1) {
+            rhoTerm1 = this.variables[4].value * (1 + 0.05 * this.milestoneLevels[3]) + this.variables[5].value
+                    + this.q + this.r;
+            rhoTerm2 = this.variables[6].value + 2 * this.q + this.r + Math.log10(0.5);
+            if (this.milestoneLevels[1] == 1) {
+                rhoTerm3 = this.variables[7].value + this.r + 3 * this.q + Math.log10(1 / 3.0);
+            } else {
+                rhoTerm3 = 0;
+            }
+
+            if (this.milestoneLevels[2] == 1) {
+                rhoTerm4 = this.variables[8].value + this.q + 2 * this.r + Math.log10(1 / 2.0);
+            } else {
+                rhoTerm4 = 0;
+            }
+        } else {
+            rhoTerm1 = this.variables[4].value * (1 + 0.05 * this.milestoneLevels[3]) + this.variables[5].value
+                    + this.q;
+            rhoTerm2 = this.variables[6].value + 2 * this.q + Math.log10(0.5);
+            if (this.milestoneLevels[1] == 1) {
+                rhoTerm3 = this.variables[7].value + 3 * this.q + Math.log10(1 / 3.0);
+            } else {
+                rhoTerm3 = 0;
+            }
+
+            rhoTerm4 = 0;
+        }
 
         return Variable.add(rhoTerm4, Variable.add(rhoTerm3, Variable.add(rhoTerm1, rhoTerm2))) +
                 this.totalMultiplier;
     }
-
-
 
     @Override
     public void display() {

@@ -14,12 +14,12 @@ public class TheoryRunner {
 
     public static void main(String[] args) {
 
-        if (args.length == 4) {
+        if (args.length == 3) {
             try {
                 int studentNumber = Integer.parseInt(args[0]);
                 int theoryNumber = Integer.parseInt(args[1]);
                 double pubMark = Double.parseDouble(args[2]);
-                SimRunner.runDetailedSim(studentNumber, theoryNumber, pubMark, true, "strategy=0");
+                SimRunner.runDetailedSim(studentNumber, theoryNumber, pubMark, true, "stra=0");
             } catch (Exception e) {
                 // TODO: handle exception
             }
@@ -55,32 +55,50 @@ public class TheoryRunner {
         
         
       
-        //SimRunner.runDetailedSim(300, 1, 580 + Math.log10(1.00), true, "strate=0, ").get(0);
-        SimRunner.runDetailedSim(30, 4, 100, true, "strate=0, ").get(0);
-        //SimRunner.runDetailedSim(30, 8, 10+Math.log10(1.00), true, "strate=0, ").get(0);
+        /**SimRunner.runDetailedSim(300, 1, 600 + Math.log10(1.00), true, "strategy=T1Play2, ").get(0);
+        SimRunner.runDetailedSim(300, 1, 610 + Math.log10(1.00), true, "strategy=T1Play2, ").get(0);
+        SimRunner.runDetailedSim(300, 1, 620 + Math.log10(1.00), true, "strategy=T1Play2, ").get(0);
+        SimRunner.runDetailedSim(300, 1, 630 + Math.log10(1.00), true, "strategy=T1Play2, ").get(0);
+        SimRunner.runDetailedSim(300, 1, 640 + Math.log10(1.00), true, "strategy=T1Play2, ").get(0);
+        SimRunner.runDetailedSim(300, 1, 650 + Math.log10(1.00), true, "strategy=T1Play2, ").get(0);
+        SimRunner.runDetailedSim(300, 1, 660 + Math.log10(1.00), true, "strategy=T1Play2, ").get(0);
+        SimRunner.runDetailedSim(300, 1, 670 + Math.log10(1.00), true, "strategy=T1Play2, ").get(0);
+        SimRunner.runDetailedSim(300, 1, 680 + Math.log10(1.00), true, "strategy=T1Play2, ").get(0);
+        SimRunner.runDetailedSim(300, 1, 690 + Math.log10(1.00), true, "strategy=T1Play2, ").get(0);*/
+        //SimRunner.runDetailedSim(300, 3, 600, true, "strate=0, ").get(0);
+        //SimRunner.runDetailedSim(300, 3, 640+Math.log10(1.00), true, "strategy=T3Play2").get(0);
       
-        /**SimRunner.runDetailedSim(300, 1, 500, true, "strate=0, ").get(0);
-        SimRunner.runDetailedSim(300, 1, 525, true, "strate=0, ").get(0);
-        SimRunner.runDetailedSim(300, 1, 550, true, "strate=0, ").get(0);
-        SimRunner.runDetailedSim(300, 1, 575, true, "strate=0, ").get(0);
-        SimRunner.runDetailedSim(300, 1, 600, true, "strate=0, ").get(0);
-        SimRunner.runDetailedSim(300, 1, 625, true, "strate=0, ").get(0);
-        SimRunner.runDetailedSim(300, 1, 650, true, "strate=0, ").get(0);*/
+        
+        SimRunner.runDetailedSim(299, 1, 618, true, "strategy=T1Play2, ").get(0);
+        SimRunner.runDetailedSim(299, 2, 630+Math.log10(8.78), true, "strategy=T2AI, ").get(0);
+        SimRunner.runDetailedSim(299,3, 626+Math.log10(3.09), true, "strategy=T3Play2, ").get(0);
+        SimRunner.runDetailedSim(299, 4, 727+Math.log10(3.71), true, "strategy=T4PlaySpqcey, ").get(0);
+        SimRunner.runDetailedSim(299, 5, 939+Math.log10(1.63), true, "strategy=T5Play, ").get(0);
+        SimRunner.runDetailedSim(299, 6, 1107+Math.log10(1.8), true, "strategy=T6Play, ").get(0);
+        SimRunner.runDetailedSim(299, 7, 580+Math.log10(4.97), true, "strategy=T7PlaySpqcey, ").get(0);
+        SimRunner.runDetailedSim(299, 8, 497+Math.log10(5.79), true, "strategy=T8SolarS, ").get(0);
         Summary summary;
         ArrayList<Double> tau_per_hours = new ArrayList<>();
-        
-        for(int i = 0; i < 300; i++) {
-            summary = SimRunner.runDetailedSim(25, 4, i, true, "strategy=T4Baby").get(0);
-            tau_per_hours.add(summary.pubMulti);
+        /**
+        for(int i = 0; i < 200; i++) {
+            if(i < 175) {
+                summary = SimRunner.runDetailedSim(25, 6, i, true, "strategy=T6Baby").get(0);
+            } else {
+                //65 students - 175 tau, 305 students, 1175 tau, 240 students diff, 1000 tau diff
+                // ratio = 1.2 tau/student
+                summary = SimRunner.runDetailedSim(((int) Math.round(0.24 * i + 23)), 6, i, true, "strategy=T6Play").get(0);
+            }
+            //summary = SimRunner.runDetailedSim(25, 8, i, true, "strategy=T8Baby").get(0);
+            tau_per_hours.add(summary.tauPerHour);
         }
 
         for(int i = 0; i < tau_per_hours.size(); i++) {
             System.out.println(tau_per_hours.get(i));
-        }
+        }*/
 
-        //double totalTime = SimRunner.runLongSim(30, 4, 600 + Math.log10(1.00), 660, "strategy=T1Play2");
+        //double totalTime = SimRunner.runLongSim(300, 1, 600 + Math.log10(1.00), 700, "strategy=T1Play2");
    
-        
+        //System.out.println(totalTime);
 
         double i = 1000;
         double totalTime1 = 0;
@@ -101,28 +119,40 @@ public class TheoryRunner {
         totalTime6 += SimRunner.runLongSim(210, 6, 200, 795 + Math.log10(8.6));
         totalTime7 += SimRunner.runLongSim(210, 7, 200, 494 + Math.log10(5.03));
         totalTime8 += SimRunner.runLongSim(210, 8, 200, 450 + Math.log10(4.72));*/
-        /**
+        
         //Snaeky's distribution.
-        totalTime1 += SimRunner.runLongSim(300, 1, 400, 630 + Math.log10(7.3));
-        totalTime2 += SimRunner.runLongSim(300, 2, 300, 562 + Math.log10(1.28));
-        totalTime3 += SimRunner.runLongSim(300, 3, 400, 644 + Math.log10(2.81));
-        totalTime4 += SimRunner.runLongSim(300, 4, 600, 751 + Math.log10(1.0));
-        totalTime5 += SimRunner.runLongSim(300, 5, 800, 950 + Math.log10(8.72));
-        totalTime6 += SimRunner.runLongSim(300, 6, 800, 1121 + Math.log10(8.6));
-        totalTime7 += SimRunner.runLongSim(300, 7, 400, 604 + Math.log10(5.03));
-        totalTime8 += SimRunner.runLongSim(300, 8, 400, 519 + Math.log10(4.72));*/
-
+        /**
+        totalTime1 += SimRunner.runLongSim(300, 1, 400, 640 + Math.log10(1.46), "strategy=0");
+        totalTime2 += SimRunner.runLongSim(300, 2, 300, 562 + Math.log10(1.28), "strategy=0");
+        totalTime3 += SimRunner.runLongSim(300, 3, 400, 655 + Math.log10(1.18), "strategy=0");
+        totalTime4 += SimRunner.runLongSim(300, 4, 600, 751 + Math.log10(1.00), "strategy=0");
+        totalTime5 += SimRunner.runLongSim(300, 5, 800, 954 + Math.log10(1.68), "strategy=0");
+        totalTime6 += SimRunner.runLongSim(300, 6, 800, 1127 + Math.log10(2.5), "strategy=0");
+        totalTime7 += SimRunner.runLongSim(300, 7, 400, 604 + Math.log10(5.03), "strategy=0");
+        totalTime8 += SimRunner.runLongSim(300, 8, 400, 519 + Math.log10(4.72), "strategy=0");
+*/
         /**
         //XLII's distribution.
-        totalTime1 -= SimRunner.runLongSim(300, 1, 400, 646 + Math.log10(1.36));
-        totalTime2 -= SimRunner.runLongSim(300, 2, 300, 568 + Math.log10(1.22));
-        totalTime3 -= SimRunner.runLongSim(300, 3, 400, 645 + Math.log10(2.40));
-        totalTime4 -= SimRunner.runLongSim(300, 4, 600, 732 + Math.log10(1.90));
-        totalTime5 -= SimRunner.runLongSim(300, 5, 800, 945 + Math.log10(4.13));
-        totalTime6 -= SimRunner.runLongSim(300, 6, 800, 1095 + Math.log10(8.0));
-        totalTime7 -= SimRunner.runLongSim(300, 7, 400, 595 + Math.log10(2.69));
-        totalTime8 -= SimRunner.runLongSim(300, 8, 400, 512 + Math.log10(1.80));*/
+        totalTime1 += SimRunner.runLongSim(300, 1, 400, 646 + Math.log10(1.23), "strategy=0");
+        totalTime2 += SimRunner.runLongSim(300, 2, 300, 586 + Math.log10(1.23), "strategy=0");
+        totalTime3 += SimRunner.runLongSim(300, 3, 400, 645 + Math.log10(2.40), "strategy=0");
+        totalTime4 += SimRunner.runLongSim(300, 4, 600, 732 + Math.log10(1.90), "strategy=0");
+        totalTime5 += SimRunner.runLongSim(300, 5, 800, 945 + Math.log10(4.13), "strategy=0");
+        totalTime6 += SimRunner.runLongSim(300, 6, 800, 1105 + Math.log10(7.1), "strategy=0");
+        totalTime7 += SimRunner.runLongSim(300, 7, 400, 595 + Math.log10(2.69), "strategy=0");
+        totalTime8 += SimRunner.runLongSim(300, 8, 400, 512 + Math.log10(1.80), "strategy=0");*/
 
+        /**
+        //Solarion's distribution.
+        totalTime1 -= SimRunner.runLongSim(299, 1, 400, 618 + Math.log10(1.00), "strategy=0");
+        totalTime2 -= SimRunner.runLongSim(299, 2, 300, 630 + Math.log10(4.34), "strategy=0");
+        totalTime3 -= SimRunner.runLongSim(299, 3, 400, 623 + Math.log10(9.89), "strategy=0");
+        totalTime4 -= SimRunner.runLongSim(299, 4, 600, 727 + Math.log10(3.71), "strategy=0");
+        totalTime5 -= SimRunner.runLongSim(299, 5, 800, 938 + Math.log10(2.89), "strategy=0");
+        totalTime6 -= SimRunner.runLongSim(299, 6, 800, 1107 + Math.log10(1.8), "strategy=0");
+        totalTime7 -= SimRunner.runLongSim(299, 7, 400, 580 + Math.log10(4.97), "strategy=0");
+        totalTime8 -= SimRunner.runLongSim(299, 8, 400, 497 + Math.log10(5.79), "strategy=0");
+*/
         /**
         //Spqcey's distribution.
         totalTime1 -= SimRunner.runLongSim(300, 1, 400, 640 + Math.log10(1.0));
@@ -134,27 +164,28 @@ public class TheoryRunner {
         totalTime7 -= SimRunner.runLongSim(300, 7, 400, 603 + Math.log10(1.0));
         totalTime8 -= SimRunner.runLongSim(300, 8, 400, 516 + Math.log10(1.0));*/
 
-        /**
+        /** 
         //Playspout's distribution.
-        totalTime1 += SimRunner.runLongSim(305, 1, 400, 640 + Math.log10(2.45));
-        totalTime2 += SimRunner.runLongSim(305, 2, 300, 598 + Math.log10(3.50));
-        totalTime3 += SimRunner.runLongSim(305, 3, 400, 642 + Math.log10(2.12));
-        totalTime4 += SimRunner.runLongSim(305, 4, 600, 767 + Math.log10(1.57));
-        totalTime5 += SimRunner.runLongSim(305, 5, 800, 953 + Math.log10(4.60));
-        totalTime6 += SimRunner.runLongSim(305, 6, 800, 1201 + Math.log10(4.2));
-        totalTime7 += SimRunner.runLongSim(305, 7, 400, 605 + Math.log10(1.04));
-        totalTime8 += SimRunner.runLongSim(305, 8, 400, 519 + Math.log10(1.37));
-
+        totalTime1 += SimRunner.runLongSim(308, 1, 400, 640 + Math.log10(2.45), "strategy=0");
+        totalTime2 += SimRunner.runLongSim(308, 2, 300, 598 + Math.log10(3.50), "strategy=0");
+        totalTime3 += SimRunner.runLongSim(308, 3, 400, 663 + Math.log10(2.12), "strategy=0");
+        totalTime4 += SimRunner.runLongSim(308, 4, 600, 767 + Math.log10(1.57), "strategy=0");
+        totalTime5 += SimRunner.runLongSim(308, 5, 800, 953 + Math.log10(4.60), "strategy=0");
+        totalTime6 += SimRunner.runLongSim(308, 6, 800, 1205 + Math.log10(1.0), "strategy=0");
+        totalTime7 += SimRunner.runLongSim(308, 7, 400, 605 + Math.log10(1.04), "strategy=0");
+        totalTime8 += SimRunner.runLongSim(308, 8, 400, 519 + Math.log10(1.37), "strategy=0");
+*/
         
+         /** 
         //Afuro's distribution.
-        totalTime1 -= SimRunner.runLongSim(305, 1, 400, 632 + Math.log10(7.14));
-        totalTime2 -= SimRunner.runLongSim(305, 2, 300, 580 + Math.log10(1.03));
-        totalTime3 -= SimRunner.runLongSim(305, 3, 400, 617 + Math.log10(1.17));
-        totalTime4 -= SimRunner.runLongSim(305, 4, 600, 777 + Math.log10(1.04));
-        totalTime5 -= SimRunner.runLongSim(305, 5, 800, 1000 + Math.log10(1.0));
-        totalTime6 -= SimRunner.runLongSim(305, 6, 800, 1172 + Math.log10(1.6));
-        totalTime7 -= SimRunner.runLongSim(305, 7, 400, 614 + Math.log10(1.70));
-        totalTime8 -= SimRunner.runLongSim(305, 8, 400, 524 + Math.log10(3.76));
+        totalTime1 -= SimRunner.runLongSim(307, 1, 400, 632 + Math.log10(7.14), "strategy=0");
+        totalTime2 -= SimRunner.runLongSim(307, 2, 300, 580 + Math.log10(1.03), "strategy=0");
+        totalTime3 -= SimRunner.runLongSim(307, 3, 400, 617 + Math.log10(1.17), "strategy=0");
+        totalTime4 -= SimRunner.runLongSim(307, 4, 600, 777 + Math.log10(1.04), "strategy=0");
+        totalTime5 -= SimRunner.runLongSim(307, 5, 800, 1000 + Math.log10(1.0), "strategy=0");
+        totalTime6 -= SimRunner.runLongSim(307, 6, 800, 1172 + Math.log10(1.6), "strategy=0");
+        totalTime7 -= SimRunner.runLongSim(307, 7, 400, 614 + Math.log10(1.70), "strategy=0");
+        totalTime8 -= SimRunner.runLongSim(307, 8, 400, 524 + Math.log10(3.76), "strategy=0");
         */
 
         /**
@@ -169,18 +200,18 @@ public class TheoryRunner {
         totalTime8 -= SimRunner.runLongSim(300, 8, 400, 518 + Math.log10(2.65));*/
 
         //Gen's distribution.
-        /**
-        totalTime1 -= SimRunner.runLongSim(305, 1, 400, 663 + Math.log10(1.11));
-        totalTime2 -= SimRunner.runLongSim(305, 2, 300, 581 + Math.log10(4.86));
-        totalTime3 -= SimRunner.runLongSim(305, 3, 400, 659 + Math.log10(1.32));
-        totalTime4 -= SimRunner.runLongSim(305, 4, 600, 763 + Math.log10(2.11));
-        totalTime5 -= SimRunner.runLongSim(305, 5, 800, 983 + Math.log10(6.02));
-        totalTime6 -= SimRunner.runLongSim(305, 6, 800, 1173 + Math.log10(2.5));
-        totalTime7 -= SimRunner.runLongSim(305, 7, 400, 619 + Math.log10(5.17));
-        totalTime8 -= SimRunner.runLongSim(305, 8, 400, 524 + Math.log10(1.33));*/
+        /** 
+        totalTime1 -= SimRunner.runLongSim(310, 1, 400, 663 + Math.log10(1.11), "strategy=0");
+        totalTime2 -= SimRunner.runLongSim(310, 2, 300, 581 + Math.log10(4.86), "strategy=0");
+        totalTime3 -= SimRunner.runLongSim(310, 3, 400, 666 + Math.log10(6.66), "strategy=0");
+        totalTime4 -= SimRunner.runLongSim(310, 4, 600, 763 + Math.log10(2.11), "strategy=0");
+        totalTime5 -= SimRunner.runLongSim(310, 5, 800, 983 + Math.log10(6.02), "strategy=0");
+        totalTime6 -= SimRunner.runLongSim(310, 6, 800, 1178 + Math.log10(2.5), "strategy=0");
+        totalTime7 -= SimRunner.runLongSim(310, 7, 400, 625 + Math.log10(5.17), "strategy=0");
+        totalTime8 -= SimRunner.runLongSim(310, 8, 400, 534 + Math.log10(1.33), "strategy=0");*/
 
-        
-        /**System.out.println(totalTime1);
+        /**
+        System.out.println(totalTime1);
         System.out.println(totalTime2);
         System.out.println(totalTime3);
         System.out.println(totalTime4);
@@ -213,6 +244,13 @@ public class TheoryRunner {
   
 
     }
+
+    public static void simEndgame(String flag) {
+        if(flag.contains("T1=")) {
+
+        }
+    }
+    
 
     public static void findDataForGraph(int studentNumber, int theoryNumber, double start, double finish, String flag) {
         if(flag.equalsIgnoreCase("variableBuyFrequency")) {

@@ -389,6 +389,12 @@ public class Theory2 extends Theory {
     public void buyVariable(int variableNumber) {
         super.buyVariable(variableNumber);
 
+        if(this.variableWeights[variableNumber] < 10.11) {
+
+        } else {
+            this.resetIdlePeriod(variableNumber);
+        }
+
     }
 
     public void runEpoch() {

@@ -70,6 +70,9 @@ public class Theory implements Simmable {
     /**Current best publication multiplier to start coasting. */
     public double bestCoastStart;
 
+    /**Longest period of time where a variable is not manually bought. */
+    public double longestIdlePeriod;
+
 
 
 
@@ -105,6 +108,8 @@ public class Theory implements Simmable {
 
     public Strategy strategy;
 
+    public double currentIdlePeriod;
+
     public double coastStart = 0;
     public double pubCoefficient;
 
@@ -126,6 +131,8 @@ public class Theory implements Simmable {
         this.tickCount = 0;
         this.rho = 0;
         this.rhodot = 0;
+        this.currentIdlePeriod = 0;
+        this.longestIdlePeriod = 0;
         
         if(this.publicationMark < 250) { // Assume full milestones at e250.
             this.tickFrequency = 0.1;
@@ -219,6 +226,10 @@ public class Theory implements Simmable {
         
         this.seconds += this.tickFrequency;
         this.tickCount += 1;
+        this.currentIdlePeriod += this.tickFrequency;
+        if(this.longestIdlePeriod < this.currentIdlePeriod) {
+            this.longestIdlePeriod = this.currentIdlePeriod;
+        }
 
         
         
@@ -255,6 +266,9 @@ public class Theory implements Simmable {
      * @param variableNumber - the variable number to buy. Note that the variable number starts at 0, not 1.
      */
     public void buyVariable(int variableNumber) {
+
+        
+
         double variableCost = this.variables[variableNumber].nextCost;
         if(this.rho >= variableCost) {
             this.variables[variableNumber].level += 1;
@@ -264,6 +278,12 @@ public class Theory implements Simmable {
             //too poor to buy stuff feelsbadman
         }
         
+    }
+
+    public void resetIdlePeriod(int variableNumber) {
+
+        this.currentIdlePeriod = 0;
+    
     }
 
     
@@ -343,14 +363,14 @@ public class Theory implements Simmable {
             tauRate = 60 * 60 * Math.log(this.publicationMultiplier) / Math.log(10) / this.pubCoefficient / this.seconds;
 
         }
-        int j = 0;
+        this.resetIdlePeriod(2);
     }
     
     public void printSummaryHeader() {
         System.out.println(this.name + " at e" + String.format("%.1f", this.publicationMark) + " rho" + 
             ", " + Theory.studentNumber + " students" );
         System.out.print("Tau/hr\t\t" + "PubMulti\t\t" + "Strategy\t\t" + "PubTime\t\t" + "TauGain\t\t"
-        + "CoastM\n");
+        + "CoastM\t\t" + "LongestIdle\n");
     }
 
     public void printSummary() {
@@ -375,9 +395,10 @@ public class Theory implements Simmable {
             System.out.print(String.format("%s", summary.strategy) + "\t\t\t");
         }
         
-        System.out.print(String.format("%.3f", summary.pubTime));
-        System.out.print("\t\t" + String.format("%.4f", summary.tauGain));
-        System.out.print("\t\t" + String.format("%.4f", summary.coastStart));
+        System.out.print(String.format("%.2f", summary.pubTime));
+        System.out.print("\t\t" + String.format("%.2f", summary.tauGain));
+        System.out.print("\t\t" + String.format("%.2f", summary.coastStart));
+        System.out.print("\t\t" + String.format("%.2f", summary.longestIdlePeriod / 3600.0));
         //System.out.print("\t\t" + String.format("%.1f", this.publicationMark));
         System.out.println("");
 
@@ -392,7 +413,7 @@ public class Theory implements Simmable {
     public Summary getSummary() {
         Summary summary = new Summary(Theory.theoryNumber, this.maxTauPerHour, this.bestPubMulti,
          this.strategy.name, this.strategy.type,
-         this.bestPubTime, this.bestRecoveryTime, this.bestTauGain, this.coastStart, this.variables);
+         this.bestPubTime, this.bestRecoveryTime, this.bestTauGain, this.coastStart, this.variables, this.longestIdlePeriod / 3600.0);
 
          return summary;
     }

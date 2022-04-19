@@ -28,7 +28,7 @@ public class Theory3 extends Theory {
     public double term33;
 
     public String strategyType = "active";
-    public double coastingPub = 4.5;
+    public double coastingPub = 2.5;
     public double recoveryPub = 1.0;
 
 
@@ -69,6 +69,9 @@ public class Theory3 extends Theory {
         
         this.variables = new Variable[12];
         this.strategy = new Strategy("T3AI", "AI"); 
+
+        this.longestIdlePeriod = 0;
+        this.currentIdlePeriod = 0;
   
         
 
@@ -137,6 +140,17 @@ public class Theory3 extends Theory {
     @Override
     public void buyVariable(int variableNumber) {
         double variableCost = this.variables[variableNumber].nextCost;
+
+        if(this.variableWeights[variableNumber] < 10.11) {
+            this.resetIdlePeriod(variableNumber);
+            if(this.publicationMultiplier > 0.1) {
+                //System.out.print(this.longestIdlePeriod+ "\t\t" + this.currentIdlePeriod + "\t\t" + this.publicationMultiplier +
+             //"\t\t" +  this.variableWeights[variableNumber] + "\t\t" + variableNumber + "\t\t" + this.seconds + "\n");
+            }
+        }
+
+
+        
 
         if(variableNumber == 0 || variableNumber == 3 || variableNumber == 6 || variableNumber == 9) {
             if(this.rho1 >= variableCost) {
@@ -301,6 +315,8 @@ public class Theory3 extends Theory {
                 
     
             if(this.strategy.name == "T3Play2") {
+                
+                
                 this.variableWeights[0] = 10.9 + (0.028*(this.variables[i].level % 10) - 0.14); //b1
                 this.variableWeights[1] = 10.80 + (0.028*(this.variables[i].level % 10) - 0.14); //b2
                 this.variableWeights[2] = 11.00 + (0.028*(this.variables[i].level % 10) - 0.14); //b3
@@ -455,6 +471,7 @@ public class Theory3 extends Theory {
             this.variables[10].deactivate();
             
             this.isCoasting = true;
+            
            
        }
 
