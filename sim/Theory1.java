@@ -305,7 +305,7 @@ public class Theory1 extends Theory {
     public void buyVariable(int variableNumber) {
         super.buyVariable(variableNumber);
 
-        if(this.variableWeights[variableNumber] < 10.11) {
+        if(this.variableWeights[variableNumber] < 10.03) {
 
         } else {
             this.resetIdlePeriod(variableNumber);
@@ -453,6 +453,7 @@ public class Theory1 extends Theory {
             double coefficient = rhodotMultiplier * (2.0 - 1) / (2 * (rhodotMultiplier - 1));
             coefficient = Math.log10(coefficient);
             this.variableWeights[i] = 10 + 1.4*coefficient;
+            this.variableWeights[i] += 0.05;
 
            
 
@@ -489,6 +490,7 @@ public class Theory1 extends Theory {
             //this.variableWeights[1] = 10.0;
             //this.variableWeights[4] = 11.1;
             //this.variableWeights[5] = 9.7;
+            this.variableWeights[i] += 0.05;
             this.variables[2].deactivate();
             this.variables[3].deactivate();
 

@@ -55,28 +55,19 @@ public class TheoryRunner {
         
         
       
-        /**SimRunner.runDetailedSim(300, 1, 600 + Math.log10(1.00), true, "strategy=T1Play2, ").get(0);
-        SimRunner.runDetailedSim(300, 1, 610 + Math.log10(1.00), true, "strategy=T1Play2, ").get(0);
-        SimRunner.runDetailedSim(300, 1, 620 + Math.log10(1.00), true, "strategy=T1Play2, ").get(0);
-        SimRunner.runDetailedSim(300, 1, 630 + Math.log10(1.00), true, "strategy=T1Play2, ").get(0);
-        SimRunner.runDetailedSim(300, 1, 640 + Math.log10(1.00), true, "strategy=T1Play2, ").get(0);
-        SimRunner.runDetailedSim(300, 1, 650 + Math.log10(1.00), true, "strategy=T1Play2, ").get(0);
-        SimRunner.runDetailedSim(300, 1, 660 + Math.log10(1.00), true, "strategy=T1Play2, ").get(0);
-        SimRunner.runDetailedSim(300, 1, 670 + Math.log10(1.00), true, "strategy=T1Play2, ").get(0);
-        SimRunner.runDetailedSim(300, 1, 680 + Math.log10(1.00), true, "strategy=T1Play2, ").get(0);
-        SimRunner.runDetailedSim(300, 1, 690 + Math.log10(1.00), true, "strategy=T1Play2, ").get(0);*/
-        //SimRunner.runDetailedSim(300, 3, 600, true, "strate=0, ").get(0);
-        //SimRunner.runDetailedSim(300, 3, 640+Math.log10(1.00), true, "strategy=T3Play2").get(0);
+        //simAllStrategies();
       
-        
-        SimRunner.runDetailedSim(299, 1, 618, true, "strategy=T1Play2, ").get(0);
-        SimRunner.runDetailedSim(299, 2, 630+Math.log10(8.78), true, "strategy=T2AI, ").get(0);
-        SimRunner.runDetailedSim(299,3, 626+Math.log10(3.09), true, "strategy=T3Play2, ").get(0);
-        SimRunner.runDetailedSim(299, 4, 727+Math.log10(3.71), true, "strategy=T4PlaySpqcey, ").get(0);
-        SimRunner.runDetailedSim(299, 5, 939+Math.log10(1.63), true, "strategy=T5Play, ").get(0);
-        SimRunner.runDetailedSim(299, 6, 1107+Math.log10(1.8), true, "strategy=T6Play, ").get(0);
-        SimRunner.runDetailedSim(299, 7, 580+Math.log10(4.97), true, "strategy=T7PlaySpqcey, ").get(0);
-        SimRunner.runDetailedSim(299, 8, 497+Math.log10(5.79), true, "strategy=T8SolarS, ").get(0);
+        /**
+        SimRunner.runDetailedSim(299, 1, 618, true, "strategy=T1Pla2, ").get(0);
+        SimRunner.runDetailedSim(299, 2, 630+Math.log10(8.78), true, "strategy=T2I, ").get(0);
+        SimRunner.runDetailedSim(299,3, 626+Math.log10(3.09), true, "strategy=T3Ply2, ").get(0);
+        SimRunner.runDetailedSim(299, 4, 727+Math.log10(3.71), true, "strategy=T4PlySpqcey, ").get(0);
+        SimRunner.runDetailedSim(299, 5, 939+Math.log10(1.63), true, "strategy=T5Pay, ").get(0);
+        SimRunner.runDetailedSim(299, 6, 1107+Math.log10(1.8), true, "strategy=T6Pay, ").get(0);
+        SimRunner.runDetailedSim(299, 7, 580+Math.log10(4.97), true, "strategy=T7PlaSpqcey, ").get(0);
+        SimRunner.runDetailedSim(299, 8, 497+Math.log10(5.79), true, "strategy=T8SoarS, ").get(0);*/
+
+        SimRunner.runDetailedSim(308, 7, 605, true, "strategy");
         Summary summary;
         ArrayList<Double> tau_per_hours = new ArrayList<>();
         /**
@@ -164,8 +155,17 @@ public class TheoryRunner {
         totalTime7 -= SimRunner.runLongSim(300, 7, 400, 603 + Math.log10(1.0));
         totalTime8 -= SimRunner.runLongSim(300, 8, 400, 516 + Math.log10(1.0));*/
 
-        /** 
+        /**
         //Playspout's distribution.
+        SimRunner.runDetailedSim(308, 1, 640 + Math.log10(2.45), true , "strategy=all");
+        totalTime2 += SimRunner.runLongSim(308, 2, 598 + Math.log10(3.50), "strategy=all");
+        totalTime3 += SimRunner.runLongSim(308, 3, 663 + Math.log10(2.12), "strategy=all");
+        totalTime4 += SimRunner.runLongSim(308, 4, 767 + Math.log10(1.57), "strategy=all");
+        totalTime5 += SimRunner.runLongSim(308, 5, 953 + Math.log10(4.60), "strategy=all");
+        totalTime6 += SimRunner.runLongSim(308, 6, 1205 + Math.log10(1.0), "strategy=all");
+        totalTime7 += SimRunner.runLongSim(308, 7, 605 + Math.log10(1.04), "strategy=all");
+        totalTime8 += SimRunner.runLongSim(308, 8, 519 + Math.log10(1.37), "strategy=all");*/
+/**
         totalTime1 += SimRunner.runLongSim(308, 1, 400, 640 + Math.log10(2.45), "strategy=0");
         totalTime2 += SimRunner.runLongSim(308, 2, 300, 598 + Math.log10(3.50), "strategy=0");
         totalTime3 += SimRunner.runLongSim(308, 3, 400, 663 + Math.log10(2.12), "strategy=0");
@@ -243,6 +243,20 @@ public class TheoryRunner {
         
   
 
+    }
+
+    public static void simAllStrategies() {
+        //Playspout's distribution.
+        SimRunner.runDetailedSim(308, 1, 640 + Math.log10(2.45), true , "strategy=all");
+        SimRunner.runDetailedSim(308, 2, 598 + Math.log10(3.50), true, "strategy=all");
+        SimRunner.runDetailedSim(308, 3, 663 + Math.log10(2.12), true, "strategy=all");
+        SimRunner.runDetailedSim(308, 4, 767 + Math.log10(1.57), true, "strategy=all");
+        SimRunner.runDetailedSim(308, 5, 953 + Math.log10(4.60), true, "strategy=all");
+        SimRunner.runDetailedSim(308, 6, 1205 + Math.log10(1.0), true, "strategy=all");
+        SimRunner.runDetailedSim(308, 7, 605 + Math.log10(1.04), true, "strategy=all");
+        SimRunner.runDetailedSim(308, 8, 519 + Math.log10(1.37), true, "strategy=all");
+        SimRunner.runDetailedSim(308, 10, 1037 + Math.log10(1.37), true, "strategy=all");
+        SimRunner.runDetailedSim(308, 11, 1045 + Math.log10(1.37), true, "strategy=all");
     }
 
     public static void simEndgame(String flag) {

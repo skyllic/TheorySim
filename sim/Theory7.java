@@ -218,10 +218,10 @@ public class Theory7 extends Theory {
                 
 
             } else if(this.strategy.name == "T7PlaySpqcey") {
-                this.variableWeights[0] = 10.6 + (0.018 * (this.variables[0].level % 10) - 0.11);
+                this.variableWeights[0] = 10.6 + (0.028 * (this.variables[0].level % 10) - 0.11);
                 this.variables[1].deactivate();
                 this.variables[2].deactivate();
-                this.variableWeights[3] = 11.0;
+                this.variableWeights[3] = 12.0;
                 this.variableWeights[4] = 11.0;
                 this.variableWeights[5] = 10.6;
                 this.variableWeights[6] = 10.0;

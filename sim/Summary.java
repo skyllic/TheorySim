@@ -20,6 +20,13 @@ public class Summary {
   public Summary(int theoryNumber, double tauPerHour, double pubMulti, String strategy, String strategyType, 
   double pubTime, double recoveryTime, double tauGain, double coastStart, Variable[] variables, 
     double longestIdlePeriod) {
+
+    if(longestIdlePeriod / 3600.0 > pubTime) {
+      this.longestIdlePeriod = pubTime * 3600.0;
+    } else {
+      this.longestIdlePeriod = longestIdlePeriod;
+    }
+
     this.theoryNumber = theoryNumber;
     this.tauPerHour = tauPerHour;
     this.pubMulti = pubMulti;
@@ -31,7 +38,7 @@ public class Summary {
     this.coastStart = coastStart;
 
     this.variables = variables;
-    this.longestIdlePeriod = longestIdlePeriod;
+    
   }
 
   public Summary(String flags) {
@@ -41,7 +48,7 @@ public class Summary {
   }
 
   public Summary() {
-    
+
   }
   
 }

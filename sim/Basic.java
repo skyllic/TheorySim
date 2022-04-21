@@ -92,6 +92,12 @@ public class Basic extends Theory {
     @Override
     public void buyVariable(int variableNumber) {
 
+        if(this.variableWeights[variableNumber] < 10.11) {
+
+        } else {
+            this.resetIdlePeriod(variableNumber);
+        }
+
         super.buyVariable(variableNumber);
 
         

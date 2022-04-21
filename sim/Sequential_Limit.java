@@ -127,6 +127,12 @@ public class Sequential_Limit extends Theory {
      */
     @Override
     public void buyVariable(int variableNumber) {
+
+        if(this.variableWeights[variableNumber] < 10.11) {
+
+        } else {
+            this.resetIdlePeriod(variableNumber);
+        }
        
         double variableCost = this.variables[variableNumber].nextCost;
         if(this.rho1 >= variableCost) {
