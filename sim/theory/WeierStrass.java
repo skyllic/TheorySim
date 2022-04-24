@@ -1,4 +1,5 @@
-package sim;
+package sim.theory;
+import sim.upgrades.Variable;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,7 +30,7 @@ public class WeierStrass extends Theory {
         this.q = Math.log10(1);
         this.chi = 0;
         this.variables = new Variable[5];
-        this.strategy = new Strategy("", "");
+        
         this.isCoasting = false;
 
         // Order of variable is q1, q2, n, c1, c2 (same as in game when read top to
@@ -138,7 +139,7 @@ public class WeierStrass extends Theory {
             this.resetIdlePeriod(variableNumber);
         }
 
-        double variableCost = this.variables[variableNumber].nextCost;
+        
         super.buyVariable(variableNumber); // default behaviour.
 
         

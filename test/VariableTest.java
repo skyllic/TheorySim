@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import sim.Variable;
+import sim.upgrades.Variable;
 
 
 

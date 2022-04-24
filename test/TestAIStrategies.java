@@ -3,6 +3,7 @@ package test;
 import org.junit.Test;
 
 import sim.*;
+import sim.theory.Theory6;
 
 
 

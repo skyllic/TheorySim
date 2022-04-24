@@ -1,6 +1,7 @@
 package sim;
 
 import java.util.ArrayList;
+import sim.upgrades.Variable;
 
 public class Summary {
 
@@ -15,11 +16,15 @@ public class Summary {
   public double coastStart;
   public double longestIdlePeriod;
 
+  public String name;
+  public double publicationMark;
+  public int studentNumber;
+
   public Variable[] variables;
 
   public Summary(int theoryNumber, double tauPerHour, double pubMulti, String strategy, String strategyType, 
   double pubTime, double recoveryTime, double tauGain, double coastStart, Variable[] variables, 
-    double longestIdlePeriod) {
+    double longestIdlePeriod, String name, double publicationMark, int studentNumber) {
 
     if(longestIdlePeriod / 3600.0 > pubTime) {
       this.longestIdlePeriod = pubTime * 3600.0;
@@ -36,13 +41,16 @@ public class Summary {
     this.recoveryTime = recoveryTime;
     this.tauGain = tauGain;
     this.coastStart = coastStart;
+    this.name = name;
+    this.publicationMark = publicationMark;
+    this.studentNumber = studentNumber;
 
     this.variables = variables;
     
   }
 
   public Summary(String flags) {
-    if(flags.contains("")) {
+    if(flags.contains("theory=")) {
 
     }
   }

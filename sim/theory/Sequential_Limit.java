@@ -1,5 +1,6 @@
 
-package sim;
+package sim.theory;
+import sim.upgrades.Variable;
 
 import java.util.ArrayList;
 
@@ -45,7 +46,7 @@ public class Sequential_Limit extends Theory {
         this.isCoasting = false;
 
         this.variables = new Variable[4];
-        this.strategy = new Strategy("", "");
+        
 
         // Order of variable is q1, q2, r1, r2, c1, c2, c3, c4, c5 (same as in game when
         // read top to bottom)
@@ -188,7 +189,7 @@ public class Sequential_Limit extends Theory {
    /**
      * Finds the best variable index to buy according to variable weightings.
      */
-    @Override
+    
     public int findBestVarToBuy() {
         for (int i = 0; i < this.variables.length; i++) {
             this.variables[i].update();

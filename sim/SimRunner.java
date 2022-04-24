@@ -2,10 +2,91 @@ package sim;
 
 import java.util.ArrayList;
 
+import UI.Printer;
+import sim.strategy.*;
+import sim.theory.ITheory;
+import sim.theory.Theory1;
+import sim.theory.TheoryFactory;
+
+/**A class for Running different types of sim. E.g. individual theory sims, combined sims etc.*/
 public class SimRunner {
+
+  public static ArrayList<Strategy> strategies = new ArrayList<Strategy>();
+ 
 
   public SimRunner() {
 
+    SimRunner.addAllKnownStrategies();
+  }
+
+  /**A collection of all known strategies the sim supports. */
+  public static void addAllKnownStrategies() {
+    SimRunner.strategies.add(new Strategy("T1Play", 1, "active"));
+    SimRunner.strategies.add(new Strategy("T1Play2", 1, "active"));
+    SimRunner.strategies.add(new Strategy("T1Baby", 1, "active"));
+    SimRunner.strategies.add(new Strategy("T1C34", 1, "idle"));
+    SimRunner.strategies.add(new Strategy("T1C4", 1, "idle"));
+
+    SimRunner.strategies.add(new Strategy("T2AI", 2, "active"));
+    SimRunner.strategies.add(new Strategy("T2MS", 2, "active"));
+    SimRunner.strategies.add(new Strategy("T2NoMS", 2, "idle"));
+    SimRunner.strategies.add(new Strategy("T2", 2, "idle"));
+
+    SimRunner.strategies.add(new Strategy("T3Play2", 3, "active"));
+    SimRunner.strategies.add(new Strategy("T3PlayX", 3, "active"));
+    SimRunner.strategies.add(new Strategy("T3PlayI", 3, "idle"));
+    SimRunner.strategies.add(new Strategy("T3XS", 3, "active"));
+    SimRunner.strategies.add(new Strategy("T3OldI", 3, "idle"));
+
+    SimRunner.strategies.add(new Strategy("T4PlaySpqcey", 4,  "active"));
+    SimRunner.strategies.add(new Strategy("T4SolC", 4, "active"));
+    SimRunner.strategies.add(new Strategy("T4Sol2", 4, "active"));
+    SimRunner.strategies.add(new Strategy("T4Solar", 4, "active"));
+    SimRunner.strategies.add(new Strategy("T4Gold", 4, "active"));
+    SimRunner.strategies.add(new Strategy("T4C3d", 4, "active"));
+    SimRunner.strategies.add(new Strategy("T4C3",4,  "idle"));
+    SimRunner.strategies.add(new Strategy("T4Baby", 4, "active"));
+    SimRunner.strategies.add(new Strategy("T4NoMS", 4, "active"));
+
+    SimRunner.strategies.add(new Strategy("T5Play", 5, "active"));
+    SimRunner.strategies.add(new Strategy("T5", 5, "idle"));
+    SimRunner.strategies.add(new Strategy("T5PlayI", 5, "idle"));
+    
+    SimRunner.strategies.add(new Strategy("T6Play", 6,  "active"));
+    SimRunner.strategies.add(new Strategy("T6C5d", 6, "active"));
+    SimRunner.strategies.add(new Strategy("T6C125d", 6, "active"));
+    SimRunner.strategies.add(new Strategy("T6C5", 6, "idle"));
+    SimRunner.strategies.add(new Strategy("T6C125", 6, "idle"));
+    SimRunner.strategies.add(new Strategy("T6Baby", 6, "active"));
+
+    SimRunner.strategies.add(new Strategy("T7PlaySpqcey", 7, "active"));
+    SimRunner.strategies.add(new Strategy("T7Play", 7, "active"));
+    SimRunner.strategies.add(new Strategy("T7C456", 7, "idle"));
+
+    SimRunner.strategies.add(new Strategy("T8MS2", 8, "active"));
+    SimRunner.strategies.add(new Strategy("T8MS", 8, "active"));
+    SimRunner.strategies.add(new Strategy("T8Play", 8, "active"));
+    SimRunner.strategies.add(new Strategy("T8", 8, "idle"));
+    SimRunner.strategies.add(new Strategy("T8Baby", 8, "active"));
+
+    SimRunner.strategies.add(new Strategy("WSPlay2", 10, "active"));
+    SimRunner.strategies.add(new Strategy("WSPlay", 10, "active"));
+    SimRunner.strategies.add(new Strategy("WSPd", 10,  "active"));
+    SimRunner.strategies.add(new Strategy("WSPStC1", 10, "idle"));
+    SimRunner.strategies.add(new Strategy("WSP", 10, "idle"));
+
+    SimRunner.strategies.add(new Strategy("SLPlay2", 11, "active"));
+    SimRunner.strategies.add(new Strategy("SLPlay", 11, "active"));
+    SimRunner.strategies.add(new Strategy("SLst", 11, "idle"));
+    SimRunner.strategies.add(new Strategy("SLd", 11, "active"));
+
+    SimRunner.strategies.add(new Strategy("CSRPlay", 12, "active"));
+    SimRunner.strategies.add(new Strategy("CSR2d", 12, "active"));
+    SimRunner.strategies.add(new Strategy("CSR2", 12, "idle"));
+
+    SimRunner.strategies.add(new Strategy("BTPlay", 13, "active"));
+    SimRunner.strategies.add(new Strategy("BTd", 13, "active"));
+    SimRunner.strategies.add(new Strategy("BT", 13,  "idle"));
   }
 
   /**
@@ -29,18 +110,77 @@ public class SimRunner {
    * @param endPub        - Goal rho in log format.
    * @return - Total time required in hours.
    */
-  public static double runLongSim(int studentNumber, int theoryNumber, double startPub, double endPub, String flag) {
+  public static double runChainSims(int studentNumber, int theoryNumber, double startPub, double endPub, String flag) {
 
     double totalTime = 0;
     double currentPub = startPub;
+    ArrayList<Summary> summaries;
     while (currentPub < endPub) {
-      ArrayList<Summary> summaries = runDetailedSim(studentNumber, theoryNumber, currentPub, true, flag);
+      if(flag.contains("print=true")) {
+        summaries = runDetailedSim(studentNumber, theoryNumber, currentPub, true, flag);
+      } else {
+        summaries = runDetailedSim(studentNumber, theoryNumber, currentPub, false, flag);
+      }
+      
       currentPub = currentPub + summaries.get(0).tauGain;
       totalTime = totalTime + summaries.get(0).pubTime;
     }
 
     System.out.println(totalTime);
+    
     return totalTime;
+  }
+
+  /**This method is used to run a specific strategy from one theory. It will not run other strategies not specified.
+   * If a non-existent strategy is specified, it will run sims for all known strategies for that particular theory.
+   */
+  public static void runSpecificSim(int studentNumber, int theoryNumber, double pubMark, String flag) {
+    if(flag.contains("print=false")) {
+      runDetailedSim(studentNumber, theoryNumber, pubMark, false, flag);
+    } else {
+      runDetailedSim(studentNumber, theoryNumber, pubMark, true, flag);
+    }
+    
+  }
+
+  public static void appendStrategies(int theoryNumber, String flag) {
+    for(int i = 0; i < SimRunner.strategies.size(); i++) {
+      if(SimRunner.strategies.get(i).theoryNumber == theoryNumber) {
+        if(flag.contains(SimRunner.strategies.get(i).name.toLowerCase())) {
+          
+        }
+      }
+    }
+  }
+
+  private static ArrayList<Strategy> addWorkingStrategies(int theoryNumber) {
+    ArrayList<Strategy> workingStrategies = new ArrayList<>();
+    for(int i = 0; i < SimRunner.strategies.size(); i++) {
+      if(SimRunner.strategies.get(i).theoryNumber == theoryNumber) {
+        workingStrategies.add(SimRunner.strategies.get(i));
+      }
+      
+    }
+    return workingStrategies;
+  }
+
+  private static ITheory runSims(int theoryNumber, double pubMark, ArrayList<Strategy> strategies) {
+    ArrayList<Summary> summmaryStrategies = new ArrayList<Summary>();
+    ITheory theory = TheoryFactory.createTheory(theoryNumber, pubMark);
+    for(Strategy strategy : strategies) {
+      
+      theory.setStrategy(strategy);
+      theory.runUntilPublish();
+      summmaryStrategies.add(theory.getSummary());
+      theory = TheoryFactory.createTheory(theoryNumber, pubMark);
+      
+    }
+
+    Printer.printSummaries(summmaryStrategies);
+  
+    
+
+    return theory;
   }
 
   public static ArrayList<Summary> runDetailedSim(int studentNumber, int theoryNumber, double pubMark,
@@ -48,579 +188,20 @@ public class SimRunner {
     // double start = System.currentTimeMillis();
 
     int printHeaderCounter = 0;
-    ArrayList<Strategy> strategies = new ArrayList<>();
+    ArrayList<Strategy> workingStrategies = new ArrayList<>();
     ArrayList<Summary> summaries = new ArrayList<>();
 
-    Theory.studentNumber = studentNumber;
+    addAllKnownStrategies();
 
-    if (theoryNumber == 1) {
-      if (flag.contains("strategy=0")) {
-        strategies.add(new Strategy("T1Play", "active"));
-      } else if(flag.contains("strategy=T1Play2")) {
-        strategies.add(new Strategy("T1Play2", "active"));
-      } else if(flag.contains("strategy=T1Baby")) {
-        strategies.add(new Strategy("T1Baby", "Active"));
-      }
-      else {
-        strategies.add(new Strategy("T1Play", "active"));
-        strategies.add(new Strategy("T1Play2", "active"));
-        strategies.add(new Strategy("T1C34", "idle"));
-        strategies.add(new Strategy("T1C4", "idle"));
-        if(pubMark < 150) {
-          strategies.add(new Strategy("T1Baby", "active"));
-        }
-      }
+    
 
-      Theory1 t1 = new Theory1(pubMark);
+    workingStrategies = SimRunner.addWorkingStrategies(theoryNumber);
+    
+    ITheory theory = TheoryFactory.createTheory(theoryNumber, pubMark);
+    theory = SimRunner.runSims(theory, workingStrategies);
+    
+  
 
-      double bestPubMulti = 0;
-      Summary summary = new Summary();
-      for (Strategy strategy : strategies) {
-        for (int i = 0; i < 10; i++) {
-          t1 = new Theory1(pubMark);
-          t1.strategy = strategy;
-
-          if (i > 0) {
-            t1.coastingPub = bestPubMulti - 0.09 * i * bestPubMulti;
-          }
-
-          while (t1.finishCoasting == false) {
-            t1.runEpoch();
-          }
-          if (printHeaderCounter == 0 && print == true) {
-            t1.printSummaryHeader();
-            printHeaderCounter = 1;
-          }
-          if (i == 0 || t1.maxTauPerHour > summary.tauPerHour) {
-            bestPubMulti = t1.getSummary().pubMulti;
-            summary = new Summary(1, t1.maxTauPerHour,
-                t1.bestPubMulti, t1.strategy.name, t1.strategy.type, t1.bestPubTime, t1.bestRecoveryTime,
-                t1.bestTauGain,
-                t1.coastStart,
-                t1.variables, t1.longestIdlePeriod);
-          }
-        }
-        summaries.add(summary);
-        if (print == true) {
-          t1.printSummary(summary);
-        }
-      }
-    } else if (theoryNumber == 2) {
-      if (flag.contains("strategy=T2AI")) {
-        strategies.add(new Strategy("T2AI", "active"));
-      } else if (flag.contains("strategy=T2MS")) {
-        strategies.add((new Strategy("T2MS", "active")));
-      } else if (flag.contains("strategy=T2NoMS")) {
-        strategies.add(new Strategy("T2NoMS", "idle"));
-
-      } else if(flag.contains("strategy=T2") && flag.length() == 11) {
-        strategies.add(new Strategy("T2", "idle"));
-      } else {
-        strategies.add(new Strategy("T2AI", "active"));
-        strategies.add(new Strategy("T2", "idle"));
-        strategies.add(new Strategy("T2MS", "active"));
-        strategies.add(new Strategy("T2NoMS", "idle"));
-      }
-      Theory2 t2 = new Theory2(pubMark);
-
-      double bestPubMulti = 0;
-      Summary summary = new Summary();
-      for (Strategy strategy : strategies) {
-        for (int i = 0; i < 6; i++) {
-          t2 = new Theory2(pubMark);
-          t2.strategy = strategy;
-
-          if (i > 0) {
-            t2.coastingPub = bestPubMulti - 0.15 * i * bestPubMulti;
-          }
-
-          while (t2.finishCoasting == false) {
-            t2.runEpoch();
-          }
-          if (printHeaderCounter == 0 && print == true) {
-            t2.printSummaryHeader();
-            printHeaderCounter = 1;
-          }
-          if (i == 0 || t2.maxTauPerHour > summary.tauPerHour) {
-            bestPubMulti = t2.getSummary().pubMulti;
-            summary = new Summary(2, t2.maxTauPerHour,
-                t2.bestPubMulti, t2.strategy.name, t2.strategy.type, t2.bestPubTime,
-                t2.bestRecoveryTime, t2.bestTauGain,
-                t2.coastStart,
-                t2.variables, t2.longestIdlePeriod);
-          }
-        }
-        summaries.add(summary);
-        if (print == true) {
-          t2.printSummary(summary);
-        }
-      }
-    } else if (theoryNumber == 3) {
-      if (flag.contains("strategy=T3Play2")) {
-        strategies.add(new Strategy("T3Play2", "active"));
-      } else {
-        strategies.add(new Strategy("T3Play2", "active"));
-        strategies.add(new Strategy("T3PlayX", "active"));
-        strategies.add(new Strategy("T3XS", "idle"));
-        strategies.add(new Strategy("T3PlayI", "idle"));
-        strategies.add(new Strategy("T3OldI", "idle"));
-      }
-      Theory3 t3 = new Theory3(pubMark);
-
-      double bestPubMulti = 0;
-      Summary summary = new Summary();
-      for (Strategy strategy : strategies) {
-        for (int j = 0; j < 1; j++) {
-          for (int i = 0; i < 6; i++) {
-
-            t3 = new Theory3(pubMark);
-            t3.strategy = strategy;
-
-            if (i > 0) {
-              t3.coastingPub = bestPubMulti - 0.15 * i * bestPubMulti;
-            }
-
-            t3.recoveryPub = Math.pow(Math.E, -0.2 * j) * 1.0;
-
-            while (t3.finishCoasting == false) {
-              t3.runEpoch();
-            }
-            if (printHeaderCounter == 0 && print == true) {
-              t3.printSummaryHeader();
-              printHeaderCounter = 1;
-            }
-            if (i == 0 || t3.maxTauPerHour > summary.tauPerHour) {
-              bestPubMulti = t3.getSummary().pubMulti;
-              summary = new Summary(3, t3.maxTauPerHour,
-                  t3.bestPubMulti, t3.strategy.name, t3.strategy.type, t3.bestPubTime,
-                  t3.bestRecoveryTime, t3.bestTauGain,
-                  t3.coastStart,
-                  t3.variables, t3.longestIdlePeriod);
-            }
-          }
-          summaries.add(summary);
-          if (print == true) {
-            t3.printSummary(summary);
-          }
-        }
-      }
-    }
-
-    else if (theoryNumber == 4) {
-      if (flag.contains("strategy=0")) {
-        strategies.add(new Strategy("T4Sol2", "active"));
-      } else if(flag.contains("strategy=T4Baby")) {
-        strategies.add(new Strategy("T4Baby", "active"));
-      } else if(flag.contains("strategy=T4NoMS")) {
-        strategies.add(new Strategy("T4NoMS", "active"));
-      } else if(flag.contains("T4PlaySpqcey")) {
-        strategies.add(new Strategy("T4PlaySpqcey", "active"));
-      }
-      
-      else {
-        strategies.add(new Strategy("T4PlaySpqcey", "active"));
-        strategies.add(new Strategy("T4SolC", "active"));
-        strategies.add(new Strategy("T4Sol2", "active"));
-        strategies.add(new Strategy("T4Solar", "active"));
-        strategies.add(new Strategy("T4Gold", "active"));
-        strategies.add(new Strategy("T4C3d", "active"));
-        strategies.add(new Strategy("T4C3", "idle"));
-        strategies.add(new Strategy("T4Baby", "active"));
-        strategies.add(new Strategy("T4NoMS", "active"));
-      }
-      Theory4 t4 = new Theory4(pubMark);
-      double bestPubMulti = 0;
-      Summary summary = new Summary();
-      for (Strategy strategy : strategies) {
-        for (int i = 0; i < 3; i++) {
-          t4 = new Theory4(pubMark);
-          t4.strategy = strategy;
-
-          if (i > 0) {
-            t4.coastingPub = bestPubMulti - 0.15 * i * bestPubMulti;
-          }
-
-          while (t4.finishCoasting == false) {
-            t4.runEpoch();
-          }
-          if (printHeaderCounter == 0 && print == true) {
-            t4.printSummaryHeader();
-            printHeaderCounter = 1;
-          }
-          if (i == 0 || t4.maxTauPerHour > summary.tauPerHour) {
-            bestPubMulti = t4.getSummary().pubMulti;
-            summary = new Summary(4, t4.maxTauPerHour,
-                t4.bestPubMulti, t4.strategy.name, t4.strategy.type, t4.bestPubTime, t4.bestRecoveryTime,
-                t4.bestTauGain,
-                t4.coastStart,
-                t4.variables, t4.longestIdlePeriod);
-          }
-        }
-        summaries.add(summary);
-        if (print == true) {
-          t4.printSummary(summary);
-        }
-      }
-
-    } else if (theoryNumber == 5) {
-      if (flag.contains("strategy=T5Play")) {
-        strategies.add(new Strategy("T5Play", "active"));
-      } else {
-        strategies.add(new Strategy("T5Play", "active"));
-        strategies.add(new Strategy("T5", "idle"));
-        strategies.add(new Strategy("T5PlayI", "idle"));
-      }
-
-      Theory5 t5 = new Theory5(pubMark);
-      double bestPubMulti = 0;
-      Summary summary = new Summary();
-      for (Strategy strategy : strategies) {
-        for (int i = 0; i < 5; i++) {
-          t5 = new Theory5(pubMark);
-          t5.strategy = strategy;
-
-          if (i > 0) {
-            t5.coastingPub = bestPubMulti - 0.15 * i * bestPubMulti;
-          }
-
-          while (t5.finishCoasting == false) {
-            t5.runEpoch();
-          }
-          if (printHeaderCounter == 0 && print == true) {
-            t5.printSummaryHeader();
-            printHeaderCounter = 1;
-          }
-          if (i == 0 || t5.maxTauPerHour > summary.tauPerHour) {
-            bestPubMulti = t5.getSummary().pubMulti;
-            summary = new Summary(5, t5.maxTauPerHour,
-                t5.bestPubMulti, t5.strategy.name, t5.strategy.type, t5.bestPubTime,
-                t5.bestRecoveryTime, t5.bestTauGain,
-                t5.coastStart,
-                t5.variables, t5.longestIdlePeriod);
-          }
-        }
-        summaries.add(summary);
-        if (print == true) {
-          t5.printSummary(summary);
-        }
-      }
-
-    } else if (theoryNumber == 6) {
-      if (flag.contains("strategy=T6Play") || flag.contains("strategy=0")) {
-        strategies.add(new Strategy("T6Play", "active"));
-      } else if(flag.contains("strategy=T6Baby")) {
-        strategies.add(new Strategy("T6Baby", "active"));
-      } 
-      else {
-        strategies.add(new Strategy("T6Play", "active"));
-        strategies.add(new Strategy("T6C5d", "active"));
-        strategies.add(new Strategy("T6C125d", "active"));
-        strategies.add(new Strategy("T6C5", "idle"));
-        strategies.add(new Strategy("T6C125", "idle"));
-        strategies.add(new Strategy("T6Baby", "active"));
-      }
-
-      Theory6 t6 = new Theory6(pubMark);
-      double bestPubMulti = 0;
-      Summary summary = new Summary();
-      for (Strategy strategy : strategies) {
-        for (int i = 0; i < 6; i++) {
-          t6 = new Theory6(pubMark);
-          t6.strategy = strategy;
-
-          if (i > 0) {
-            t6.coastingPub = bestPubMulti - 0.15 * i * bestPubMulti;
-          }
-
-          while (t6.finishCoasting == false) {
-            t6.runEpoch();
-          }
-          if (printHeaderCounter == 0 && print == true) {
-            t6.printSummaryHeader();
-            printHeaderCounter = 1;
-          }
-          if (i == 0 || t6.maxTauPerHour > summary.tauPerHour) {
-            bestPubMulti = t6.getSummary().pubMulti;
-            summary = new Summary(6, t6.maxTauPerHour,
-                t6.bestPubMulti, t6.strategy.name, t6.strategy.type, t6.bestPubTime,
-                t6.bestRecoveryTime, t6.bestTauGain,
-                t6.coastStart,
-                t6.variables, t6.longestIdlePeriod);
-          }
-        }
-        summaries.add(summary);
-        if (print == true) {
-          t6.printSummary(summary);
-        }
-      }
-    } else if (theoryNumber == 7) {
-      if (flag.contains("strategy=0") || flag.contains("strategy=T7PlaySpqcey")) {
-        strategies.add(new Strategy("T7PlaySpqcey", "active"));
-      } else {
-        strategies.add(new Strategy("T7PlaySpqcey", "active"));
-        strategies.add(new Strategy("T7Play", "active"));
-        strategies.add(new Strategy("T7C456", "idle"));
-      }
-      Theory7 t7 = new Theory7(pubMark);
-
-      double bestPubMulti = 0;
-      Summary summary = new Summary();
-      for (Strategy strategy : strategies) {
-        for (int i = 0; i < 5; i++) {
-          t7 = new Theory7(pubMark);
-          t7.strategy = strategy;
-
-          if (i > 0) {
-            t7.coastingPub = bestPubMulti - 0.15 * i * bestPubMulti;
-          }
-
-          while (t7.finishCoasting == false) {
-            t7.runEpoch();
-          }
-          if (printHeaderCounter == 0 && print == true) {
-            t7.printSummaryHeader();
-            printHeaderCounter = 1;
-          }
-          if (i == 0 || t7.maxTauPerHour > summary.tauPerHour) {
-            bestPubMulti = t7.getSummary().pubMulti;
-            summary = new Summary(7, t7.maxTauPerHour,
-                t7.bestPubMulti, t7.strategy.name, t7.strategy.type, t7.bestPubTime,
-                t7.bestRecoveryTime, t7.bestTauGain,
-                t7.coastStart,
-                t7.variables, t7.longestIdlePeriod);
-          }
-        }
-        summaries.add(summary);
-        if (print == true) {
-          t7.printSummary(summary);
-        }
-
-      }
-    } else if (theoryNumber == 8) {
-      if (flag.contains("strategy=0") || flag.contains("strategy=T8SolarS")) {
-        strategies.add(new Strategy("T8SolarS", "active"));
-      } else if (flag.contains("strategy=T8Baby")) {
-        strategies.add(new Strategy("T8Baby", "active"));
-      } else {
-        strategies.add(new Strategy("T8MS2", "active"));
-        strategies.add(new Strategy("T8MS", "active"));
-        strategies.add(new Strategy("T8Play", "active"));
-        strategies.add(new Strategy("T8", "idle"));
-        strategies.add(new Strategy("T8Baby", "active"));
-
-      }
-      Theory8 t8 = new Theory8(pubMark);
-
-      double bestPubMulti = 0;
-      Summary summary = new Summary();
-      for (Strategy strategy : strategies) {
-        for (int i = 0; i < 1; i++) {
-          t8 = new Theory8(pubMark);
-          t8.strategy = strategy;
-
-          if (i > 0) {
-            t8.coastingPub = bestPubMulti - 0.15 * i * bestPubMulti;
-          }
-
-          while (t8.finishCoasting == false) {
-            t8.runEpoch();
-          }
-          if (printHeaderCounter == 0 && print == true) {
-            t8.printSummaryHeader();
-            printHeaderCounter = 1;
-          }
-          if (i == 0 || t8.maxTauPerHour > summary.tauPerHour) {
-            bestPubMulti = t8.getSummary().pubMulti;
-            summary = new Summary(8, t8.maxTauPerHour,
-                t8.bestPubMulti, t8.strategy.name, t8.strategy.type, t8.bestPubTime,
-                t8.bestRecoveryTime, t8.bestTauGain,
-                t8.coastStart,
-                t8.variables, t8.longestIdlePeriod);
-          }
-        }
-        summaries.add(summary);
-        if (print == true) {
-          t8.printSummary(summary);
-        }
-
-      }
-
-    } else if (theoryNumber == 10) {
-
-      if (flag.contains("strategy=0")) {
-        strategies.add(new Strategy("WSPlay2", "active"));
-
-      } else {
-        strategies.add(new Strategy("WSPlay2", "active"));
-        strategies.add(new Strategy("WSPlay", "active"));
-        strategies.add(new Strategy("WSPd", "active"));
-        strategies.add(new Strategy("WSPStC1", "idle"));
-        strategies.add(new Strategy("WSP", "idle"));
-
-      }
-      WeierStrass weierStrass = new WeierStrass(pubMark);
-      double bestPubMulti = 0;
-      Summary summary = new Summary();
-      for (Strategy strategy : strategies) {
-        for (int i = 0; i < 5; i++) {
-          weierStrass = new WeierStrass(pubMark);
-          weierStrass.strategy = strategy;
-          if (i > 0) {
-            weierStrass.coastingPub = bestPubMulti - 0.15 * i * bestPubMulti;
-          }
-
-          while (weierStrass.finishCoasting == false) {
-            weierStrass.runEpoch();
-          }
-          if (printHeaderCounter == 0 && print == true) {
-            weierStrass.printSummaryHeader();
-            printHeaderCounter = 1;
-          }
-          if (i == 0 || weierStrass.maxTauPerHour > summary.tauPerHour) {
-            bestPubMulti = weierStrass.getSummary().pubMulti;
-            summary = new Summary(10, weierStrass.maxTauPerHour,
-                weierStrass.bestPubMulti, weierStrass.strategy.name, weierStrass.strategy.type,
-                weierStrass.bestPubTime,
-                weierStrass.bestRecoveryTime,
-                weierStrass.bestTauGain,
-                weierStrass.coastStart,
-                weierStrass.variables, weierStrass.longestIdlePeriod);
-          }
-        }
-        summaries.add(summary);
-        if (print == true) {
-          weierStrass.printSummary(summary);
-        }
-
-      }
-    } else if (theoryNumber == 11) {
-      if (flag.contains("strategy=0")) {
-        strategies.add(new Strategy("SLPlay2", "active"));
-      } else {
-        strategies.add(new Strategy("SLPlay2", "active"));
-        strategies.add(new Strategy("SLPlay", "active"));
-        strategies.add(new Strategy("SLst", "idle"));
-        strategies.add(new Strategy("SLd", "active"));
-      }
-
-      Sequential_Limit SL = new Sequential_Limit(pubMark);
-      double bestPubMulti = 0;
-      Summary summary = new Summary();
-      for (Strategy strategy : strategies) {
-        for (int i = 0; i < 10; i++) {
-          SL = new Sequential_Limit(pubMark);
-          SL.strategy = strategy;
-          if (i > 0) {
-            SL.coastingPub = bestPubMulti - 0.10 * i * bestPubMulti;
-          }
-
-          while (SL.finishCoasting == false) {
-            SL.runEpoch();
-          }
-          if (printHeaderCounter == 0 && print == true) {
-            SL.printSummaryHeader();
-            printHeaderCounter = 1;
-          }
-          if (i == 0 || SL.maxTauPerHour > summary.tauPerHour) {
-            bestPubMulti = SL.getSummary().pubMulti;
-            summary = new Summary(11, SL.maxTauPerHour,
-                SL.bestPubMulti, SL.strategy.name, SL.strategy.type, SL.bestPubTime,
-                SL.bestRecoveryTime,
-                SL.bestTauGain,
-                SL.coastStart,
-                SL.variables, SL.longestIdlePeriod);
-          }
-        }
-        summaries.add(summary);
-        if (print == true) {
-          SL.printSummary(summary);
-        }
-      }
-    } else if (theoryNumber == 12) {
-      if (flag.contains("strategy=0")) {
-        strategies.add(new Strategy("CSRPlay", "active"));
-      } else {
-        strategies.add(new Strategy("CSRPlay", "active"));
-        strategies.add(new Strategy("CSR2d", "active"));
-        strategies.add(new Strategy("CSR2", "idle"));
-      }
-
-      Convergence_Square_Root CSR2 = new Convergence_Square_Root(pubMark);
-      double bestPubMulti = 0;
-      Summary summary = new Summary();
-      for (Strategy strategy : strategies) {
-        for (int i = 0; i < 9; i++) {
-          CSR2 = new Convergence_Square_Root(pubMark);
-          CSR2.strategy = strategy;
-          if (i > 0) {
-            CSR2.coastingPub = bestPubMulti - 0.10 * i * bestPubMulti;
-          }
-
-          while (CSR2.finishCoasting == false) {
-            CSR2.runEpoch();
-          }
-          if (printHeaderCounter == 0 && print == true) {
-            CSR2.printSummaryHeader();
-            printHeaderCounter = 1;
-          }
-          if (i == 0 || CSR2.maxTauPerHour > summary.tauPerHour) {
-            bestPubMulti = CSR2.getSummary().pubMulti;
-            summary = new Summary(12, CSR2.maxTauPerHour,
-                CSR2.bestPubMulti, CSR2.strategy.name, CSR2.strategy.type, CSR2.bestPubTime,
-                CSR2.bestRecoveryTime,
-                CSR2.bestTauGain,
-                CSR2.coastStart,
-                CSR2.variables, CSR2.longestIdlePeriod);
-          }
-        }
-        summaries.add(summary);
-        if (print == true) {
-          CSR2.printSummary(summary);
-        }
-      }
-    } else if (theoryNumber == 13) {
-      if (flag.contains("strategy=0")) {
-        strategies.add(new Strategy("BTPlay", "active"));
-      } else {
-        strategies.add(new Strategy("BTPlay", "active"));
-        strategies.add(new Strategy("BTd", "active"));
-        strategies.add(new Strategy("BT", "idle"));
-      }
-
-      Basic BT = new Basic(pubMark);
-      double bestPubMulti = 0;
-      Summary summary = new Summary();
-      for (Strategy strategy : strategies) {
-        for (int i = 0; i < 8; i++) {
-          BT = new Basic(pubMark);
-          BT.strategy = strategy;
-          if (i > 0) {
-            BT.coastingPub = bestPubMulti - 0.07 * i * bestPubMulti;
-          }
-
-          while (BT.finishCoasting == false) {
-            BT.runEpoch();
-          }
-          if (printHeaderCounter == 0 && print == true) {
-            BT.printSummaryHeader();
-            printHeaderCounter = 1;
-          }
-          if (i == 0 || BT.maxTauPerHour > summary.tauPerHour) {
-            bestPubMulti = BT.getSummary().pubMulti;
-            summary = new Summary(13, BT.maxTauPerHour,
-                BT.bestPubMulti, BT.strategy.name, BT.strategy.type, BT.bestPubTime,
-                BT.bestRecoveryTime,
-                BT.bestTauGain,
-                BT.coastStart,
-                BT.variables, BT.longestIdlePeriod);
-          }
-        }
-        summaries.add(summary);
-        if (print == true) {
-          BT.printSummary(summary);
-        }
-      }
-    }
 
     // double finish = System.currentTimeMillis();
     // double seconds = (finish - start) / 1000.0;

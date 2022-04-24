@@ -1,4 +1,5 @@
-package sim;
+package sim.theory;
+import sim.upgrades.Variable;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -46,7 +47,7 @@ public class Convergence_Square_Root extends Theory {
         
 
         this.variables = new Variable[5];
-        this.strategy = new Strategy("", "");
+        
 
         // Order of variable is q1, q2, r1, r2, c1, c2, c3, c4, c5 (same as in game when
         // read top to bottom)

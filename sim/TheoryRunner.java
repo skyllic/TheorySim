@@ -4,6 +4,10 @@ import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.Map;
 
+import javafx.stage.Stage;
+
+import sim.upgrades.Variable;
+
 /**
  * A TheoryRunner class containing the main method used to run to theory
  * simulator
@@ -53,10 +57,11 @@ public class TheoryRunner {
 
         ArrayList<Double> summaryList = new ArrayList<>();
         
-        
+        //SimRunner.runChainSims(300, 1, 300, 1300, "print=true,strategy=0");
       
         //simAllStrategies();
       
+        SimRunner.runDetailedSim(300, 1, 500, true, "");
         /**
         SimRunner.runDetailedSim(299, 1, 618, true, "strategy=T1Pla2, ").get(0);
         SimRunner.runDetailedSim(299, 2, 630+Math.log10(8.78), true, "strategy=T2I, ").get(0);
@@ -67,9 +72,21 @@ public class TheoryRunner {
         SimRunner.runDetailedSim(299, 7, 580+Math.log10(4.97), true, "strategy=T7PlaSpqcey, ").get(0);
         SimRunner.runDetailedSim(299, 8, 497+Math.log10(5.79), true, "strategy=T8SoarS, ").get(0);*/
 
-        SimRunner.runDetailedSim(308, 7, 605, true, "strategy");
+        //SimRunner.runDetailedSim(300, 7, 644+Math.log10(9.91), true, "strategy");
         Summary summary;
         ArrayList<Double> tau_per_hours = new ArrayList<>();
+
+        /**
+        for(int i = 150; i < 700; i++) {
+            summary = SimRunner.runDetailedSim(308, 1, i, true, "strategy=T1Play").get(0);
+            tau_per_hours.add(summary.longestIdlePeriod);
+            
+        }
+        for(Double element : tau_per_hours) {
+            System.out.println(element);
+        }*/
+
+       
         /**
         for(int i = 0; i < 200; i++) {
             if(i < 175) {
@@ -282,56 +299,7 @@ public class TheoryRunner {
         }
     }
 
-    public static void runOvernightComparison(int studentNumber, int theoryNumber, double pubMark, double pubMulti,
-            String strategyName) {
-        double start = System.currentTimeMillis();
-
-        int printHeaderCounter = 0;
-
-        Theory.studentNumber = studentNumber;
-        if (theoryNumber == 10) {
-
-            ArrayList<Strategy> strategies = new ArrayList<>();
-
-            strategies.add(new Strategy(strategyName, "idle"));
-
-            double startPubTime = 0;
-            int counter = 0;
-
-            for (Strategy strategy : strategies) {
-                WeierStrass weierStrass = new WeierStrass(pubMark);
-
-                weierStrass.strategy = strategy;
-
-                while (weierStrass.finishCoasting == false) {
-                    weierStrass.runEpoch();
-                    if (weierStrass.publicationMultiplier >= pubMulti && counter == 0) {
-                        startPubTime = weierStrass.seconds; // grab the start pub time.
-                        System.out.println(startPubTime);
-                        counter = 1;
-                    }
-                    if (weierStrass.seconds >= startPubTime + 3600 * 8.0 && counter == 1) {
-                        // finish overnight
-                        weierStrass.isCoasting = true;
-                        weierStrass.maxTauPerHour = (weierStrass.maxRho - weierStrass.publicationMark)
-                                / (weierStrass.seconds / 3600.0);
-                        weierStrass.bestPubMulti = weierStrass.publicationMultiplier;
-                        weierStrass.bestPubTime = weierStrass.seconds / 3600.0;
-                        weierStrass.bestTauGain = weierStrass.maxRho - weierStrass.publicationMark;
-                    }
-                }
-                if (printHeaderCounter == 0) {
-                    weierStrass.printSummaryHeader();
-                    printHeaderCounter = 1;
-                }
-                weierStrass.printSummary();
-
-            }
-        }
-        double finish = System.currentTimeMillis();
-
-        System.out.println("elapsed time: " + String.format("%.3f", (finish - start) / 1000.0) + " seconds.");
-    }
+    
 
     public static void runAllSim(int studentNumber, String t1Tau, String t2Tau, String t3Tau, String t4Tau,
             String t5Tau, String t6Tau, String t7Tau, String t8Tau, String WSPTau, String SLTau) {

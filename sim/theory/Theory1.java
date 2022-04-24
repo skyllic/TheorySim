@@ -1,7 +1,9 @@
-package sim;
+package sim.theory;
 import java.util.ArrayList;
 
 import java.util.Collections;
+
+import sim.upgrades.Variable;
 
 /**
  * An implementation of Theory 6 (Integral Calculus) from the game Exponential
@@ -30,24 +32,14 @@ public class Theory1 extends Theory {
 
         this.isCoasting = false;
 
-        this.variables = new Variable[6];
-        this.strategy = new Strategy("T1Play", "AI");
+   
 
         this.milestoneLevels[0] = 3;
         this.milestoneLevels[1] = 1;
         this.milestoneLevels[2] = 1;
         this.milestoneLevels[3] = 1;
 
-        // Order of variable is q1, q2, r1, r2, c1, c2, c3, c4, c5 (same as in game when
-        // read top to bottom)
-        this.variables[0] = new Variable(2, 5, Math.pow(2, 0.1), 0, false, true, false, true, false, new double[2]);
-        this.variables[1] = new Variable(10, 100, 2, 1, true, true, false, false, false, new double[2]);
-        this.variables[2] = new Variable(2, 15, Math.pow(2, 0.1), 1, false, true, false, false, true, new double[2]);
-        this.variables[3] = new Variable(10, 3000, 2, 1, true, true, false, false, false, new double[2]);
-        this.variables[4] = new Variable(Math.pow(10, 4.5), 10000, 10, 1, true, true, false, false, false,
-                new double[2]);
-        this.variables[5] = new Variable(Math.pow(10, 8), Math.pow(10, 10), 10, 1, true, true, false, false, false,
-                new double[2]);
+        
 
     }
 
@@ -66,13 +58,14 @@ public class Theory1 extends Theory {
 
         this.publicationMultiplier = Math.pow(10, 0.164 * (this.maxRho - this.publicationMark));
 
+        System.out.println(this.rho + "\t" + this.seconds + "\t" + this.variables[5].nextCost);
         /**if(this.maxRho - this.variables[5].nextCost < 0.01 && this.publicationMultiplier > 2.0) {
             this.isCoasting = true;
         }*/
 
     }
 
-    public void milestoneSwapCheck() {
+    private void milestoneSwapCheck() {
 
         if (this.strategy.name == "T1Baby") {
             if (this.maxRho < 25 && this.publicationMark < 25) {
@@ -236,7 +229,7 @@ public class Theory1 extends Theory {
      * Part of the moveTick() method. Updates equation values such as rho, rhodot,
      * q, qdot etc.
      */
-    public void updateEquation() {
+    private void updateEquation() {
 
         double term1 = 0;
         double term2 = 0;
@@ -249,12 +242,7 @@ public class Theory1 extends Theory {
         } else {
 
         }
-        if(this.strategy.name == "T1Baby") {
-            System.out.println(this.rhodot);
-            if(Math.abs(this.rhodot - 84.6235) < 0.1) {
-                int a = 0;
-            }
-        }
+        
         
         if(this.milestoneLevels[2] == 1) {
             term2 = this.variables[4].value + this.rho * 0.2;
@@ -278,6 +266,11 @@ public class Theory1 extends Theory {
 
     }
 
+
+/**
+ *Calculates current rhodot. Used for determining current rhodot after a variable is bought. 
+ * @return - current rhodot.
+ */
     public double calculateRhodot() {
         double term1 = this.variables[2].value * 1.15 + this.variables[3].value +
                 Math.log10(Variable.add(1, this.rho * Math.log(10) / 100.0));
@@ -313,12 +306,18 @@ public class Theory1 extends Theory {
 
     }
 
+    public void runUntilPublish() {
+        while(this.finishCoasting == false) {
+            this.runEpoch();
+        }
+    }
+
     public void runEpoch() {
+        
         for (int i = 0; i < this.variables.length; i++) {
             this.variables[i].update();
         }
-
-        for (int i = 0; i < 1; i++) {
+        
             int bestVarIndex = this.findBestVarToBuy();
             if (!isCoasting) {
                 double buyDelay = this.calculateBuyDelay(bestVarIndex);
@@ -326,17 +325,16 @@ public class Theory1 extends Theory {
                 this.buyVariable(bestVarIndex);
 
             } else {// is coasting, stop buying any variable.
-                // this.idleUntil(this, this.publicationMark + Math.log(2.5) / Math.log(10) /
-                // 0.152);
+                
                 this.coastUntilPublish();
-                // this.display();
+                
                 this.finishCoasting = true;
                 return;
             }
-        }
+        
     }
 
-    @Override
+    
     public int findBestVarToBuy() {
         for (int i = 0; i < this.variables.length; i++) {
             this.variables[i].update();
@@ -437,7 +435,7 @@ public class Theory1 extends Theory {
     public void adjustWeightings(int i) {
 
         // public double[] variableWeights = {11, 10, 10, 10, 10, 10};
-        if (this.strategy.name == "T1Play") {
+        if (this.strategy.name.equalsIgnoreCase("T1Play")) {
 
 
             double rhoDotOld = this.calculateRhodot();
@@ -459,7 +457,7 @@ public class Theory1 extends Theory {
 
             this.variables[2].deactivate();
             this.variables[3].deactivate();
-        } else if(this.strategy.name == "T1Play2") {
+        } else if(this.strategy.name.equalsIgnoreCase("T1Play2")) {
             
             double rhoDotOld = this.calculateRhodot();
             this.variables[i].level += 1;
@@ -494,21 +492,21 @@ public class Theory1 extends Theory {
             this.variables[2].deactivate();
             this.variables[3].deactivate();
 
-        } else if(this.strategy.name == "T1C34") {
+        } else if(this.strategy.name.equalsIgnoreCase("T1C34")) {
             this.variableWeights[0] = 10.0;
             this.variableWeights[1] = 10.0;
             this.variables[2].deactivate();
             this.variables[3].deactivate();
             this.variableWeights[4] = 10.0;
             this.variableWeights[5] = 10.0;
-        } else if(this.strategy.name == "T1C4") {
+        } else if(this.strategy.name.equalsIgnoreCase("T1C4")) {
             this.variableWeights[0] = 10.0;
             this.variableWeights[1] = 10.0;
             this.variables[2].deactivate();
             this.variables[3].deactivate();
             this.variables[4].deactivate();
             this.variableWeights[5] = 10.0;
-        } else if(this.strategy.name == "T1Baby") {
+        } else if(this.strategy.name.equalsIgnoreCase("T1Baby")) {
             if(this.maxRho < 25 && this.publicationMark < 25) {
                 this.variableWeights[0] = 11.0;
                 this.variableWeights[1] = 10.0;

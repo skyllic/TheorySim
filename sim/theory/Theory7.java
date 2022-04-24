@@ -1,7 +1,9 @@
-package sim;
+package sim.theory;
 
 import java.util.ArrayList;
 import java.util.Collections;
+
+import sim.upgrades.Variable;
 
 /**
  * An implementation of Theory 6 (Integral Calculus) from the game Exponential
@@ -41,8 +43,7 @@ public class Theory7 extends Theory {
         this.isCoasting = false;
 
         this.variables = new Variable[7];
-        this.strategy = new Strategy("T7AI", "AI");
-
+        
         // Order of variable is q1, q2, r1, r2, c1, c2, c3, c4, c5 (same as in game when
         // read top to bottom)
         this.variables[0] = new Variable(1.51572, 500, Math.pow(2, 0.1), 0, false, true, false, true, false,
@@ -158,8 +159,7 @@ public class Theory7 extends Theory {
         }
 
     }
-
-    @Override
+    
     public int findBestVarToBuy() {
         for (int i = 0; i < this.variables.length; i++) {
             this.variables[i].update();
@@ -221,7 +221,7 @@ public class Theory7 extends Theory {
                 this.variableWeights[0] = 10.6 + (0.028 * (this.variables[0].level % 10) - 0.11);
                 this.variables[1].deactivate();
                 this.variables[2].deactivate();
-                this.variableWeights[3] = 12.0;
+                this.variableWeights[3] = 11.0;
                 this.variableWeights[4] = 11.0;
                 this.variableWeights[5] = 10.6;
                 this.variableWeights[6] = 10.0;

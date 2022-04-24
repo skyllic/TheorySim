@@ -1,7 +1,9 @@
-package sim;
+package sim.theory;
 
 import java.util.ArrayList;
 import java.util.Collections;
+
+import sim.upgrades.Variable;
 
 /**
  * An implementation of Theory 8 (Chaos Theory) from the game Exponential
@@ -53,7 +55,7 @@ public class Theory8 extends Theory {
         
 
         this.variables = new Variable[5];
-        this.strategy = new Strategy("T8AI", "AI");
+        
 
         this.milestoneLevels[0] = 2;
         this.milestoneLevels[1] = 3;
@@ -358,7 +360,7 @@ public class Theory8 extends Theory {
 
     }
 
-    @Override
+    
     public int findBestVarToBuy() {
         for (int i = 0; i < this.variables.length; i++) {
             this.variables[i].update();

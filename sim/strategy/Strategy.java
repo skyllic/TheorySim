@@ -1,4 +1,4 @@
-package sim;
+package sim.strategy;
 import java.util.ArrayList;
 
 /**A class to input strategies */
@@ -7,7 +7,7 @@ public class Strategy {
     public String name; // for example "T4c3d"
     public int theoryNumber; // the theory number the strategy pertains to. For example 6 means the strategy is for theory 6
 
-    public String type; // idle, active, speedrun
+    public String type; // idle, semi-idle, active, speedrun
 
     public boolean chaseDoubling;
 
@@ -16,6 +16,11 @@ public class Strategy {
     public ArrayList<Integer> chasingVariable; // A list of variables that are chasing the doublings e.g.
     // for T4c3d, q1 is chasing q2 so q1 in T4 (variable[6] so 6) will be in the list
     
+    public Strategy(String name, int theoryNumber, String type) {
+        this.name = name.toLowerCase();
+        this.theoryNumber = theoryNumber;
+        this.type = type;
+    }
     
     public Strategy(String name, String type) {
         if(name.isBlank() || type.isBlank()) {

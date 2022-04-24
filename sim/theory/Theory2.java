@@ -1,8 +1,10 @@
-package sim;
+package sim.theory;
 
 import java.util.ArrayList;
 
 import java.util.Collections;
+
+import sim.upgrades.Variable;
 
 /**
  * An implementation of Theory 2 (Differential Calculus) from the game
@@ -47,8 +49,7 @@ public class Theory2 extends Theory {
         this.rhodot = 0;
         this.isCoasting = false;
 
-        this.variables = new Variable[8];
-        this.strategy = new Strategy("T2AI", "AI");
+ 
 
         // Default all milestones.
         this.milestoneLevels[0] = 2;
@@ -56,22 +57,7 @@ public class Theory2 extends Theory {
         this.milestoneLevels[2] = 3;
         this.milestoneLevels[3] = 3;
 
-        // Order of variable is q1, q2, r1, r2, c1, c2, c3, c4, c5 (same as in game when
-        // read top to bottom)
-        this.variables[0] = new Variable(2, 10, Math.pow(2, 0.1), 0, false, true, false, true, false, new double[2]);
-        this.variables[1] = new Variable(2, 5000, Math.pow(2, 0.1), 0, false, true, false, false, false, new double[2]);
-        this.variables[2] = new Variable(3, 3 * Math.pow(10, 25), Math.pow(2, 0.1), 0, false, true, false, false, false,
-                new double[2]);
-        this.variables[3] = new Variable(4, 8 * Math.pow(10, 50), Math.pow(2, 0.1), 0, false, true, false, false, false,
-                new double[2]);
-        this.variables[4] = new Variable(2, 2 * Math.pow(10, 6), Math.pow(2, 0.1), 0, false, true, false, false, false,
-                new double[2]);
-        this.variables[5] = new Variable(2, 3 * Math.pow(10, 9), Math.pow(2, 0.1), 0, false, true, false, false, false,
-                new double[2]);
-        this.variables[6] = new Variable(3, 4 * Math.pow(10, 25), Math.pow(2, 0.1), 0, false, true, false, false, false,
-                new double[2]);
-        this.variables[7] = new Variable(4, 5 * Math.pow(10, 50), Math.pow(2, 0.1), 0, false, true, false, false, false,
-                new double[2]);
+        
 
     }
 
@@ -416,7 +402,7 @@ public class Theory2 extends Theory {
 
     }
 
-    @Override
+    
     public int findBestVarToBuy() {
         for (int i = 0; i < this.variables.length; i++) {
             this.variables[i].update();

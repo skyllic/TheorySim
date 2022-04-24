@@ -1,4 +1,4 @@
-package sim;
+package sim.upgrades;
 
 /** */
 public class Variable {
@@ -130,9 +130,7 @@ public class Variable {
             value = (this.level * this.valueScaling + this.valueBase);
             return value;
         }
-        if(this.costBase == 1000 && this.level == 253) {
-            double t = 3;
-        }
+       
         if(isExponential) {
             if(!isDoubling) {
                 if(!isOffset) {

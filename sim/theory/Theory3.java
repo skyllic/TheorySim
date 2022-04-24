@@ -1,7 +1,9 @@
-package sim;
+package sim.theory;
 
 import java.util.ArrayList;
 import java.util.Collections;
+
+import sim.upgrades.Variable;
 
 /**An implementation of Theory 6 (Integral Calculus) from the game Exponential Idle. */
 public class Theory3 extends Theory {
@@ -66,28 +68,14 @@ public class Theory3 extends Theory {
 
        
         this.isCoasting = false;
-        
-        this.variables = new Variable[12];
-        this.strategy = new Strategy("T3AI", "AI"); 
+   
 
         this.longestIdlePeriod = 0;
         this.currentIdlePeriod = 0;
   
         
 
-        //Order of variable is b1, b2, b3, c11, c12, c13, c21, c22, c23, c31, c32, c33.
-        this.variables[0] = new Variable(1.18099, 10, Math.pow(2, 0.1), 0, false, true, false, true, false, new double[2]);
-        this.variables[1] = new Variable(1.308, 10, Math.pow(2, 0.1), 0, false, true, false, false, false, new double[2]);
-        this.variables[2] = new Variable(1.675, 3000, Math.pow(2, 0.1), 0, false, true, false, false, false, new double[2]);
-        this.variables[3] = new Variable(6.3496, 20, 2, 1, true, true, false, false, false, new double[2]);
-        this.variables[4] = new Variable(2.74, 10, 2, 1, true, true, false, false, false, new double[2]);
-        this.variables[5] = new Variable(1.965, 1000, 2, 1, true, true, false, false, false, new double[2]);
-        this.variables[6] = new Variable(18.8343, 1000, 2, 0, true, true, false, false, false, new double[2]);
-        this.variables[7] = new Variable(3.65, Math.pow(10, 5), 2, 1, true, true, false, false, false, new double[2]);
-        this.variables[8] = new Variable(2.27, Math.pow(10, 5), 2, 1, true, true, false, false, false, new double[2]);
-        this.variables[9] = new Variable(1248.27, Math.pow(10, 4), 2, 1, true, true, false, false, false, new double[2]);
-        this.variables[10] = new Variable(6.81774, Math.pow(10, 3), 2, 1, true, true, false, false, false, new double[2]);
-        this.variables[11] = new Variable(2.98, Math.pow(10, 5), 2, 1, true, true, false, false, false, new double[2]);
+        
         
     }
     /**Moves the theory by 1 tick (default is 0.1 seconds). Also updates auxillary variables such as q, r, 

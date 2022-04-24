@@ -1,8 +1,9 @@
-package sim;
+package sim.theory;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Timer;
+
+import sim.upgrades.Variable;
 
 /**
  * An implementation of Theory 6 (Integral Calculus) from the game Exponential
@@ -46,7 +47,7 @@ public class Theory6 extends Theory {
         this.qdot = -Double.MAX_VALUE;
         this.rdot = -Double.MAX_VALUE;
         this.variables = new Variable[9];
-        this.strategy = new Strategy("", "");
+        
         this.usedMoney = -Double.MAX_VALUE;
         this.c = -Double.MAX_VALUE;
 
@@ -359,7 +360,7 @@ public class Theory6 extends Theory {
 
     }
 
-    @Override
+    
     public int findBestVarToBuy() {
         for (int i = 0; i < this.variables.length; i++) {
             this.variables[i].update();
