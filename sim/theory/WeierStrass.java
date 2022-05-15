@@ -149,6 +149,12 @@ public class WeierStrass extends Theory {
         
     }
 
+    public void runUntilPublish() {
+        while(this.finishCoasting == false) {
+            this.runEpoch();
+        }
+    }
+
     /**
      * Finds the best variable to buy according to variable weightings of the
      * strategy. Then waits to
@@ -254,7 +260,7 @@ public class WeierStrass extends Theory {
 
         if (this.variables[i].isActive == 1) {
 
-            if (this.strategy.name == "WSPlay") {
+            if (this.strategy.name.equalsIgnoreCase("WSPlay")) {
 
                 this.variableWeights[0] = 11;
                 this.variableWeights[0] = 10.85 + (0.028 * (this.variables[i].level % 10) - 0.16);
@@ -266,7 +272,7 @@ public class WeierStrass extends Theory {
                     this.variables[3].deactivate();
                 }
 
-            } else if (this.strategy.name == "WSPlay2") {
+            } else if (this.strategy.name.equalsIgnoreCase("WSPlay2")) {
                 this.variableWeights[0] = 11;
                 this.variableWeights[0] = 10.85 + (0.028 * (this.variables[i].level % 10) - 0.16);
                 this.variableWeights[1] = 10.0;
@@ -289,19 +295,19 @@ public class WeierStrass extends Theory {
 
 
 
-            } else if (this.strategy.name == "WSPd") {
+            } else if (this.strategy.name.equalsIgnoreCase("WSPd")) {
                 this.variableWeights[0] = 11.0;
                 this.variableWeights[1] = 10.0;
                 this.variableWeights[2] = 10.0;
                 this.variableWeights[3] = 11.0;
                 this.variableWeights[4] = 10.0;
-            } else if (this.strategy.name == "WSPStC1") {
+            } else if (this.strategy.name.equalsIgnoreCase("WSPStC1")) {
                 this.variableWeights[0] = 10.0;
                 this.variableWeights[1] = 10.0;
                 this.variableWeights[2] = 10.0;
                 this.variableWeights[3] = 18.0;
                 this.variableWeights[4] = 10.0;
-            } else if (this.strategy.name == "WSP") {
+            } else if (this.strategy.name.equalsIgnoreCase("WSP")) {
                 this.variableWeights[0] = 10.0;
                 this.variableWeights[1] = 10.0;
                 this.variableWeights[2] = 10.0;
@@ -311,7 +317,7 @@ public class WeierStrass extends Theory {
 
 
         }
-        if (this.publicationMultiplier > this.coastingPub) {
+        if (this.publicationMultiplier > this.coastingPubs[9]) {
             for (int j = 0; j < this.variables.length; j++) {
                 this.variables[j].deactivate(); // autobuy for the variable off.
                 this.isCoasting = true;

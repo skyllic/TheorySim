@@ -33,6 +33,8 @@ public class TheoryFactory {
       return new Convergence_Square_Root(pubMark);
     } else if(theoryNumber == 13) {
       return new Basic(pubMark);
+    } else if(theoryNumber == 14) {
+      return new Euler_Formula(pubMark);
     } else {
       return null;
     }

@@ -105,6 +105,12 @@ public class Basic extends Theory {
 
     }
 
+    public void runUntilPublish() {
+        while(this.finishCoasting == false) {
+            this.runEpoch();
+        }
+    }
+
     /**
      * Finds the best variable to buy according to variable weightings of the
      * strategy. Then waits to
@@ -198,20 +204,20 @@ public class Basic extends Theory {
 
         if (this.variables[i].isActive == 1) {
 
-            if(this.strategy.name == "BTPlay") {
+            if(this.strategy.name.equalsIgnoreCase("BTPlay")) {
                 this.variableWeights[0] = 11.20 + (0.030 * (this.variables[i].level % 10) - 0.20);
                 this.variableWeights[1] = 10.0;
             }
-             else if (this.strategy.name == "BTd") {
+             else if (this.strategy.name.equalsIgnoreCase("BTd")) {
                 this.variableWeights[0] = 11.0;
                 this.variableWeights[1] = 10.0;
-            } else if(this.strategy.name == "BT") {
+            } else if(this.strategy.name.equalsIgnoreCase("BT")) {
                 this.variableWeights[0] = 10.0;
                 this.variableWeights[1] = 10.0;
             }
             
 
-            if (this.publicationMultiplier > this.coastingPub) {
+            if (this.publicationMultiplier > this.coastingPubs[12]) {
                 for (int j = 0; j < this.variables.length; j++) {
                     this.variables[j].deactivate(); // autobuy for the variable off.
                     this.isCoasting = true;

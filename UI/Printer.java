@@ -32,8 +32,8 @@ public class Printer {
 
         System.out.print(String.format("%.2f", summary.pubTime));
         System.out.print("\t\t" + String.format("%.2f", summary.tauGain));
-        System.out.print("\t\t" + String.format("%.2f", summary.coastStart));
-        System.out.print("\t\t" + String.format("%.2f", summary.longestIdlePeriod / 3600.0));
+        //System.out.print("\t\t" + String.format("%.2f", summary.coastStart));
+        //System.out.print("\t\t" + String.format("%.2f", summary.longestIdlePeriod / 3600.0));
         // System.out.print("\t\t" + String.format("%.1f", this.publicationMark));
         System.out.println("");
   }
@@ -41,8 +41,8 @@ public class Printer {
   private static void printSummaryHeader(Summary summary) {
     System.out.println(summary.name + " at e" + String.format("%.1f", summary.publicationMark) + " rho" +
                 ", " + summary.studentNumber + " students");
-        System.out.print("Tau/hr\t\t" + "PubMulti\t\t" + "Strategy\t\t" + "PubTime\t\t" + "TauGain\t\t"
-                + "CoastM\t\t" + "LongestIdle\n");
+        System.out.print("Rho/hr\t\t" + "PubMulti\t\t" + "Strategy\t\t" + "PubTime\t\t" + "RhoGain\t\t\n"
+                /**+ "CoastM\t\t" + "LongestIdle\n"*/);
   }
 
 

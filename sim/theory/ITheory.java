@@ -15,4 +15,8 @@ public interface ITheory {
 
   public void setStudent(int studentNumber);
 
+  public void setCoastingPubs(int position, double value);
+  
+  public double getCoastingPub(int position);
+
 }

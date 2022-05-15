@@ -332,6 +332,12 @@ public class Theory4 extends Theory {
 
     }
 
+    public void runUntilPublish() {
+        while(this.finishCoasting == false) {
+            this.runEpoch();
+        }
+    }
+
     /**
      * Finds the best variable to buy according to variable weightings of the
      * strategy. Then waits to
@@ -422,7 +428,7 @@ public class Theory4 extends Theory {
 
         if (this.variables[i].isActive == 1) {
 
-            if (this.strategy.name == "T4C3d") {
+            if (this.strategy.name.equalsIgnoreCase("T4C3d")) {
                 this.variables[0].deactivate();
                 this.variables[1].deactivate();
                 this.variableWeights[2] = 10.0;
@@ -431,7 +437,7 @@ public class Theory4 extends Theory {
                 this.variables[5].deactivate();
                 this.variableWeights[6] = 11.0;
                 this.variableWeights[7] = 10.0;
-            } else if (this.strategy.name == "T4PlaySpqcey") {
+            } else if (this.strategy.name.equalsIgnoreCase("T4PlaySpqcey")) {
 
                 if (this.maxRho < this.publicationMark - 12) {
                     this.variableWeights[0] = 12.0;
@@ -475,7 +481,7 @@ public class Theory4 extends Theory {
 
                 q2Offset = Math.log10(q2Offset);
                 this.variableWeights[7] = 10.00 + q2Offset;
-            } else if (this.strategy.name == "T4SolC") {
+            } else if (this.strategy.name.equalsIgnoreCase("T4SolC")) {
                 this.variables[0].deactivate();
                 this.variables[1].deactivate();
                 this.variableWeights[2] = 10.0;
@@ -513,7 +519,7 @@ public class Theory4 extends Theory {
                 q2Offset = Math.log10(q2Offset);
                 this.variableWeights[7] = 10.00 + q2Offset;
 
-            } else if (this.strategy.name == "T4Sol2") {
+            } else if (this.strategy.name.equalsIgnoreCase("T4Sol2")) {
                 this.variables[0].deactivate();
                 this.variables[1].deactivate();
                 this.variableWeights[2] = 10.0;
@@ -550,7 +556,7 @@ public class Theory4 extends Theory {
 
                 q2Offset = Math.log10(q2Offset);
                 this.variableWeights[7] = 10.00 + q2Offset;
-            } else if (this.strategy.name == "T4Solar") {
+            } else if (this.strategy.name.equalsIgnoreCase("T4Solar")) {
                 this.variables[0].deactivate();
                 this.variables[1].deactivate();
                 this.variableWeights[2] = 10.0;
@@ -583,7 +589,7 @@ public class Theory4 extends Theory {
 
                 q2Offset = Math.log10(q2Offset);
                 this.variableWeights[7] = 10.00 + q2Offset;
-            } else if (this.strategy.name == "T4Gold") {
+            } else if (this.strategy.name.equalsIgnoreCase("T4Gold")) {
                 this.variables[0].deactivate();
                 this.variables[1].deactivate();
                 this.variableWeights[2] = 10.0;
@@ -610,7 +616,7 @@ public class Theory4 extends Theory {
                     this.variableWeights[6] = 11.10 + (0.028 * (this.variables[i].level % 10) - 0.12);
                 }
 
-            } else if (this.strategy.name == "T4C3") {
+            } else if (this.strategy.name.equalsIgnoreCase("T4C3")) {
                 this.variables[0].deactivate();
                 this.variables[1].deactivate();
                 this.variableWeights[2] = 10.0;
@@ -619,7 +625,7 @@ public class Theory4 extends Theory {
                 this.variables[5].deactivate();
                 this.variableWeights[6] = 10.0;
                 this.variableWeights[7] = 10.0;
-            } else if (this.strategy.name == "T4Baby" || this.strategy.name == "T4NoMS") {
+            } else if (this.strategy.name.equalsIgnoreCase("T4Baby") || this.strategy.name.equalsIgnoreCase(("T4NoMS"))) {
                 this.variableWeights[0] = 11.0;
                 this.variableWeights[1] = 10.0;
                 this.variableWeights[2] = 10.0;
@@ -630,7 +636,7 @@ public class Theory4 extends Theory {
                 this.variableWeights[7] = 10.0;
             }
 
-            if (this.publicationMultiplier > this.coastingPub) {
+            if (this.publicationMultiplier > this.coastingPubs[3]) {
                 for (int j = 0; j < this.variables.length; j++) {
                     this.variables[j].deactivate(); // autobuy for the variable off.
                     this.isCoasting = true;

@@ -341,7 +341,13 @@ public class Theory6 extends Theory {
 
     }
 
-    public void runEpoch() {
+    public void runUntilPublish() {
+        while(this.finishCoasting == false) {
+            this.runEpoch();
+        }
+    }
+
+    private void runEpoch() {
         for (int i = 0; i < this.variables.length; i++) {
             this.variables[i].update();
         }
@@ -365,7 +371,7 @@ public class Theory6 extends Theory {
         for (int i = 0; i < this.variables.length; i++) {
             this.variables[i].update();
             if (this.variables[i].isActive == 1) {
-                while (this.variables[i].cost < this.publicationMark * 0.60) {
+                while (this.variables[i].cost < this.publicationMark * 0.90) {
                     this.variables[i].level += 1;
                     this.variables[i].update();
 
@@ -397,7 +403,7 @@ public class Theory6 extends Theory {
 
         if (this.variables[i].isActive == 1) {
 
-            if (this.strategy.name == "T6Play") {
+            if (this.strategy.name.equalsIgnoreCase("T6Play")) {
                 // variableWeights = { 11, 10.0, 10.5, 9.8, 11, 10, 1000, 1000, 10 };
 
                 if (this.maxRho < this.publicationMark * 0.981) {
@@ -416,7 +422,7 @@ public class Theory6 extends Theory {
 
                 this.variableWeights[0] = 10.9 + (0.022 * (this.variables[0].level % 10) - 0.12);
 
-            } else if (this.strategy.name == "T6C5d") {
+            } else if (this.strategy.name.equalsIgnoreCase("T6C5d")) {
                 this.variableWeights[0] = 11 + (0.018 * (this.variables[0].level % 10) - 0.11);
                 this.variableWeights[2] = 11.0;
                 this.variableWeights[3] = 10.0;
@@ -425,7 +431,7 @@ public class Theory6 extends Theory {
                 this.variables[6].deactivate();
                 this.variables[7].deactivate();
 
-            } else if (this.strategy.name == "T6C125d") {
+            } else if (this.strategy.name.equalsIgnoreCase("T6C125d")) {
                 this.variableWeights[0] = 11 + (0.018 * (this.variables[0].level % 10) - 0.11);
                 this.variableWeights[2] = 11.0;
                 this.variableWeights[3] = 10.0;
@@ -435,7 +441,7 @@ public class Theory6 extends Theory {
                 this.variables[6].deactivate();
                 this.variables[7].deactivate();
 
-            } else if (this.strategy.name == "T6C5") {
+            } else if (this.strategy.name.equalsIgnoreCase("T6C5")) {
                 this.variableWeights[0] = 10;
                 this.variableWeights[1] = 10;
                 this.variableWeights[2] = 10;
@@ -445,7 +451,7 @@ public class Theory6 extends Theory {
                 this.variables[5].deactivate();
                 this.variables[6].deactivate();
                 this.variables[7].deactivate();
-            } else if (this.strategy.name == "T6C125") {
+            } else if (this.strategy.name.equalsIgnoreCase("T6C125")) {
                 this.variableWeights[0] = 10;
                 this.variableWeights[1] = 10;
                 this.variableWeights[2] = 10;
@@ -455,7 +461,7 @@ public class Theory6 extends Theory {
                 this.variableWeights[5] = 10;
                 this.variables[6].deactivate();
                 this.variables[7].deactivate();
-            } else if (this.strategy.name == "T6Baby") {
+            } else if (this.strategy.name.equalsIgnoreCase("T6Baby")) {
                 this.variableWeights[0] = 11;
                 this.variableWeights[1] = 10;
                 this.variableWeights[2] = 11;
@@ -478,7 +484,7 @@ public class Theory6 extends Theory {
                     this.variableWeights[8] = 15;
                 }
             }
-            if (this.publicationMultiplier > this.coastingPub) {
+            if (this.publicationMultiplier > this.coastingPubs[5]) {
                 for (int j = 0; j < this.variables.length; j++) {
                     this.variables[j].deactivate(); // autobuy for the variable off.
                     this.isCoasting = true;

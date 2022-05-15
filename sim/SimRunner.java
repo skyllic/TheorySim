@@ -5,21 +5,24 @@ import java.util.ArrayList;
 import UI.Printer;
 import sim.strategy.*;
 import sim.theory.ITheory;
+import sim.theory.Theory;
 import sim.theory.Theory1;
 import sim.theory.TheoryFactory;
 
-/**A class for Running different types of sim. E.g. individual theory sims, combined sims etc.*/
+/**
+ * A class for Running different types of sim. E.g. individual theory sims,
+ * combined sims etc.
+ */
 public class SimRunner {
 
   public static ArrayList<Strategy> strategies = new ArrayList<Strategy>();
- 
 
   public SimRunner() {
 
     SimRunner.addAllKnownStrategies();
   }
 
-  /**A collection of all known strategies the sim supports. */
+  /** A collection of all known strategies the sim supports. */
   public static void addAllKnownStrategies() {
     SimRunner.strategies.add(new Strategy("T1Play", 1, "active"));
     SimRunner.strategies.add(new Strategy("T1Play2", 1, "active"));
@@ -38,21 +41,21 @@ public class SimRunner {
     SimRunner.strategies.add(new Strategy("T3XS", 3, "active"));
     SimRunner.strategies.add(new Strategy("T3OldI", 3, "idle"));
 
-    SimRunner.strategies.add(new Strategy("T4PlaySpqcey", 4,  "active"));
+    SimRunner.strategies.add(new Strategy("T4PlaySpqcey", 4, "active"));
     SimRunner.strategies.add(new Strategy("T4SolC", 4, "active"));
     SimRunner.strategies.add(new Strategy("T4Sol2", 4, "active"));
     SimRunner.strategies.add(new Strategy("T4Solar", 4, "active"));
     SimRunner.strategies.add(new Strategy("T4Gold", 4, "active"));
     SimRunner.strategies.add(new Strategy("T4C3d", 4, "active"));
-    SimRunner.strategies.add(new Strategy("T4C3",4,  "idle"));
+    SimRunner.strategies.add(new Strategy("T4C3", 4, "idle"));
     SimRunner.strategies.add(new Strategy("T4Baby", 4, "active"));
     SimRunner.strategies.add(new Strategy("T4NoMS", 4, "active"));
 
     SimRunner.strategies.add(new Strategy("T5Play", 5, "active"));
     SimRunner.strategies.add(new Strategy("T5", 5, "idle"));
     SimRunner.strategies.add(new Strategy("T5PlayI", 5, "idle"));
-    
-    SimRunner.strategies.add(new Strategy("T6Play", 6,  "active"));
+
+    SimRunner.strategies.add(new Strategy("T6Play", 6, "active"));
     SimRunner.strategies.add(new Strategy("T6C5d", 6, "active"));
     SimRunner.strategies.add(new Strategy("T6C125d", 6, "active"));
     SimRunner.strategies.add(new Strategy("T6C5", 6, "idle"));
@@ -71,7 +74,7 @@ public class SimRunner {
 
     SimRunner.strategies.add(new Strategy("WSPlay2", 10, "active"));
     SimRunner.strategies.add(new Strategy("WSPlay", 10, "active"));
-    SimRunner.strategies.add(new Strategy("WSPd", 10,  "active"));
+    SimRunner.strategies.add(new Strategy("WSPd", 10, "active"));
     SimRunner.strategies.add(new Strategy("WSPStC1", 10, "idle"));
     SimRunner.strategies.add(new Strategy("WSP", 10, "idle"));
 
@@ -80,13 +83,20 @@ public class SimRunner {
     SimRunner.strategies.add(new Strategy("SLst", 11, "idle"));
     SimRunner.strategies.add(new Strategy("SLd", 11, "active"));
 
+    SimRunner.strategies.add(new Strategy("CSR2MS", 12, "active"));
+    SimRunner.strategies.add(new Strategy("CSR2MST", 12, "active"));
     SimRunner.strategies.add(new Strategy("CSRPlay", 12, "active"));
-    SimRunner.strategies.add(new Strategy("CSR2d", 12, "active"));
     SimRunner.strategies.add(new Strategy("CSR2", 12, "idle"));
+    SimRunner.strategies.add(new Strategy("CSR2d", 12, "active"));
 
     SimRunner.strategies.add(new Strategy("BTPlay", 13, "active"));
     SimRunner.strategies.add(new Strategy("BTd", 13, "active"));
-    SimRunner.strategies.add(new Strategy("BT", 13,  "idle"));
+    SimRunner.strategies.add(new Strategy("BT", 13, "idle"));
+
+    SimRunner.strategies.add(new Strategy("EFBaby", 14,"active"));
+    SimRunner.strategies.add(new Strategy("EF", 14,"idle"));
+    SimRunner.strategies.add(new Strategy("EFd", 14,"active"));
+    
   }
 
   /**
@@ -110,44 +120,139 @@ public class SimRunner {
    * @param endPub        - Goal rho in log format.
    * @return - Total time required in hours.
    */
-  public static double runChainSims(int studentNumber, int theoryNumber, double startPub, double endPub, String flag) {
+  public static double[] runChainSims(int studentNumber, int theoryNumber, double startPub, double endPub, String flag) {
 
     double totalTime = 0;
     double currentPub = startPub;
-    ArrayList<Summary> summaries;
+    ArrayList<Summary> summaries = new ArrayList<Summary>();
     while (currentPub < endPub) {
-      if(flag.contains("print=true")) {
+      if (flag.contains("print=true")) {
         summaries = runDetailedSim(studentNumber, theoryNumber, currentPub, true, flag);
       } else {
         summaries = runDetailedSim(studentNumber, theoryNumber, currentPub, false, flag);
       }
-      
+
       currentPub = currentPub + summaries.get(0).tauGain;
       totalTime = totalTime + summaries.get(0).pubTime;
     }
 
-    System.out.println(totalTime);
     
-    return totalTime;
+    double normalisedTime = totalTime / (currentPub - startPub) * (endPub - startPub);
+    double[] result = {totalTime, currentPub, normalisedTime};
+
+    System.out.println(normalisedTime);
+
+    return result;
   }
 
-  /**This method is used to run a specific strategy from one theory. It will not run other strategies not specified.
-   * If a non-existent strategy is specified, it will run sims for all known strategies for that particular theory.
+  public static void runDistributionComparison(double[] dist1, double[] dist2, int studentNumber1, int studentNumber2) {
+
+    double[] totalTime1 = new double[8];
+    double[] totalTime2 = new double[8];
+    double sumTime1 = 0;
+    double sumTime2 = 0;
+    for(int i = 0; i < dist1.length; i++) {
+      totalTime1[i] = SimRunner.runChainSims(studentNumber2, i+1, 0, dist1[i], "print=true,strategy=first")[0];
+      totalTime2[i] = SimRunner.runChainSims(studentNumber1, i+1, 0, dist2[i], "print=true,strategy=first")[0];
+    } 
+
+    for(int i = 0; i < totalTime1.length; i++) {
+      System.out.println(totalTime1[i] + "\t" + totalTime2[i]);
+    }
+
+    for(int i = 0; i < totalTime2.length; i++) {
+      sumTime1 += totalTime1[i];
+      sumTime2 += totalTime2[i];
+    }
+
+    System.out.println(sumTime1 - sumTime2);
+
+    
+  }
+
+  public static void runIntervalSim(int studentNumber, int theoryNumber, double startPub, double endPub, double interval, String flag) {
+    double totalTime = 0;
+    double currentPub = startPub;
+    ArrayList<Summary> summaries = new ArrayList<Summary>();
+    ArrayList<Double> data = new ArrayList<Double>();
+    while (currentPub < endPub) {
+      if (flag.contains("print=true")) {
+        summaries = runDetailedSim(studentNumber, theoryNumber, currentPub, true, flag);
+      } else {
+        summaries = runDetailedSim(studentNumber, theoryNumber, currentPub, false, flag);
+      }
+
+      currentPub = currentPub + interval;
+      totalTime = totalTime + summaries.get(0).pubTime;
+
+      if(flag.contains("taudot")) {
+        data.add(summaries.get(0).tauPerHour);
+      } else if(flag.contains("pubmulti")) {
+        data.add(summaries.get(0).pubMulti);
+      }
+    }
+
+    for(int i = 0; i < data.size(); i++) {
+      System.out.println(data.get(i));
+    }
+    
+
+    
+  }
+
+  public static void runStrategicSim(int studentNumber, int theoryNumber, double start, double end, String flag) {
+    double bestK1 = 0;
+    double bestK2 = 0;
+    double bestK3 = 0;
+    double bestK4 = 0;
+    double bestK5 = 0;
+    double bestK6 = 0;
+    double bestK7 = 0;
+    double bestK8 = 0;
+  
+    double bestTotalTime = 2222222220.0;
+    
+    for(double i = 10.0; i < 11; i = i + 0.05) {
+      for(double j = 10.0; j < 11; j = j + 0.05) {
+        Theory.K_value[0] = i;
+        Theory.K_value[1] = j;
+        double[] result = new double[2];
+        
+        double normalisedTime = SimRunner.runChainSims(studentNumber, theoryNumber, start, end, flag)[2];
+        
+        if(normalisedTime < bestTotalTime) {
+          bestTotalTime = normalisedTime;
+          bestK1 = Theory.K_value[0];
+          bestK2 = Theory.K_value[1];
+        }
+      }
+    }
+
+    System.out.println(bestTotalTime);
+    System.out.println(bestK1);
+    System.out.println(bestK2);
+  }
+
+  /**
+   * This method is used to run a specific strategy from one theory. It will not
+   * run other strategies not specified.
+   * If a non-existent strategy is specified, it will run sims for all known
+   * strategies for that particular theory.
    */
   public static void runSpecificSim(int studentNumber, int theoryNumber, double pubMark, String flag) {
-    if(flag.contains("print=false")) {
+    if (flag.contains("print=false")) {
       runDetailedSim(studentNumber, theoryNumber, pubMark, false, flag);
     } else {
       runDetailedSim(studentNumber, theoryNumber, pubMark, true, flag);
     }
-    
+
   }
 
   public static void appendStrategies(int theoryNumber, String flag) {
-    for(int i = 0; i < SimRunner.strategies.size(); i++) {
-      if(SimRunner.strategies.get(i).theoryNumber == theoryNumber) {
-        if(flag.contains(SimRunner.strategies.get(i).name.toLowerCase())) {
-          
+    for (int i = 0; i < SimRunner.strategies.size(); i++) {
+      if (SimRunner.strategies.get(i).theoryNumber == theoryNumber) {
+        if (flag.contains(SimRunner.strategies.get(i).name.toLowerCase())) {
+
         }
       }
     }
@@ -155,32 +260,70 @@ public class SimRunner {
 
   private static ArrayList<Strategy> addWorkingStrategies(int theoryNumber) {
     ArrayList<Strategy> workingStrategies = new ArrayList<>();
-    for(int i = 0; i < SimRunner.strategies.size(); i++) {
-      if(SimRunner.strategies.get(i).theoryNumber == theoryNumber) {
-        workingStrategies.add(SimRunner.strategies.get(i));
+    for (int i = 0; i < SimRunner.strategies.size(); i++) {
+      if (SimRunner.strategies.get(i).theoryNumber == theoryNumber) {
+        if (SimRunner.strategies.get(i).name.toLowerCase().contains("baooy")) {
+
+        } else {
+          workingStrategies.add(SimRunner.strategies.get(i));
+        }
+
       }
-      
+
     }
     return workingStrategies;
   }
 
-  private static ITheory runSims(int theoryNumber, double pubMark, ArrayList<Strategy> strategies) {
+  private static ArrayList<Summary> runSims(int studentNumber, int theoryNumber, double pubMark, ArrayList<Strategy> strategies, String flag) {
     ArrayList<Summary> summmaryStrategies = new ArrayList<Summary>();
     ITheory theory = TheoryFactory.createTheory(theoryNumber, pubMark);
-    for(Strategy strategy : strategies) {
-      
-      theory.setStrategy(strategy);
-      theory.runUntilPublish();
-      summmaryStrategies.add(theory.getSummary());
-      theory = TheoryFactory.createTheory(theoryNumber, pubMark);
-      
+
+    
+    
+    ArrayList<Strategy> tempStrategy = new ArrayList<Strategy>();
+    if(flag.contains("strategy=first")) {
+      tempStrategy.add(strategies.get(0));
+    } else if(flag.contains("strategy=second")) {
+      tempStrategy.add(strategies.get(1));
+    } else if(flag.contains("strategy=third")) {
+      tempStrategy.add(strategies.get(2));
+    }
+    else if(flag.contains("strategy=fourth")) {
+      tempStrategy.add(strategies.get(3));
+    }else {
+      tempStrategy = strategies;
+    }
+    Summary currentBestSummary = new Summary();
+
+    for (Strategy strategy : tempStrategy) {
+      double currentMaxTauPerHour = 0;
+      for (int i = 0; i < 1; i++) {
+        theory.setStrategy(strategy);
+        theory.setStudent(studentNumber);
+        theory.runUntilPublish();
+        
+
+        double tauPerHour = theory.getSummary().tauPerHour;
+        if (tauPerHour > currentMaxTauPerHour) {
+          currentMaxTauPerHour = tauPerHour;
+          currentBestSummary = theory.getSummary();
+        }
+
+        theory = TheoryFactory.createTheory(theoryNumber, pubMark);
+        if(theoryNumber < 9) {
+          theory.setCoastingPubs(theoryNumber - 1, theory.getCoastingPub(theoryNumber - 1) * 0.85);
+        } else {
+          theory.setCoastingPubs(theoryNumber - 1, theory.getCoastingPub(theoryNumber - 1) * 0.85);
+        }
+        
+      }
+      summmaryStrategies.add(currentBestSummary);
+
     }
 
     Printer.printSummaries(summmaryStrategies);
-  
-    
 
-    return theory;
+    return summmaryStrategies;
   }
 
   public static ArrayList<Summary> runDetailedSim(int studentNumber, int theoryNumber, double pubMark,
@@ -191,21 +334,18 @@ public class SimRunner {
     ArrayList<Strategy> workingStrategies = new ArrayList<>();
     ArrayList<Summary> summaries = new ArrayList<>();
 
-    addAllKnownStrategies();
-
     
 
     workingStrategies = SimRunner.addWorkingStrategies(theoryNumber);
-    
-    ITheory theory = TheoryFactory.createTheory(theoryNumber, pubMark);
-    theory = SimRunner.runSims(theory, workingStrategies);
-    
-  
 
+    
+    summaries = SimRunner.runSims(studentNumber, theoryNumber, pubMark, workingStrategies, flag);
+    
 
     // double finish = System.currentTimeMillis();
     // double seconds = (finish - start) / 1000.0;
     // System.out.println("Elapsed time: " + seconds + " seconds.");
+    workingStrategies = new ArrayList<Strategy>();
     return summaries;
   }
 
@@ -370,7 +510,5 @@ public class SimRunner {
     printSummaries(summaries, "nice");
     return summaries;
   }
-
-  
 
 }

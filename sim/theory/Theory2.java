@@ -383,6 +383,12 @@ public class Theory2 extends Theory {
 
     }
 
+    public void runUntilPublish() {
+        while(this.finishCoasting == false) {
+            this.runEpoch();
+        }
+    }
+
     public void runEpoch() {
         for (int i = 0; i < this.variables.length; i++) {
             this.variables[i].update();
@@ -444,32 +450,18 @@ public class Theory2 extends Theory {
 
         if (this.variables[i].isActive == 1) {
 
-            if (this.strategy.name == "T2AI") {
-                if (this.publicationMultiplier > 800) {
-                    this.variables[3].deactivate();
-                    this.variables[7].deactivate();
-                }
-                if (this.publicationMultiplier > 800) {
-                    this.variables[2].deactivate();
-                    this.variables[6].deactivate();
-                }
-                if (this.publicationMultiplier > 800) {
-                    this.variables[1].deactivate();
-                    this.variables[5].deactivate();
-                }
-                if (this.publicationMultiplier > 2000) {
-                    this.variables[0].deactivate();
-                    this.variables[4].deactivate();
-                }
+            if (this.strategy.name.equalsIgnoreCase("T2AI")) {
+                
 
-                this.variableWeights[i] = 10 + (0.030 * (this.variables[i].level % 10) - 0.16);
+                this.variableWeights[i] = 10 + (0.04 * (this.variables[i].level % 10) - 0.05);
+                
 
-            } else if (this.strategy.name == "T2") {
+            } else if (this.strategy.name.equalsIgnoreCase("T2")) {
                 this.variableWeights[i] = 10.0;
-            } else if(this.strategy.name == "T2MS") {
+            } else if(this.strategy.name.equalsIgnoreCase("T2MS")) {
                     this.variableWeights[i] = 10.0;
                 }
-            } else if(this.strategy.name == "T2NoMS") {
+            } else if(this.strategy.name.equalsIgnoreCase("T2NoMS")) {
                 this.variableWeights[i] = 10.0;
 
                 
@@ -477,7 +469,7 @@ public class Theory2 extends Theory {
 
         
 
-        if (this.publicationMultiplier > this.coastingPub) {
+        if (this.publicationMultiplier > coastingPub) {
           
             for (int j = 0; j < this.variables.length; j++) {
                 this.variables[j].deactivate(); // autobuy for the variable off.

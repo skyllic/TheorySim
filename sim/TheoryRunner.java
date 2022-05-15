@@ -1,11 +1,16 @@
 package sim;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.Map;
 
 import javafx.stage.Stage;
-
+import sim.data.DataGenerator;
+import sim.theory.Euler_Formula;
+import sim.theory.ITheory;
+import sim.theory.Theory;
+import sim.theory.TheoryFactory;
 import sim.upgrades.Variable;
 
 /**
@@ -16,14 +21,14 @@ public class TheoryRunner {
 
     public static final int NUMBER_OF_THEORIES = 10;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
         if (args.length == 3) {
             try {
                 int studentNumber = Integer.parseInt(args[0]);
                 int theoryNumber = Integer.parseInt(args[1]);
                 double pubMark = Double.parseDouble(args[2]);
-                SimRunner.runDetailedSim(studentNumber, theoryNumber, pubMark, true, "stra=0");
+                SimRunner.runDetailedSim(studentNumber, theoryNumber, pubMark, true, "strategy=0");
             } catch (Exception e) {
                 // TODO: handle exception
             }
@@ -60,53 +65,32 @@ public class TheoryRunner {
         //SimRunner.runChainSims(300, 1, 300, 1300, "print=true,strategy=0");
       
         //simAllStrategies();
-      
-        SimRunner.runDetailedSim(300, 1, 500, true, "");
-        /**
-        SimRunner.runDetailedSim(299, 1, 618, true, "strategy=T1Pla2, ").get(0);
-        SimRunner.runDetailedSim(299, 2, 630+Math.log10(8.78), true, "strategy=T2I, ").get(0);
-        SimRunner.runDetailedSim(299,3, 626+Math.log10(3.09), true, "strategy=T3Ply2, ").get(0);
-        SimRunner.runDetailedSim(299, 4, 727+Math.log10(3.71), true, "strategy=T4PlySpqcey, ").get(0);
-        SimRunner.runDetailedSim(299, 5, 939+Math.log10(1.63), true, "strategy=T5Pay, ").get(0);
-        SimRunner.runDetailedSim(299, 6, 1107+Math.log10(1.8), true, "strategy=T6Pay, ").get(0);
-        SimRunner.runDetailedSim(299, 7, 580+Math.log10(4.97), true, "strategy=T7PlaSpqcey, ").get(0);
-        SimRunner.runDetailedSim(299, 8, 497+Math.log10(5.79), true, "strategy=T8SoarS, ").get(0);*/
 
-        //SimRunner.runDetailedSim(300, 7, 644+Math.log10(9.91), true, "strategy");
+        SimRunner simRunner = new SimRunner();
+
+        
+        //SimRunner.runStrategicSim(300, 12, 10, 45, "strategy=first");
+        //double[] dist1 = new double[] {671, 588, 681, 772.8, 984, 1194, 628.8, 535};
+        //double[] dist2 = new double[] {631, 631, 629, 727.6, 942, 1115.3, 590.1, 508.5};
+        //double[] dist2 = new double[] {641, 608.5, 667, 773.7, 953.6, 1214, 640, 528.5};
+      
+        //SimRunner.runDistributionComparison(dist1, dist2, 315, 313);
+        //Theory theory = new Theory(1, 610);
+        
+        SimRunner.runChainSims(300, 14, 1,50, "strategy=first");
+        //SimRunner.runStrategicSim(300, 14, 0, 50, "print=true,strategy=first");
+        //SimRunner.runDetailedSim(300, 1, 600 + Math.log10(6.22),
+        // true, "strategy=frst");
+       //double totalTime = SimRunner.runChainSims(300, 1, 600, 700, 
+       //"print=true,strategy=second")[0];
+       
+       
+  
+       
         Summary summary;
         ArrayList<Double> tau_per_hours = new ArrayList<>();
 
-        /**
-        for(int i = 150; i < 700; i++) {
-            summary = SimRunner.runDetailedSim(308, 1, i, true, "strategy=T1Play").get(0);
-            tau_per_hours.add(summary.longestIdlePeriod);
-            
-        }
-        for(Double element : tau_per_hours) {
-            System.out.println(element);
-        }*/
-
        
-        /**
-        for(int i = 0; i < 200; i++) {
-            if(i < 175) {
-                summary = SimRunner.runDetailedSim(25, 6, i, true, "strategy=T6Baby").get(0);
-            } else {
-                //65 students - 175 tau, 305 students, 1175 tau, 240 students diff, 1000 tau diff
-                // ratio = 1.2 tau/student
-                summary = SimRunner.runDetailedSim(((int) Math.round(0.24 * i + 23)), 6, i, true, "strategy=T6Play").get(0);
-            }
-            //summary = SimRunner.runDetailedSim(25, 8, i, true, "strategy=T8Baby").get(0);
-            tau_per_hours.add(summary.tauPerHour);
-        }
-
-        for(int i = 0; i < tau_per_hours.size(); i++) {
-            System.out.println(tau_per_hours.get(i));
-        }*/
-
-        //double totalTime = SimRunner.runLongSim(300, 1, 600 + Math.log10(1.00), 700, "strategy=T1Play2");
-   
-        //System.out.println(totalTime);
 
         double i = 1000;
         double totalTime1 = 0;

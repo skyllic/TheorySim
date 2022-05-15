@@ -147,6 +147,12 @@ public class Sequential_Limit extends Theory {
 
     }
 
+    public void runUntilPublish() {
+        while(this.finishCoasting == false) {
+            this.runEpoch();
+        }
+    }
+
    /**
      * Finds the best variable to buy according to variable weightings of the
      * strategy. Then waits to
@@ -237,7 +243,7 @@ public class Sequential_Limit extends Theory {
         
 
         if (this.variables[i].isActive == 1) {
-            if (this.strategy.name == "SLPlay2") {
+            if (this.strategy.name.equalsIgnoreCase("SLPlay2")) {
 
                 if (this.publicationMultiplier > 0.1) {
                     a1Penalty = 0.00;
@@ -297,7 +303,7 @@ public class Sequential_Limit extends Theory {
                 }
             }
 
-            else if (this.strategy.name == "SLPlay") {
+            else if (this.strategy.name.equalsIgnoreCase("SLPlay")) {
 
                 if (this.publicationMultiplier > 0.1) {
                     a1Penalty = 0.00;
@@ -356,13 +362,13 @@ public class Sequential_Limit extends Theory {
                     this.variables[3].deactivate();
                 }
 
-            } else if (this.strategy.name == "SLd") {
+            } else if (this.strategy.name.equalsIgnoreCase("SLd")) {
                 this.variableWeights[0] = 11.0;
                 this.variableWeights[0] = 10.0;
                 this.variableWeights[0] = 11.0;
                 this.variableWeights[0] = 10.0;
 
-            } else if (this.strategy.name == "SLst") {
+            } else if (this.strategy.name.equalsIgnoreCase("SLst")) {
                 this.variableWeights[0] = 10.0;
                 this.variableWeights[0] = 10.0;
                 this.variableWeights[0] = 10.0;
@@ -375,7 +381,7 @@ public class Sequential_Limit extends Theory {
             }
 
         }
-        if (this.publicationMultiplier > this.coastingPub) {
+        if (this.publicationMultiplier > this.coastingPubs[10]) {
             for (int j = 0; j < this.variables.length; j++) {
                 this.variables[j].deactivate(); // autobuy for the variable off.
                 this.isCoasting = true;

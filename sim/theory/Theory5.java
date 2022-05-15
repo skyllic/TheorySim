@@ -134,6 +134,12 @@ public class Theory5 extends Theory {
 
     }
 
+    public void runUntilPublish() {
+        while(this.finishCoasting == false) {
+            this.runEpoch();
+        }
+    }
+
     public void runEpoch() {
         for (int i = 0; i < this.variables.length; i++) {
             this.variables[i].update();
@@ -199,7 +205,7 @@ public class Theory5 extends Theory {
 
         if (this.variables[i].isActive == 1) {
 
-            if (this.strategy.name == "T5Play") {
+            if (this.strategy.name.equalsIgnoreCase("T5Play")) {
 
                 //double q1DefaultWeight = 10.8;
                 variableWeights[1] = 10.0;
@@ -248,7 +254,7 @@ public class Theory5 extends Theory {
                 }
                 variableWeights[0] = 10.8 + (0.018 * (this.variables[0].level % 10) - 0.11) + q1Adjustment;
 
-            } else if (this.strategy.name == "T5") {
+            } else if (this.strategy.name.equalsIgnoreCase("T5")) {
 
                 this.variableWeights[0] = 10.0;
                 this.variableWeights[1] = 10.0;
@@ -256,7 +262,7 @@ public class Theory5 extends Theory {
                 this.variableWeights[3] = 10.0;
                 this.variableWeights[4] = 10.0;
 
-            } else if(this.strategy.name == "T5PlayI") {
+            } else if(this.strategy.name.equalsIgnoreCase("T5PlayI")) {
                 this.variableWeights[0] = 10.0;
                 this.variableWeights[1] = 10.0;
                 this.variableWeights[2] = 10.0;
@@ -269,7 +275,7 @@ public class Theory5 extends Theory {
 
         }
 
-        if (this.publicationMultiplier > this.coastingPub) {
+        if (this.publicationMultiplier > this.coastingPubs[4]) {
             for (int j = 0; j < this.variables.length; j++) {
                 this.variables[j].deactivate(); // autobuy for the variable off.
                 this.isCoasting = true;

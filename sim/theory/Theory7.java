@@ -138,6 +138,12 @@ public class Theory7 extends Theory {
 
     }
 
+    public void runUntilPublish() {
+        while(this.finishCoasting == false) {
+            this.runEpoch();
+        }
+    }
+
     public void runEpoch() {
         for (int i = 0; i < this.variables.length; i++) {
             this.variables[i].update();
@@ -201,7 +207,7 @@ public class Theory7 extends Theory {
         if (this.variables[i].isActive == 1) {
 
             // variableWeights = {10.6,10,10,10,11.0,10.6,10.0};
-            if (this.strategy.name == "T7Play") {
+            if (this.strategy.name.equalsIgnoreCase("T7Play")) {
                 this.variableWeights[0] = 10.6 + (0.018 * (this.variables[0].level % 10) - 0.11);
                 this.variables[1].deactivate();
                 this.variables[2].deactivate();
@@ -217,7 +223,7 @@ public class Theory7 extends Theory {
 
                 
 
-            } else if(this.strategy.name == "T7PlaySpqcey") {
+            } else if(this.strategy.name.equalsIgnoreCase("T7PlaySpqcey")) {
                 this.variableWeights[0] = 10.6 + (0.028 * (this.variables[0].level % 10) - 0.11);
                 this.variables[1].deactivate();
                 this.variables[2].deactivate();
@@ -226,7 +232,7 @@ public class Theory7 extends Theory {
                 this.variableWeights[5] = 10.6;
                 this.variableWeights[6] = 10.0;
 
-            } else if(this.strategy.name == "T7C456") {
+            } else if(this.strategy.name.equalsIgnoreCase("T7C456")) {
                 this.variableWeights[0] = 10.0;
                 this.variables[1].deactivate();
                 this.variables[2].deactivate();
@@ -238,7 +244,7 @@ public class Theory7 extends Theory {
 
         }
 
-        if (this.publicationMultiplier > this.coastingPub) {
+        if (this.publicationMultiplier > this.coastingPubs[6]) {
             for (int j = 0; j < this.variables.length; j++) {
                 this.variables[j].deactivate(); // autobuy for the variable off.
                 this.isCoasting = true;

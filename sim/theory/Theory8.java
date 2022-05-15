@@ -62,7 +62,7 @@ public class Theory8 extends Theory {
         this.milestoneLevels[2] = 3;
         this.milestoneLevels[3] = 3;
 
-        this.milestoneSwapCheck();
+       
         this.resetStateDefault();
 
         this.dt[0] = 0.02; // lorentz
@@ -85,11 +85,11 @@ public class Theory8 extends Theory {
      */
     public void moveTick() {
         //
-        if(this.strategy.name == "T8SolarS" && (this.tickCount) % 335 == 0 ) {
+        if(this.strategy.name.equalsIgnoreCase("T8SolarS") && (this.tickCount) % 335 == 0 ) {
             this.resetStateDefault();
-        } else if(this.strategy.name == "T8MS2" && (this.tickCount) % 335 == 0) {
+        } else if(this.strategy.name.equalsIgnoreCase("T8MS2") && (this.tickCount) % 335 == 0) {
             this.resetStateDefault();
-        } else if(this.strategy.name == "T8Baby" && (this.tickCount) % 335 == 0 
+        } else if(this.strategy.name.equalsIgnoreCase("T8Baby") && (this.tickCount) % 335 == 0 
             && this.maxRho > 40 && this.maxRho < preE60SwapTau
                  && this.publicationMark > 40 && this.publicationMark < preE60SwapTau) {
             this.resetStateDefault();
@@ -338,6 +338,12 @@ public class Theory8 extends Theory {
 
     }
 
+    public void runUntilPublish() {
+        while(this.finishCoasting == false) {
+            this.runEpoch();
+        }
+    }
+
     public void runEpoch() {
         for (int i = 0; i < this.variables.length; i++) {
             this.variables[i].update();
@@ -402,7 +408,7 @@ public class Theory8 extends Theory {
 
         if (this.variables[i].isActive == 1) {
 
-            if (this.strategy.name == "T8Play") {
+            if (this.strategy.name.equalsIgnoreCase("T8Play")) {
 
                 // this.variableWeights[0] = 11;
                 this.variableWeights[1] = 10.0;
@@ -412,7 +418,7 @@ public class Theory8 extends Theory {
 
                 this.variableWeights[0] = 10.9 + (0.018 * (this.variables[0].level % 10) - 0.11);
 
-            } else if(this.strategy.name == "T8SolarS") {
+            } else if(this.strategy.name.equalsIgnoreCase("T8SolarS")) {
                 this.variableWeights[1] = 10.0;
                 this.variableWeights[2] = 10.4;
                 this.variableWeights[3] = 10.0;
@@ -420,7 +426,7 @@ public class Theory8 extends Theory {
 
                 this.variableWeights[0] = 10.9 + (0.018 * (this.variables[0].level % 10) - 0.11);
             } 
-            else if(this.strategy.name == "T8MS2") {
+            else if(this.strategy.name.equalsIgnoreCase("T8MS2")) {
                 // this.variableWeights[0] = 11;
                 this.variableWeights[1] = 10.0;
                 this.variableWeights[2] = 10.4;
@@ -429,7 +435,7 @@ public class Theory8 extends Theory {
 
                 this.variableWeights[0] = 10.9 + (0.030 * (this.variables[0].level % 10) - 0.11);
             }
-            else if(this.strategy.name == "T8") {
+            else if(this.strategy.name.equalsIgnoreCase("T8")) {
                 this.variableWeights[0] = 10.0;
                 this.variableWeights[1] = 10.0;
                 this.variableWeights[2] = 10.0;
@@ -509,7 +515,7 @@ public class Theory8 extends Theory {
 
         }
 
-        if (this.publicationMultiplier > this.coastingPub) {
+        if (this.publicationMultiplier > this.coastingPubs[7]) {
             for (int j = 0; j < this.variables.length; j++) {
                 this.variables[j].deactivate(); // autobuy for the variable off.
                 this.isCoasting = true;

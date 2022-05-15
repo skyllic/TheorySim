@@ -146,8 +146,16 @@ public class Variable {
                     value = (Variable.subtract(Math.log10(10+this.level % 10) + 
                     Math.log10(2) * Math.floor(this.level/10), Math.log10(10)));
                 } else {
-                    value = (Variable.subtract(Math.log10(11+this.level % 10) + 
-                    Math.log10(2) * Math.floor((1+this.level)/10), Math.log10(10)));
+                    if(this.stepwiseParam[0] > 0) { // for more exotic stepwise variables (such as ones in sequential limit)
+                        value = Variable.subtract(Math.log10(this.stepwiseParam[1] / (this.stepwiseParam[0] - 1) + this.level % this.stepwiseParam[1]) + 
+                            Math.log10(this.stepwiseParam[0]) * Math.floor((this.level) / this.stepwiseParam[1]), 
+                            Math.log10(this.stepwiseParam[1] / (this.stepwiseParam[0] - 1)));
+                        value = Variable.add(value, Math.log10(1));
+                        return value;
+                    }
+
+                    value = (Variable.subtract(Math.log10(10+this.level % 10) + 
+                    Math.log10(2) * Math.floor((this.level)/10), Math.log10(9)));
                 }
             } else {
                 value = (Math.log10(this.valueBase) + this.level * Math.log10(this.valueScaling));    

@@ -58,7 +58,6 @@ public class Theory1 extends Theory {
 
         this.publicationMultiplier = Math.pow(10, 0.164 * (this.maxRho - this.publicationMark));
 
-        System.out.println(this.rho + "\t" + this.seconds + "\t" + this.variables[5].nextCost);
         /**if(this.maxRho - this.variables[5].nextCost < 0.01 && this.publicationMultiplier > 2.0) {
             this.isCoasting = true;
         }*/
@@ -322,7 +321,11 @@ public class Theory1 extends Theory {
             if (!isCoasting) {
                 double buyDelay = this.calculateBuyDelay(bestVarIndex);
                 this.idleUntil(this, this.variables[bestVarIndex].nextCost + buyDelay);
-                this.buyVariable(bestVarIndex);
+                
+                if(!isCoasting) {
+                    this.buyVariable(bestVarIndex);
+                }
+                
 
             } else {// is coasting, stop buying any variable.
                 
@@ -358,8 +361,7 @@ public class Theory1 extends Theory {
                 } catch (Exception e) {
 
                 }
-                // Adjust weightings, current best is 157.443 at 15.0392282
-                // current best is 155.283 at 15.039224
+           
             } else {
                 temp.add(10000.0);
             }
@@ -395,40 +397,6 @@ public class Theory1 extends Theory {
 
         return Multi;
 
-        /**
-         * if(bestVarIndex == 0) {
-         * if(this.variables[0].level % 10 == 0) {
-         * buyDelay = 0.568;
-         * } else if(this.variables[0].level % 10 == 1) {
-         * buyDelay = 0.602;
-         * } else if(this.variables[0].level % 10 == 2) {
-         * buyDelay = 0.633;
-         * } else if(this.variables[0].level % 10 == 3) {
-         * buyDelay = 0.663;
-         * } else if(this.variables[0].level % 10 == 4) {
-         * buyDelay = 0.690;
-         * } else if(this.variables[0].level % 10 == 5) {
-         * buyDelay = 0.716;
-         * } else if(this.variables[0].level % 10 == 6) {
-         * buyDelay = 0.740;
-         * } else if(this.variables[0].level % 10 == 7) {
-         * buyDelay = 0.763;
-         * }else if(this.variables[0].level % 10 == 8) {
-         * buyDelay = 0.785;
-         * }else if(this.variables[0].level % 10 == 9) {
-         * buyDelay = 0.806;
-         * }
-         * 
-         * } else if(bestVarIndex == 1) {
-         * buyDelay = 0.0453;
-         * } else if(bestVarIndex == 4) {
-         * buyDelay = 0.45;
-         * } else if(bestVarIndex == 5) {
-         * buyDelay = 0.005;
-         * }
-         * 
-         * return buyDelay;
-         */
 
     }
 
@@ -448,10 +416,10 @@ public class Theory1 extends Theory {
             double rhoDotDiff = rhoDotNew - rhoDotOld;
 
             double rhodotMultiplier = Math.pow(10, rhoDotDiff);
-            double coefficient = rhodotMultiplier * (2.0 - 1) / (2 * (rhodotMultiplier - 1));
+            double coefficient = rhodotMultiplier * (1.6 - 1) / (1.6 * (rhodotMultiplier - 1));
             coefficient = Math.log10(coefficient);
-            this.variableWeights[i] = 10 + 1.4*coefficient;
-            this.variableWeights[i] += 0.05;
+            this.variableWeights[i] = 10 + 1.2*coefficient;
+            
 
            
 
@@ -472,23 +440,23 @@ public class Theory1 extends Theory {
             double rhoDotDiff = rhoDotNew - rhoDotOld;
 
             double rhodotMultiplier = Math.pow(10, rhoDotDiff);
-            double coefficient = rhodotMultiplier * (2.0 - 1) / (2 * (rhodotMultiplier - 1));
+            double coefficient = rhodotMultiplier * (2.15 - 1) / (2.15 * (rhodotMultiplier - 1));
             coefficient = Math.log10(coefficient);
           
             if(i == 0) {
-                this.variableWeights[i] = 9.9 + 1.20 * coefficient;
+                this.variableWeights[i] = 9.9 + 1.45 * coefficient;
             } else if(i == 1) {
-                this.variableWeights[i] = 10.1 + 1.2 * coefficient;
+                this.variableWeights[i] = 10.1 + 1.1 * coefficient;
             } else if(i == 4) {
-                this.variableWeights[i] = 9.9 + 1.6 * coefficient;
+                this.variableWeights[i] = 9.9 + 1.65 * coefficient;
             } else if(i == 5) {
-                this.variableWeights[i] = 10.0 + 1.2 * coefficient;
+                this.variableWeights[i] = 10.0 + 1.0 * coefficient;
             }
             //this.variableWeights[0] = 11.2;
             //this.variableWeights[1] = 10.0;
             //this.variableWeights[4] = 11.1;
             //this.variableWeights[5] = 9.7;
-            this.variableWeights[i] += 0.05;
+            
             this.variables[2].deactivate();
             this.variables[3].deactivate();
 
@@ -566,31 +534,9 @@ public class Theory1 extends Theory {
             }
         }
 
-        /**
-         * this.variableWeights[0] = 11.1 + (0.018*(this.variables[0].level % 10) -
-         * 0.11);
-         * this.variableWeights[1] = 10.0;
-         * 
-         * if(this.variables[4].nextCost - this.variables[5].nextCost > &&
-         * this.variables[4].nextCost - this.variables[5].nextCost< 4) {
-         * this.variableWeights[4] = 11.9;
-         * } else if(this.variables[4].nextCost - this.variables[]){
-         * this.variableWeights[4] = 10.7;
-         * } else {
-         * 
-         * }
-         * 
-         * 
-         * 
-         * this.variableWeights[5] = 9.8;
-         * double term2 = this.variables[4].value + this.rho * 0.2;
-         * double term3 = this.variables[5].value + this.rho * 0.3;
-         * 
-         * double term2Ratio = term2 / Variable.add(term2, term3);
-         * double term3Ratio = term3 / Variable.add(term2, term3);
-         */
+       
 
-        if (this.publicationMultiplier > this.coastingPub) {
+        if (this.publicationMultiplier > this.coastingPubs[0]) {
             for (int j = 0; j < this.variables.length; j++) {
                 this.variables[j].deactivate(); // autobuy for the variable off.
                 this.isCoasting = true;

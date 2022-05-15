@@ -167,7 +167,11 @@ public class Theory3 extends Theory {
         }    
     }
 
-    
+    public void runUntilPublish() {
+        while(this.finishCoasting == false) {
+            this.runEpoch();
+        }
+    }
 
     public void runEpoch() {
         for(int i = 0; i < this.variables.length; i++) {
@@ -302,7 +306,7 @@ public class Theory3 extends Theory {
             if(this.variables[i].isActive == 1){
                 
     
-            if(this.strategy.name == "T3Play2") {
+            if(this.strategy.name.equalsIgnoreCase("T3Play2")) {
                 
                 
                 this.variableWeights[0] = 10.9 + (0.028*(this.variables[i].level % 10) - 0.14); //b1
@@ -311,6 +315,7 @@ public class Theory3 extends Theory {
                 
                 this.variableWeights[7] = 10.5; //c22 8x
                 this.variableWeights[10] = 10.1; //c32 auto
+                this.variableWeights[11] = 11.1;
 
                 //Sandbag on c12 since we don't need to buy them yet.
                 if(this.publicationMultiplier < 0.6) {
@@ -335,7 +340,7 @@ public class Theory3 extends Theory {
                     this.variableWeights[11] = 120.0;//After c12 autobuy, c33 off.   
                }
               
-               if(this.publicationMultiplier > 2.4) {
+               if(this.publicationMultiplier > this.coastingPubs[2]) {
                    this.variableWeights[1] = 10.1; // b2 autobuy
                    this.variableWeights[4] = 10.1;//c12 autobuy
                    this.variableWeights[7] = 13.1; //c22 OFF
@@ -347,7 +352,7 @@ public class Theory3 extends Theory {
 
                 
               
-            } else if(this.strategy.name == "T3PlayX") {
+            } else if(this.strategy.name.equalsIgnoreCase("T3PlayX")) {
 
                 this.variableWeights[0] = 11.00 + (0.032*(this.variables[i].level % 10) - 0.14); //b1
                 this.variableWeights[1] = 10.70 + (0.032*(this.variables[i].level % 10) - 0.14); //b2
@@ -378,7 +383,7 @@ public class Theory3 extends Theory {
                     
                     this.variableWeights[11] = 13.0;//After c12 autobuy, c33 off.   
                }
-               if(this.publicationMultiplier > 2.4) {
+               if(this.publicationMultiplier > this.coastingPubs[2]) {
                    this.variableWeights[1] = 10.1; // b2 autobuy
                    this.variableWeights[4] = 10.1;//c12 autobuy
                    this.variableWeights[7] = 16.1; //c22 OFF
@@ -387,7 +392,7 @@ public class Theory3 extends Theory {
                    this.variableWeights[2] = 10.1;//b3 autobuy as c23 is bad
                    this.variableWeights[8] = 10.1;//c23
                }
-            } else if(this.strategy.name == "T3XS") {
+            } else if(this.strategy.name.equalsIgnoreCase("T3XS")) {
                 this.variableWeights[0] = 10.0;
                 this.variableWeights[1] = 10.0;
                 this.variableWeights[2] = 10.0;
@@ -420,7 +425,7 @@ public class Theory3 extends Theory {
                 }
 
                
-            } else if(this.strategy.name == "T3PlayI") {
+            } else if(this.strategy.name.equalsIgnoreCase("T3PlayI")) {
                 this.variableWeights[1] = 10.0;
                 this.variableWeights[2] = 10.0;
 
@@ -436,7 +441,7 @@ public class Theory3 extends Theory {
                     this.variableWeights[4] = 10.0;
                     this.variables[11].deactivate();
                 }
-            } else if(this.strategy.name == "T3OldI") {
+            } else if(this.strategy.name.equalsIgnoreCase("T3OldI")) {
                 this.variableWeights[0] = 10.0;
                 this.variableWeights[1] = 10.0;
                 this.variableWeights[2] = 10.0;
@@ -450,7 +455,7 @@ public class Theory3 extends Theory {
                 this.variableWeights[10] = 10.0;
             }
         } 
-        if(this.publicationMultiplier > this.coastingPub) {
+        if(this.publicationMultiplier > this.coastingPubs[2]) {
             /**for(int j = 0; j < this.variables.length; j++) {
                 this.variables[j].deactivate();
             }*/
@@ -459,6 +464,8 @@ public class Theory3 extends Theory {
             this.variables[10].deactivate();
             
             this.isCoasting = true;
+            
+            
             
            
        }
