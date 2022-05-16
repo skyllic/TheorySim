@@ -15,7 +15,7 @@ public class Convergence_Square_Root extends Theory {
 
     // public double tauPerHour;
 
-    public boolean isCoasting;
+    
 
     public int counter = 0;
 
@@ -333,7 +333,10 @@ public class Convergence_Square_Root extends Theory {
         if (!isCoasting) {
 
             this.idleUntil(this, this.variables[bestVarIndex].nextCost);
+            
             this.buyVariable(bestVarIndex);
+            
+            
 
         } else {// is coasting, stop buying any variable.
 
@@ -434,9 +437,12 @@ public class Convergence_Square_Root extends Theory {
 
     /** Idles the input theory until its rho exceeds the input rho */
     public void idleUntil(Convergence_Square_Root CSR2, double variableCost) {
+        
         while (CSR2.rho < variableCost) {
+            
             CSR2.moveTick();
         }
+       
     }
 
     @Override

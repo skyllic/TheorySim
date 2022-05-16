@@ -77,7 +77,7 @@ public class TheoryRunner {
         //SimRunner.runDistributionComparison(dist1, dist2, 315, 313);
         //Theory theory = new Theory(1, 610);
         
-        SimRunner.runChainSims(300, 14, 1,50, "strategy=first");
+        SimRunner.runChainSims(300, 14, 80,147, "strategy=first");
         //SimRunner.runStrategicSim(300, 14, 0, 50, "print=true,strategy=first");
         //SimRunner.runDetailedSim(300, 1, 600 + Math.log10(6.22),
         // true, "strategy=frst");

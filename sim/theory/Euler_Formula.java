@@ -464,7 +464,12 @@ public class Euler_Formula extends Theory {
         }
         
         
-        this.isReadyToCoast();
+        if (this.publicationMultiplier > this.coastingPubs[13]) {
+            for (int j = 0; j < this.variables.length; j++) {
+                this.variables[j].deactivate(); // autobuy for the variable off.
+                this.isCoasting = true;
+            }
+        }
 
         
         

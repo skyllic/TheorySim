@@ -82,7 +82,7 @@ public class Theory implements ITheory {
         public boolean finishCoasting = false;
 
         /** */
-        public double[] coastingPubs = { 5, 800, 3.0, 6.0, 6, 18.0, 3, 3, 0, 10.5, 9.5, 15.5, 4.0, 6 };
+        public double[] coastingPubs = { 4.5, 800, 3.0, 6.0, 6, 18.0, 3, 3, 0, 10.5, 9.5, 6, 4.0, 6 };
         public int coastingNumber = 0;
 
         /** Maximum tau per hour during publication. (log format) */
@@ -187,7 +187,7 @@ public class Theory implements ITheory {
                 initialiseVariables();
                 if (Theory.rates == null) {
                         Theory.rates = new HashMap<>();
-                        loadTheoryRates();
+                        //loadTheoryRates();
 
                 }
 
@@ -524,16 +524,21 @@ public class Theory implements ITheory {
 
                 this.seconds += this.tickFrequency;
                 this.tickCount += 1;
-                this.tickFrequency *= 1.0001;
+                //this.tickFrequency *= 1.0001;
 
                 this.updateStatistics();
                 this.collectStatistics();
 
-                this.readyToPublish();
+                //this.isReadyToCoast();
+                //this.readyToPublish();
 
         }
 
         private boolean readyToPublish() {
+                
+                if(this.maxRho < this.publicationMark) {
+                        return false;
+                }
                 if (this.calculateInstantaneousRhoPerHour(this.maxRho) < this.getTauPerHour(this.maxRho)) {
                         return true;
                 } else {
@@ -676,12 +681,21 @@ public class Theory implements ITheory {
         }
 
         public boolean isReadyToCoast() {
-                if (this.maxRho > this.getRhoGain(this.publicationMark) + this.publicationMark) {
+                if(this.maxRho < this.publicationMark) {
+                        return false;
+                }
+                if(this.rho > 645.0) {
+                        int k = 2;
+                }
+                if (this.maxRho >= this.getRhoGain(this.publicationMark) + this.publicationMark - 0.01
+                        /**this.calculateInstantaneousRhoPerHour(this.rho) < this.getTauPerHour(this.rho)*/) {
                         /**
                          * for(int j = 0; j < this.variables.length; j++) {
                          * this.variables[j].deactivate();
                          * }
                          */
+                        this.calculateInstantaneousRhoPerHour(this.rho);
+                        this.getTauPerHour(this.rho);
 
                         this.isCoasting = true;
                         return true;
@@ -693,11 +707,13 @@ public class Theory implements ITheory {
 
         public void coastUntilPublish() {
 
+                //System.out.println(this.publicationMultiplier);
                 if (this.coastStart == 0) {
                         this.coastStart = this.publicationMultiplier;
                 }
 
                 while (this.rho < this.maxRho) {
+                        //System.out.println("test");
                         this.moveTick();
                 }
                 this.tauPerHour = 60 * 60 * Math.log(this.publicationMultiplier) / Math.log(10) / this.pubCoefficient
@@ -709,9 +725,11 @@ public class Theory implements ITheory {
                 // 2 scenarios, one where the next pub tau/h max is lower than current, and one
                 // where it's higher.
                 // if next is lower.
-                if (this.findExpectedNextPubRhoRate(this.publicationMark) < this.getTauPerHour(this.publicationMark)) {
-                        while (this.calculateInstantaneousRhoPerHour(this.rho) > this.getTauPerHour(this.rho)) {
-
+                if (/**this.findExpectedNextPubRhoRate(this.publicationMark) < this.getTauPerHour(this.publicationMark)
+                        */ false) {
+                        while (this.calculateInstantaneousRhoPerHour(this.rho) > this.getTauPerHour(this.rho)
+                        ) {
+                                //System.out.println("hi\t" + this.publicationMultiplier);
                                 this.tauPerHour = tauRate;
                                 this.moveTick();
                                 tauRate = 60 * 60 * Math.log(this.publicationMultiplier) / Math.log(10)

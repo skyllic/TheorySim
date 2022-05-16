@@ -13,7 +13,7 @@ public class Theory1 extends Theory {
 
     public double coastingPub = 6;
 
-    public boolean isCoasting;
+   
 
     // public double[] variableWeights = {1000,1000,10,10,10,10,11.1,10.20};
     public double[] variableWeights = { 11, 10, 10, 10, 10, 10 };
@@ -549,6 +549,7 @@ public class Theory1 extends Theory {
     public void idleUntil(Theory1 theory1, double variableCost) {
         while (theory1.rho < variableCost) {
             theory1.moveTick();
+            
         }
     }
 
