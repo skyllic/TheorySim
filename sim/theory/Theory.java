@@ -524,7 +524,7 @@ public class Theory implements ITheory {
 
                 this.seconds += this.tickFrequency;
                 this.tickCount += 1;
-                //this.tickFrequency *= 1.0001;
+                this.tickFrequency *= 1.0001;
 
                 this.updateStatistics();
                 this.collectStatistics();
@@ -573,7 +573,8 @@ public class Theory implements ITheory {
                 // Compiles various parameters when there's a new fastest tau/hour so that we
                 // can print them
                 // to the user later.
-                if ((this.maxRho - this.publicationMark) / (this.seconds / 3600.0) > this.maxTauPerHour) {
+                if ((this.maxRho - this.publicationMark) / (this.seconds / 3600.0) > this.maxTauPerHour
+                        /**this.seconds > 10000000*/) {
                         this.maxTauPerHour = (this.maxRho - this.publicationMark) / (this.seconds / 3600.0);
                         this.bestPubMulti = this.publicationMultiplier;
                         this.bestPubTime = this.seconds / 3600.0;

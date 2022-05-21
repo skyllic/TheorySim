@@ -400,7 +400,7 @@ public class Convergence_Square_Root extends Theory {
 
             if (this.strategy.name.equalsIgnoreCase("CSR2")) {
 
-                // variableWeights = { 10, 10, 10, 10, 10};
+                variableWeights = new double[]{ 10, 10, 10, 10, 10};
 
             } else if (this.strategy.name.equalsIgnoreCase("CSR2d")) {
                 variableWeights[0] = 11.0;

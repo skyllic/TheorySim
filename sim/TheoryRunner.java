@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javafx.stage.Stage;
 import sim.data.DataGenerator;
+import sim.theory.Convergence_Square_Root;
 import sim.theory.Euler_Formula;
 import sim.theory.ITheory;
 import sim.theory.Theory;
@@ -69,15 +70,22 @@ public class TheoryRunner {
         SimRunner simRunner = new SimRunner();
 
         
-        //SimRunner.runStrategicSim(300, 12, 10, 45, "strategy=first");
-        //double[] dist1 = new double[] {671, 588, 681, 772.8, 984, 1194, 628.8, 535};
+        //SimRunner.runStrategicSim(300, 11, 500, 1200, "strategy=first");
+        //double[] dist1 = new double[] {671, 588, 681, 772.8, 984, 1187.8, 628.8, 535};
         //double[] dist2 = new double[] {631, 631, 629, 727.6, 942, 1115.3, 590.1, 508.5};
-        //double[] dist2 = new double[] {641, 608.5, 667, 773.7, 953.6, 1214, 640, 528.5};
+        //double[] dist2 = new double[] {641, 608.5, 667, 773.7, 955, 1214, 635, 528.5};
       
-        //SimRunner.runDistributionComparison(dist1, dist2, 315, 313);
+        //SimRunner.runDistributionComparison(dist1, dist2, 345, 345);
         //Theory theory = new Theory(1, 610);
         
-        SimRunner.runChainSims(300, 14, 80,147, "strategy=first");
+        
+        SimRunner.runChainSims(315, 11, 500
+        ,1200, "strategy=third");
+
+
+        /**for(int i = 0; i < 150; i++) {
+            SimRunner.runChainSims(315, 14, i,i+1, "strategy=first");
+        }*/
         //SimRunner.runStrategicSim(300, 14, 0, 50, "print=true,strategy=first");
         //SimRunner.runDetailedSim(300, 1, 600 + Math.log10(6.22),
         // true, "strategy=frst");

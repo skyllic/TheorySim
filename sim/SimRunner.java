@@ -212,8 +212,8 @@ public class SimRunner {
   
     double bestTotalTime = 2222222220.0;
     
-    for(double i = 10.0; i < 11; i = i + 0.05) {
-      for(double j = 10.0; j < 11; j = j + 0.05) {
+    for(double i = 9.8; i < 10.2; i = i + 0.02) {
+      for(double j = 10.0; j < 10.02; j = j + 0.02) {
         Theory.K_value[0] = i;
         Theory.K_value[1] = j;
         double[] result = new double[2];
