@@ -63,24 +63,26 @@ public class TheoryRunner {
 
         ArrayList<Double> summaryList = new ArrayList<>();
         
-        //SimRunner.runChainSims(300, 1, 300, 1300, "print=true,strategy=0");
+        //SimRunner.runChainSims(320, 2, 600, 800, "print=true,strategy=0");
       
         //simAllStrategies();
 
         SimRunner simRunner = new SimRunner();
 
         
-        //SimRunner.runStrategicSim(300, 11, 500, 1200, "strategy=first");
+        //SimRunner.runStrategicSim(300, 8, 500, 600, "strategy=first");
+        //double[] dist1 = new double[] {0, 700, 0, 0, 0, 0, 0, 0};
         //double[] dist1 = new double[] {671, 588, 681, 772.8, 984, 1187.8, 628.8, 535};
         //double[] dist2 = new double[] {631, 631, 629, 727.6, 942, 1115.3, 590.1, 508.5};
         //double[] dist2 = new double[] {641, 608.5, 667, 773.7, 955, 1214, 635, 528.5};
       
-        //SimRunner.runDistributionComparison(dist1, dist2, 345, 345);
+        //SimRunner.runDistributionComparison(dist1, dist2, 315, 315);
         //Theory theory = new Theory(1, 610);
         
         
-        SimRunner.runChainSims(315, 11, 500
-        ,1200, "strategy=third");
+        SimRunner.runChainSims(300, 8, Math.log10(1) + 500
+        ,Math.log10(1.09) + 600, "strategy=first");
+        
 
 
         /**for(int i = 0; i < 150; i++) {

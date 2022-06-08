@@ -38,7 +38,7 @@ public class Theory8 extends Theory {
     public int[] milestoneLevels = new int[4];
 
     
-    public double[] variableWeights = { 10, 10, 10, 10, 10 };
+    //public double[] variableWeights = { 10, 10, 10, 10, 10 };
 
     public Theory8[] t8Clones = new Theory8[5];
 
@@ -87,8 +87,20 @@ public class Theory8 extends Theory {
         //
         if(this.strategy.name.equalsIgnoreCase("T8SolarS") && (this.tickCount) % 335 == 0 ) {
             this.resetStateDefault();
-        } else if(this.strategy.name.equalsIgnoreCase("T8MS2") && (this.tickCount) % 335 == 0) {
-            this.resetStateDefault();
+        } else if(this.strategy.name.equalsIgnoreCase("T8MS2"))  {
+
+            if(this.variables[3].value > this.variables[4].value + 0) {
+                if((this.tickCount) % 335 == 0) {
+                    this.resetStateDefault();
+                }
+            } else {
+                if((this.tickCount) % 335 == 0) {
+                    this.resetStateDefault();
+                }
+            }
+
+            
+        
         } else if(this.strategy.name.equalsIgnoreCase("T8Baby") && (this.tickCount) % 335 == 0 
             && this.maxRho > 40 && this.maxRho < preE60SwapTau
                  && this.publicationMark > 40 && this.publicationMark < preE60SwapTau) {
@@ -105,7 +117,7 @@ public class Theory8 extends Theory {
 
 
     public void milestoneSwapCheck() {
-        if(this.strategy.name == "T8Baby") {
+        if(this.strategy.name.equalsIgnoreCase("T8Baby")) {
             if(this.maxRho < 20 && this.publicationMark < 20) {
                 this.milestoneLevels[0] = 0;
                 this.milestoneLevels[1] = 0;
@@ -429,11 +441,11 @@ public class Theory8 extends Theory {
             else if(this.strategy.name.equalsIgnoreCase("T8MS2")) {
                 // this.variableWeights[0] = 11;
                 this.variableWeights[1] = 10.0;
-                this.variableWeights[2] = 10.4;
-                this.variableWeights[3] = 10.0;
+                this.variableWeights[2] = 10.34;
+                this.variableWeights[3] = 10.06;
                 this.variableWeights[4] = 10.4;
 
-                this.variableWeights[0] = 10.9 + (0.030 * (this.variables[0].level % 10) - 0.11);
+                this.variableWeights[0] = 10.73 + (0.029 * (this.variables[0].level % 10));
             }
             else if(this.strategy.name.equalsIgnoreCase("T8")) {
                 this.variableWeights[0] = 10.0;
@@ -442,7 +454,7 @@ public class Theory8 extends Theory {
                 this.variableWeights[3] = 10.0;
                 this.variableWeights[4] = 10.0;
             }
-            else if(this.strategy.name == "T8Baby") {
+            else if(this.strategy.name.equalsIgnoreCase("T8Baby")) {
                 this.variableWeights[0] = 10.0;
                 this.variableWeights[1] = 10.0;
                 this.variableWeights[2] = 10.0;
@@ -515,7 +527,7 @@ public class Theory8 extends Theory {
 
         }
 
-        if (this.publicationMultiplier > this.coastingPubs[7]) {
+        if (this.readyToCoast(2.54)) {
             for (int j = 0; j < this.variables.length; j++) {
                 this.variables[j].deactivate(); // autobuy for the variable off.
                 this.isCoasting = true;
@@ -523,6 +535,21 @@ public class Theory8 extends Theory {
         }
 
     }
+
+    public boolean readyToCoast(double coastMulti) {
+        for(int i = 0; i < this.variables.length; i++) {
+            if(this.convertCostToPubMulti(this.variables[i].nextCost)
+             + this.variableWeights[i] - 10 > coastMulti ) {
+
+            } else {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    
 
     /** Idles the input theory until its rho exceeds the input rho */
     public void idleUntil(Theory8 theory8, double variableCost) {

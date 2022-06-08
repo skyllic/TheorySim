@@ -165,7 +165,7 @@ public class Theory5 extends Theory {
         for (int i = 0; i < this.variables.length; i++) {
             this.variables[i].update();
             if (this.variables[i].isActive == 1) {
-                while (this.variables[i].cost < this.publicationMark * 0.9) {
+                while (this.variables[i].cost < this.publicationMark * 0.95) {
                     this.variables[i].level += 1;
                     this.variables[i].update();
                     this.q = this.variables[4].value * 1.1 + this.variables[3].value;
@@ -264,18 +264,22 @@ public class Theory5 extends Theory {
 
             } else if(this.strategy.name.equalsIgnoreCase("T5PlayI")) {
                 this.variableWeights[0] = 10.0;
+                if(this.publicationMultiplier > 0.2) {
+                    this.variableWeights[0] = 10.0;
+                }
                 this.variableWeights[1] = 10.0;
                 this.variableWeights[2] = 10.0;
                 this.variableWeights[3] = 10.0;
                 this.variableWeights[4] = 10.0;
-                if(this.publicationMultiplier > 0.1) {
-                    this.variableWeights[2] = 100.0;
+                if(this.publicationMultiplier > 0.2) {
+                    this.variableWeights[2] = 1000.0;
                 }
+                
             }
 
         }
 
-        if (this.publicationMultiplier > this.coastingPubs[4]) {
+        if (this.publicationMultiplier > 2) {
             for (int j = 0; j < this.variables.length; j++) {
                 this.variables[j].deactivate(); // autobuy for the variable off.
                 this.isCoasting = true;

@@ -453,7 +453,20 @@ public class Theory2 extends Theory {
             if (this.strategy.name.equalsIgnoreCase("T2AI")) {
                 
 
-                this.variableWeights[i] = 10 + (0.04 * (this.variables[i].level % 10) - 0.05);
+                this.variableWeights[i] = 10 + (0.031 * (this.variables[i].level % 10));
+
+                if(this.publicationMultiplier > 520) {
+                    this.variables[3].deactivate();
+                    this.variables[7].deactivate();
+                }
+                if(this.publicationMultiplier> 530) {
+                    this.variables[2].deactivate();
+                    this.variables[6].deactivate();
+                }
+                if(this.publicationMultiplier> 555) {
+                    this.variables[1].deactivate();
+                    this.variables[5].deactivate();
+                }
                 
 
             } else if (this.strategy.name.equalsIgnoreCase("T2")) {
@@ -469,7 +482,7 @@ public class Theory2 extends Theory {
 
         
 
-        if (this.publicationMultiplier > coastingPub) {
+        if (this.publicationMultiplier > 580) {
           
             for (int j = 0; j < this.variables.length; j++) {
                 this.variables[j].deactivate(); // autobuy for the variable off.

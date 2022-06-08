@@ -254,9 +254,7 @@ public class WeierStrass extends Theory {
      * @param i - dummy variable.
      */
     public void adjustWeightings(int i) {
-        if (this.publicationMultiplier > 0.01) {
-            this.tickFrequency = 1.0;
-        }
+        
 
         if (this.variables[i].isActive == 1) {
 
@@ -272,26 +270,18 @@ public class WeierStrass extends Theory {
                     this.variables[3].deactivate();
                 }
 
-            } else if (this.strategy.name.equalsIgnoreCase("WSPlay2")) {
-                this.variableWeights[0] = 11;
-                this.variableWeights[0] = 10.85 + (0.028 * (this.variables[i].level % 10) - 0.16);
+            } else if (this.strategy.name.equalsIgnoreCase("WSPlayV3")) {
+                this.variableWeights[0] = 10.68 + (0.0305 * (this.variables[i].level % 10) - 0.155);
                 this.variableWeights[1] = 10.0;
-                this.variableWeights[2] = 9.70;
+                this.variableWeights[2] = 9.7;
                 this.variableWeights[3] = 15;
-                this.variableWeights[4] = 10.0;
+                this.variableWeights[4] = 9.9 + this.publicationMultiplier * 0.07;
 
 
-                this.variableWeights[0] = 11;
-                this.variableWeights[0] = 10.85 + (0.028 * (this.variables[i].level % 10) - 0.16);
-                this.variableWeights[1] = 10.0;
-                this.variableWeights[2] = 9.70;
-                this.variableWeights[3] = 15;
-                this.variableWeights[4] = 10.0;
+               
 
               
-                if(this.publicationMultiplier > 5) {
-                    this.variableWeights[2] = 9.75;
-                }
+                
 
 
 
@@ -317,7 +307,7 @@ public class WeierStrass extends Theory {
 
 
         }
-        if (this.publicationMultiplier > this.coastingPubs[9]) {
+        if (this.publicationMultiplier > 6) {
             for (int j = 0; j < this.variables.length; j++) {
                 this.variables[j].deactivate(); // autobuy for the variable off.
                 this.isCoasting = true;

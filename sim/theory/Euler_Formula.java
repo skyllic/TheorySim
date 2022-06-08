@@ -427,6 +427,8 @@ public class Euler_Formula extends Theory {
             } else if(this.strategy.name.equalsIgnoreCase("EFBaby")) {
                 if(this.variables[0].level >= 4) {
                     this.variableWeights[0] = 10000.0;
+                    //this.variables[0].level = 4;
+                    this.variables[0].update();
                 } else {
                     this.variableWeights[0] = 10.0;
                 }
@@ -437,7 +439,7 @@ public class Euler_Formula extends Theory {
                 this.variableWeights[2] = 10.0;
                 this.variableWeights[7] = 10.8 + (0.030 * (this.variables[i].level % 10) - 0.16);
 
-                if(this.publicationMultiplier < 2.2) {
+                if(this.publicationMultiplier < 1.5) {
                     this.variableWeights[3] = 10.8 + (0.030 * (this.variables[i].level % 10) - 0.16);;
                     this.variableWeights[4] = 10.5;
                     this.variableWeights[8] = 10.3 + (0.15 * (this.variables[i].level % 10) - 0.75);;
@@ -445,8 +447,6 @@ public class Euler_Formula extends Theory {
                     this.variableWeights[5] = 10.8 + (0.030 * (this.variables[i].level % 10) - 0.16);
                     this.variableWeights[6] = 10.5;
                     this.variableWeights[9] = 10.0;
-
-
                 } else {
                     this.variableWeights[1] = 12.0;
                     this.variableWeights[2] = 11.0;
@@ -459,15 +459,45 @@ public class Euler_Formula extends Theory {
                     this.variableWeights[5] = 20.0;
                     this.variableWeights[6] = 20.0;
                 }
+
+                if(this.publicationMark >= 150) {
+                    this.variableWeights[1] = 10.8 + (0.030 * (this.variables[i].level % 10) - 0.16)
+                    + this.publicationMultiplier * 0;
+                this.variableWeights[2] = 10.0;
+                this.variableWeights[7] = 10.8 + (0.030 * (this.variables[i].level % 10) - 0.16);
+
+                if(this.publicationMultiplier < 1.4) {
+                    this.variableWeights[3] = 10.54 + (0.03 * (this.variables[i].level % 10));;
+                    this.variableWeights[4] = 10.64;
+                    this.variableWeights[8] = 10.1 + (0.06 * (this.variables[i].level % 10));;
+
+                    this.variableWeights[5] = 10.45 + (0.030 * (this.variables[i].level % 10) - 0.16);
+                    this.variableWeights[6] = 10.35;
+                    this.variableWeights[9] = 10.0;
+                } else {
+                    this.variableWeights[1] = 10.8;
+                    this.variableWeights[2] = 10.0;
+
+                    this.variableWeights[8] = 10.0;
+                    this.variableWeights[3] = 10.5;
+                    this.variableWeights[4] = 20.0;
+
+                    this.variableWeights[9] = 10.0;
+                    this.variableWeights[5] = 20.0;
+                    this.variableWeights[6] = 20.0;
+                }
+                }
             }
 
         }
         
         
-        if (this.publicationMultiplier > this.coastingPubs[13]/**this.seconds > 10000000*/) {
+        if (this.publicationMultiplier > 1.6/**this.seconds > 10000000*/) {
             for (int j = 0; j < this.variables.length; j++) {
                 this.variables[j].deactivate(); // autobuy for the variable off.
                 this.isCoasting = true;
+
+                
             }
         }
 

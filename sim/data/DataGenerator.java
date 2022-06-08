@@ -16,7 +16,7 @@ public class DataGenerator {
 
   public static void main(String[] args) throws Exception {
 
-    DataGenerator.createTable(300, 1, 700, 900, 0.1, "300sigma\\Theory1PlayRates.txt");
+    DataGenerator.createTable(300, 12, 1, 1000, 0.1, "300sigma\\Theory122PlayRates.txt");
 
 
 

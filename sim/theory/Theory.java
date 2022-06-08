@@ -51,6 +51,9 @@ public class Theory implements ITheory {
         /** List of upgrades (non-permanent). */
         public Variable[] variables;
 
+        /** List of upgrades (non-permanent). */
+        public double[] variableWeights;
+
         /** Current rho in log format. */
         public double rho;
 
@@ -82,7 +85,7 @@ public class Theory implements ITheory {
         public boolean finishCoasting = false;
 
         /** */
-        public double[] coastingPubs = { 4.5, 800, 3.0, 6.0, 6, 18.0, 3, 3, 0, 10.5, 9.5, 6, 4.0, 6 };
+        public double[] coastingPubs = { 4.5, 800, 3.0, 6.0, 6, 18.0, 3, 1.8, 0, 10.5, 9.5, 6, 4.0, 6 };
         public int coastingNumber = 0;
 
         /** Maximum tau per hour during publication. (log format) */
@@ -131,6 +134,7 @@ public class Theory implements ITheory {
 
         public double coastStart = 0;
         public double pubCoefficient;
+        public double coastTauPerHour;
 
         public static double[] K_value = new double[8];
 
@@ -185,9 +189,10 @@ public class Theory implements ITheory {
                 initialiseR9Level();
                 initialiseTheoryMultiplier();
                 initialiseVariables();
+                initialiseVariableWeights();
                 if (Theory.rates == null) {
                         Theory.rates = new HashMap<>();
-                        //loadTheoryRates();
+                        // loadTheoryRates();
 
                 }
 
@@ -269,6 +274,13 @@ public class Theory implements ITheory {
                 }
         }
 
+        private void initialiseVariableWeights() {
+
+                this.variableWeights = new double[this.variables.length];
+               for(int i = 0; i < this.variableWeights.length; i++) {
+                this.variableWeights[i] = 10.0;
+               }
+        }
         private void initialiseVariables() {
                 if (Theory.theoryNumber == 1) {
 
@@ -529,14 +541,14 @@ public class Theory implements ITheory {
                 this.updateStatistics();
                 this.collectStatistics();
 
-                //this.isReadyToCoast();
-                //this.readyToPublish();
+                // this.isReadyToCoast();
+                // this.readyToPublish();
 
         }
 
         private boolean readyToPublish() {
-                
-                if(this.maxRho < this.publicationMark) {
+
+                if (this.maxRho < this.publicationMark) {
                         return false;
                 }
                 if (this.calculateInstantaneousRhoPerHour(this.maxRho) < this.getTauPerHour(this.maxRho)) {
@@ -573,15 +585,39 @@ public class Theory implements ITheory {
                 // Compiles various parameters when there's a new fastest tau/hour so that we
                 // can print them
                 // to the user later.
-                if ((this.maxRho - this.publicationMark) / (this.seconds / 3600.0) > this.maxTauPerHour
-                        /**this.seconds > 10000000*/) {
-                        this.maxTauPerHour = (this.maxRho - this.publicationMark) / (this.seconds / 3600.0);
-                        this.bestPubMulti = this.publicationMultiplier;
-                        this.bestPubTime = this.seconds / 3600.0;
-                        this.bestTauGain = this.maxRho - this.publicationMark;
-                        this.bestRecoveryTime = this.recoveryTime;
-                        this.bestCoastStart = this.coastStart;
+                if (!isCoasting) {
+                        if ((this.maxRho - this.publicationMark) / (this.seconds / 3600.0) > this.maxTauPerHour
+                        /** this.seconds > 10000000 */
+                        ) {
+                                this.maxTauPerHour = (this.maxRho - this.publicationMark) / (this.seconds / 3600.0);
+                                this.bestPubMulti = this.publicationMultiplier;
+                                this.bestPubTime = this.seconds / 3600.0;
+                                this.bestTauGain = this.maxRho - this.publicationMark;
+                                this.bestRecoveryTime = this.recoveryTime;
+                                this.bestCoastStart = this.coastStart;
+                        }
+                } else {
+                        if ((this.maxRho - this.publicationMark) / (this.seconds / 3600.0) > this.maxTauPerHour
+                        /** this.seconds > 10000000 */
+                        ) {
+                                this.maxTauPerHour = (this.maxRho - this.publicationMark) / (this.seconds / 3600.0);
+                                this.bestPubMulti = this.publicationMultiplier;
+                                this.bestPubTime = this.seconds / 3600.0;
+                                this.bestTauGain = this.maxRho - this.publicationMark;
+                                this.bestRecoveryTime = this.recoveryTime;
+                                this.bestCoastStart = this.coastStart;
+                        }
                 }
+
+        }
+
+        private void updateStatisticsSummary() {
+                this.maxTauPerHour = (this.maxRho - this.publicationMark) / (this.seconds / 3600.0);
+                                this.bestPubMulti = this.publicationMultiplier;
+                                this.bestPubTime = this.seconds / 3600.0;
+                                this.bestTauGain = this.maxRho - this.publicationMark;
+                                this.bestRecoveryTime = this.recoveryTime;
+                                this.bestCoastStart = this.coastStart;
         }
 
         public void loadTheoryRates() {
@@ -682,14 +718,18 @@ public class Theory implements ITheory {
         }
 
         public boolean isReadyToCoast() {
-                if(this.maxRho < this.publicationMark) {
+                if (this.maxRho < this.publicationMark) {
                         return false;
                 }
-                if(this.rho > 645.0) {
+                if (this.rho > 645.0) {
                         int k = 2;
                 }
                 if (this.maxRho >= this.getRhoGain(this.publicationMark) + this.publicationMark - 0.01
-                        /**this.calculateInstantaneousRhoPerHour(this.rho) < this.getTauPerHour(this.rho)*/) {
+                /**
+                 * this.calculateInstantaneousRhoPerHour(this.rho) <
+                 * this.getTauPerHour(this.rho)
+                 */
+                ) {
                         /**
                          * for(int j = 0; j < this.variables.length; j++) {
                          * this.variables[j].deactivate();
@@ -706,15 +746,43 @@ public class Theory implements ITheory {
                 }
         }
 
+        public double convertCostToPubMulti(double cost) {
+                double temp = cost - this.publicationMark;
+                double pubMulti = 1;
+        
+                if(Theory.theoryNumber == 8) {
+                        pubMulti = Math.pow(Math.pow(10, 0.15), temp);
+                } else if(Theory.theoryNumber == 1) {
+                        pubMulti = Math.pow(Math.pow(10, 0.164), temp);
+                } else {
+                        pubMulti = 1;
+                }
+                
+                return pubMulti;
+            }
+
+            public boolean readyToCoast(double coastMulti) {
+                for(int i = 0; i < this.variables.length; i++) {
+                    if(this.convertCostToPubMulti(this.variables[i].nextCost)
+                     + this.variableWeights[i] - 10 > coastMulti ) {
+        
+                    } else {
+                        return false;
+                    }
+                }
+        
+                return true;
+            }
+
         public void coastUntilPublish() {
 
-                //System.out.println(this.publicationMultiplier);
+                // System.out.println(this.publicationMultiplier);
                 if (this.coastStart == 0) {
                         this.coastStart = this.publicationMultiplier;
                 }
 
                 while (this.rho < this.maxRho) {
-                        //System.out.println("test");
+                        // System.out.println("test");
                         this.moveTick();
                 }
                 this.tauPerHour = 60 * 60 * Math.log(this.publicationMultiplier) / Math.log(10) / this.pubCoefficient
@@ -723,14 +791,19 @@ public class Theory implements ITheory {
                 double tauRate = 60 * 60 * Math.log(this.publicationMultiplier) / Math.log(10) / this.pubCoefficient
                                 / this.seconds;
 
+                this.coastTauPerHour = (this.maxRho - this.publicationMark) / (this.seconds / 3600.0);
+                
+                double tempTauHour;
                 // 2 scenarios, one where the next pub tau/h max is lower than current, and one
                 // where it's higher.
                 // if next is lower.
-                if (/**this.findExpectedNextPubRhoRate(this.publicationMark) < this.getTauPerHour(this.publicationMark)
-                        */ false) {
-                        while (this.calculateInstantaneousRhoPerHour(this.rho) > this.getTauPerHour(this.rho)
-                        ) {
-                                //System.out.println("hi\t" + this.publicationMultiplier);
+                if (/**
+                     * this.findExpectedNextPubRhoRate(this.publicationMark) <
+                     * this.getTauPerHour(this.publicationMark)
+                     */
+                false) {
+                        while (this.calculateInstantaneousRhoPerHour(this.rho) > this.getTauPerHour(this.rho)) {
+                                // System.out.println("hi\t" + this.publicationMultiplier);
                                 this.tauPerHour = tauRate;
                                 this.moveTick();
                                 tauRate = 60 * 60 * Math.log(this.publicationMultiplier) / Math.log(10)
@@ -748,7 +821,49 @@ public class Theory implements ITheory {
                                                 / this.seconds;
 
                         }
+                        tempTauHour = this.tauPerHour;
+                        
+
+                        if(theoryNumber == 2) {
+                                while (tauRate >= tempTauHour * 1.00) {
+                                        this.tauPerHour = tauRate;
+                                        this.moveTick();
+                                        tauRate = 60 * 60 * Math.log(this.publicationMultiplier) / Math.log(10)
+                                                        / this.pubCoefficient
+                                                        / this.seconds;
+                                }
+                        } else if(theoryNumber == 14) {
+                                while (tauRate >= tempTauHour * 1.0) {
+                                        this.tauPerHour = tauRate;
+                                        this.moveTick();
+                                        tauRate = 60 * 60 * Math.log(this.publicationMultiplier) / Math.log(10)
+                                                        / this.pubCoefficient
+                                                        / this.seconds;
+                                }
+                        } else if(theoryNumber== 8) {
+                                while (tauRate >= tempTauHour * 0.999955) {
+                                        //System.out.println("HIHIHIHI");
+                                        this.tauPerHour = tauRate;
+                                        this.moveTick();
+                                        tauRate = 60 * 60 * Math.log(this.publicationMultiplier) / Math.log(10)
+                                                        / this.pubCoefficient
+                                                        / this.seconds;
+                                }
+                        }
+                        else {
+                                while (tauRate >= tempTauHour * 1.0) {
+                                        this.tauPerHour = tauRate;
+                                        this.moveTick();
+                                        tauRate = 60 * 60 * Math.log(this.publicationMultiplier) / Math.log(10)
+                                                        / this.pubCoefficient
+                                                        / this.seconds;
+                                }    
+                        }
+
+                        
                 }
+
+                this.updateStatisticsSummary();
 
                 this.resetIdlePeriod(2);
                 this.publish();

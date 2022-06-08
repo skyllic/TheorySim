@@ -77,7 +77,8 @@ public class Convergence_Square_Root extends Theory {
                 }
 
             } else if (this.maxRho < 45 && this.publicationMark < 45) {
-                if ((this.rho > this.variables[3].nextCost - 0 || this.rho > this.variables[4].nextCost - 0.2)
+                if ((this.rho > this.variables[3].nextCost - 0 - this.publicationMark * 0.0045
+                || this.rho > this.variables[4].nextCost - 0.3 - this.publicationMark * 0.0015)
                         || this.publicationMultiplier > 3) {
                     this.milestoneLevels[0] = 1;
                     this.milestoneLevels[1] = 0;
@@ -89,7 +90,8 @@ public class Convergence_Square_Root extends Theory {
                 }
 
             } else if (this.maxRho < 80 && this.publicationMark < 80) {
-                if ((this.rho > this.variables[3].nextCost - 0.8 || this.rho > this.variables[4].nextCost - 1.0)
+                if ((this.rho > this.variables[3].nextCost - 0.4 - this.publicationMark * 0.003
+                || this.rho > this.variables[4].nextCost - 0.6 - this.publicationMark * 0.0035)
                         || this.publicationMultiplier > 2) {
                     this.milestoneLevels[0] = 2;
                     this.milestoneLevels[1] = 0;
@@ -113,7 +115,8 @@ public class Convergence_Square_Root extends Theory {
                 }
 
             } else if (this.maxRho < 220 && this.publicationMark < 220) {
-                if ((this.rho > this.variables[3].nextCost - 1.4 || this.rho > this.variables[4].nextCost - 1.6)
+                if ((this.rho > this.variables[3].nextCost - 0.6 - this.publicationMark * 0.0
+                || this.rho > this.variables[4].nextCost - 0.6 - this.publicationMark * 0.0045)
                         || this.publicationMultiplier > 1.8) {
                     this.milestoneLevels[0] = 3;
                     this.milestoneLevels[1] = 1;
@@ -124,8 +127,9 @@ public class Convergence_Square_Root extends Theory {
                     this.milestoneLevels[2] = 2;
                 }
             } else if (this.maxRho < 500 && this.publicationMark < 500) {
-                if ((this.rho > this.variables[3].nextCost - 1.8 || this.rho > this.variables[4].nextCost - 2.0)
-                        || this.publicationMultiplier > 1.6) {
+                if ((this.rho > this.variables[3].nextCost - 0.2 - this.publicationMark * 0.0035
+                || this.rho > this.variables[4].nextCost - 0.6 - this.publicationMark * 0.003)
+                         || this.publicationMultiplier > 1.6) {
                     this.milestoneLevels[0] = 3;
                     this.milestoneLevels[1] = 1;
                     this.milestoneLevels[2] = 1;
@@ -419,12 +423,21 @@ public class Convergence_Square_Root extends Theory {
                     || this.strategy.name.equalsIgnoreCase("CSR2MST")) {
                 variableWeights[0] = 10.9 + (0.028 * (this.variables[0].level % 10) - 0.11);
                 variableWeights[1] = 10.0;
-                variableWeights[2] = 11.0 + (0.028 * (this.variables[0].level % 10) - 0.11);
+                variableWeights[2] = 10.9 + (0.028 * (this.variables[2].level % 10) - 0.11);
                 variableWeights[3] = 9.8;
                 variableWeights[4] = 9.8;
+
+                if(this.publicationMark >= 500) {
+                    variableWeights[0] = 10.9 + (0.028 * (this.variables[0].level % 10) - 0.11);
+                variableWeights[1] = 10.0;
+                variableWeights[2] = 10.9 + (0.028 * (this.variables[2].level % 10) - 0.11);
+                variableWeights[3] = 9.8;
+                variableWeights[4] = 9.6;
+                }
+                
             }
 
-            if (this.publicationMultiplier > this.coastingPubs[11]) {
+            if (this.publicationMultiplier > 1.8) {
                 for (int j = 0; j < this.variables.length; j++) {
                     this.variables[j].deactivate(); // autobuy for the variable off.
                     this.isCoasting = true;

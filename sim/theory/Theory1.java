@@ -536,7 +536,7 @@ public class Theory1 extends Theory {
 
        
 
-        if (this.publicationMultiplier > this.coastingPubs[0]) {
+        if (this.publicationMultiplier > 2) {
             for (int j = 0; j < this.variables.length; j++) {
                 this.variables[j].deactivate(); // autobuy for the variable off.
                 this.isCoasting = true;

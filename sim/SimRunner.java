@@ -69,10 +69,11 @@ public class SimRunner {
     SimRunner.strategies.add(new Strategy("T8MS2", 8, "active"));
     SimRunner.strategies.add(new Strategy("T8MS", 8, "active"));
     SimRunner.strategies.add(new Strategy("T8Play", 8, "active"));
-    SimRunner.strategies.add(new Strategy("T8", 8, "idle"));
     SimRunner.strategies.add(new Strategy("T8Baby", 8, "active"));
+    SimRunner.strategies.add(new Strategy("T8", 8, "idle"));
+    
 
-    SimRunner.strategies.add(new Strategy("WSPlay2", 10, "active"));
+    SimRunner.strategies.add(new Strategy("WSPlayV3", 10, "active"));
     SimRunner.strategies.add(new Strategy("WSPlay", 10, "active"));
     SimRunner.strategies.add(new Strategy("WSPd", 10, "active"));
     SimRunner.strategies.add(new Strategy("WSPStC1", 10, "idle"));
@@ -132,15 +133,25 @@ public class SimRunner {
         summaries = runDetailedSim(studentNumber, theoryNumber, currentPub, false, flag);
       }
 
+      if(currentPub + summaries.get(0).tauGain > endPub) {
+        double rhoToEndPub = endPub - currentPub;
+        double finalPubRhoPerHour = summaries.get(0).tauPerHour;
+        double finalNormalisedTimeToEndPub = rhoToEndPub / finalPubRhoPerHour;
+        totalTime = totalTime + finalNormalisedTimeToEndPub;
+      } else {
+        totalTime = totalTime + summaries.get(0).pubTime;
+      }
+
       currentPub = currentPub + summaries.get(0).tauGain;
-      totalTime = totalTime + summaries.get(0).pubTime;
+      
     }
 
     
     double normalisedTime = totalTime / (currentPub - startPub) * (endPub - startPub);
     double[] result = {totalTime, currentPub, normalisedTime};
 
-    System.out.println(normalisedTime);
+    System.out.println(totalTime + "\t" + currentPub + "\t" + startPub);
+    //System.out.println(normalisedTime);
 
     return result;
   }
@@ -212,13 +223,13 @@ public class SimRunner {
   
     double bestTotalTime = 2222222220.0;
     
-    for(double i = 9.8; i < 10.2; i = i + 0.02) {
-      for(double j = 10.0; j < 10.02; j = j + 0.02) {
+    for(double i = 0.99995; i < 1.0000000001; i = i + 0.000001) {
+      for(double j = 300; j < 350; j = j + 500) {
         Theory.K_value[0] = i;
         Theory.K_value[1] = j;
         double[] result = new double[2];
         
-        double normalisedTime = SimRunner.runChainSims(studentNumber, theoryNumber, start, end, flag)[2];
+        double normalisedTime = SimRunner.runChainSims(studentNumber, theoryNumber, start, end, flag)[0];
         
         if(normalisedTime < bestTotalTime) {
           bestTotalTime = normalisedTime;
