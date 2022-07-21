@@ -85,7 +85,7 @@ public class Theory implements ITheory {
         public boolean finishCoasting = false;
 
         /** */
-        public double[] coastingPubs = { 4.5, 800, 3.0, 6.0, 6, 18.0, 3, 1.8, 0, 10.5, 9.5, 6, 4.0, 6 };
+        public double[] coastingPubs = { 4.5, 800, 2.5, 6.0, 6, 18.0, 3, 1.8, 0, 10.5, 9.5, 6, 4.0, 6 };
         public int coastingNumber = 0;
 
         /** Maximum tau per hour during publication. (log format) */
@@ -754,7 +754,14 @@ public class Theory implements ITheory {
                         pubMulti = Math.pow(Math.pow(10, 0.15), temp);
                 } else if(Theory.theoryNumber == 1) {
                         pubMulti = Math.pow(Math.pow(10, 0.164), temp);
-                } else {
+                } else if(Theory.theoryNumber == 2) {
+                        pubMulti = Math.pow(Math.pow(10, 0.198), temp);
+                } else if(Theory.theoryNumber == 3) {
+                        pubMulti = Math.pow(Math.pow(10, 0.147), temp);
+                } else if(Theory.theoryNumber == 6) {
+                        pubMulti = Math.pow(Math.pow(10, 0.196), temp);
+                } 
+                else {
                         pubMulti = 1;
                 }
                 
@@ -762,9 +769,14 @@ public class Theory implements ITheory {
             }
 
             public boolean readyToCoast(double coastMulti) {
+               
+                    
                 for(int i = 0; i < this.variables.length; i++) {
-                    if(this.convertCostToPubMulti(this.variables[i].nextCost)
-                     + this.variableWeights[i] - 10 > coastMulti ) {
+                        if(this.variables[i].isActive == 0) {
+                                continue;
+                        }
+                    if(this.convertCostToPubMulti(this.variables[i].nextCost + this.variableWeights[i] - 10)
+                     > coastMulti) {
         
                     } else {
                         return false;
@@ -825,7 +837,7 @@ public class Theory implements ITheory {
                         
 
                         if(theoryNumber == 2) {
-                                while (tauRate >= tempTauHour * 1.00) {
+                                while (tauRate >= tempTauHour * 1.0) {
                                         this.tauPerHour = tauRate;
                                         this.moveTick();
                                         tauRate = 60 * 60 * Math.log(this.publicationMultiplier) / Math.log(10)

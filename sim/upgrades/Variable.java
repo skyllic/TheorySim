@@ -101,6 +101,7 @@ public class Variable {
 
     public void deactivate() {
         this.isActive = 0;
+        this.nextCost = this.nextCost + 100000000;
     }
     public void activate() {
         this.isActive = 1;

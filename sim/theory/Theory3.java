@@ -41,9 +41,9 @@ public class Theory3 extends Theory {
 
     //public double[] variableWeights = {1000,1000,10,10,10,10,11.1,10.20};
     public double[] variableWeights = {11.0, 11.0, 11.0, 
-                                        100, 10.1, 100, 
-                                        100, 10.5, 10.1, 
-                                        10, 10.1, 11.1};
+                                        100, 10.0, 100, 
+                                        100, 10.4, 10.0, 
+                                        10, 10.0, 11.0};
     //public double[] variableWeights = {10.0, 10.0, 10.0, 100, 10.0, 100, 100, 10.0, 10.0, 10, 10.0, 10.0};
 
     public Theory3[] t3Clones = new Theory3[12];
@@ -310,18 +310,18 @@ public class Theory3 extends Theory {
                 
                 
                 this.variableWeights[0] = 10.9 + (0.028*(this.variables[i].level % 10) - 0.14); //b1
-                this.variableWeights[1] = 10.80 + (0.028*(this.variables[i].level % 10) - 0.14); //b2
-                this.variableWeights[2] = 11.00 + (0.028*(this.variables[i].level % 10) - 0.14); //b3
+                this.variableWeights[1] = 10.70 + (0.028*(this.variables[i].level % 10) - 0.14); //b2
+                this.variableWeights[2] = 10.90 + (0.028*(this.variables[i].level % 10) - 0.14); //b3
                 
-                this.variableWeights[7] = 10.5; //c22 8x
-                this.variableWeights[10] = 10.1; //c32 auto
-                this.variableWeights[11] = 11.1;
+                this.variableWeights[7] = 10.4; //c22 8x
+                this.variableWeights[10] = 10.0; //c32 auto
+                this.variableWeights[11] = 11.0;
 
                 //Sandbag on c12 since we don't need to buy them yet.
                 if(this.publicationMultiplier < 0.6) {
-                    this.variableWeights[4] = 14.1;
+                    this.variableWeights[4] = 14.0;
                 } else {
-                    this.variableWeights[4] = 10.1;
+                    this.variableWeights[4] = 10.0;
                 }
                 //Coasting is different for theory 3, as there are other currencies we would never coast with.
                 if(this.publicationMultiplier > 0.6) {
@@ -340,14 +340,14 @@ public class Theory3 extends Theory {
                     this.variableWeights[11] = 120.0;//After c12 autobuy, c33 off.   
                }
               
-               if(this.publicationMultiplier > this.coastingPubs[2]) {
-                   this.variableWeights[1] = 10.1; // b2 autobuy
-                   this.variableWeights[4] = 10.1;//c12 autobuy
-                   this.variableWeights[7] = 13.1; //c22 OFF
-                   this.variableWeights[10] = 13.1; //c32 OFF
+               if(this.readyToCoast(2.5)) {
+                   this.variableWeights[1] = 10.0; // b2 autobuy
+                   this.variableWeights[4] = 10.0;//c12 autobuy
+                   this.variableWeights[7] = 13.0; //c22 OFF
+                   this.variableWeights[10] = 13.0; //c32 OFF
 
-                   this.variableWeights[2] = 10.1;//b3 autobuy as c23 is bad
-                   this.variableWeights[8] = 10.1;//c23
+                   this.variableWeights[2] = 10.0;//b3 autobuy as c23 is bad
+                   this.variableWeights[8] = 10.0;//c23
                }
 
                 
@@ -383,14 +383,15 @@ public class Theory3 extends Theory {
                     
                     this.variableWeights[11] = 13.0;//After c12 autobuy, c33 off.   
                }
-               if(this.publicationMultiplier > this.coastingPubs[2]) {
-                   this.variableWeights[1] = 10.1; // b2 autobuy
-                   this.variableWeights[4] = 10.1;//c12 autobuy
-                   this.variableWeights[7] = 16.1; //c22 OFF
-                   this.variableWeights[10] = 16.1; //c32 OFF
+               if(this.publicationMultiplier > 2.5) {
+                   
+                   this.variableWeights[1] = 10.0; // b2 autobuy
+                   this.variableWeights[4] = 10.0;//c12 autobuy
+                   this.variableWeights[7] = 16.0; //c22 OFF
+                   this.variableWeights[10] = 16.0; //c32 OFF
 
-                   this.variableWeights[2] = 10.1;//b3 autobuy as c23 is bad
-                   this.variableWeights[8] = 10.1;//c23
+                   this.variableWeights[2] = 10.0;//b3 autobuy as c23 is bad
+                   this.variableWeights[8] = 10.0;//c23
                }
             } else if(this.strategy.name.equalsIgnoreCase("T3XS")) {
                 this.variableWeights[0] = 10.0;
@@ -455,7 +456,7 @@ public class Theory3 extends Theory {
                 this.variableWeights[10] = 10.0;
             }
         } 
-        if(this.publicationMultiplier > this.coastingPubs[2]) {
+        if(this.publicationMultiplier > 2.4) {
             /**for(int j = 0; j < this.variables.length; j++) {
                 this.variables[j].deactivate();
             }*/

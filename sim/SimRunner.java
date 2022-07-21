@@ -223,10 +223,14 @@ public class SimRunner {
   
     double bestTotalTime = 2222222220.0;
     
-    for(double i = 0.99995; i < 1.0000000001; i = i + 0.000001) {
-      for(double j = 300; j < 350; j = j + 500) {
-        Theory.K_value[0] = i;
+    for(double i = 100; i < 800; i = i + 100) {
+      for(double j = i + 50; j < i + 300; j = j + 50) {
+        for(double k = j + 50; k < j + 400; k = k + 80) {
+          for(double m = k + 50; m < k + 600; m = m + 100) {
+            Theory.K_value[0] = i;
         Theory.K_value[1] = j;
+        Theory.K_value[2] = k;
+        Theory.K_value[3] = m;
         double[] result = new double[2];
         
         double normalisedTime = SimRunner.runChainSims(studentNumber, theoryNumber, start, end, flag)[0];
@@ -235,13 +239,20 @@ public class SimRunner {
           bestTotalTime = normalisedTime;
           bestK1 = Theory.K_value[0];
           bestK2 = Theory.K_value[1];
+          bestK3 = Theory.K_value[2];
+          bestK4 = Theory.K_value[3];
         }
+          }
+        }
+        
       }
     }
 
     System.out.println(bestTotalTime);
     System.out.println(bestK1);
     System.out.println(bestK2);
+    System.out.println(bestK3);
+    System.out.println(bestK4);
   }
 
   /**

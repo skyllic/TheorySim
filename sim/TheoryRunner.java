@@ -70,18 +70,18 @@ public class TheoryRunner {
         SimRunner simRunner = new SimRunner();
 
         
-        //SimRunner.runStrategicSim(300, 8, 500, 600, "strategy=first");
-        //double[] dist1 = new double[] {0, 700, 0, 0, 0, 0, 0, 0};
+        //SimRunner.runStrategicSim(300, 2, 600, 700 + Math.log10(1.0), "strategy=first");
+        //double[] dist1 = new double[] {641, 628, 691, 774, 955, 1215, 650, 529};
         //double[] dist1 = new double[] {671, 588, 681, 772.8, 984, 1187.8, 628.8, 535};
-        //double[] dist2 = new double[] {631, 631, 629, 727.6, 942, 1115.3, 590.1, 508.5};
-        //double[] dist2 = new double[] {641, 608.5, 667, 773.7, 955, 1214, 635, 528.5};
+        double[] dist2 = new double[] {671, 620, 681, 776, 987, 1211, 628, 535}; // gen
+        double[] dist1 = new double[] {672, 607, 680, 779, 1000, 1184, 636, 550}; //wind
       
-        //SimRunner.runDistributionComparison(dist1, dist2, 315, 315);
+        SimRunner.runDistributionComparison(dist1, dist2, 322, 322);
         //Theory theory = new Theory(1, 610);
         
         
-        SimRunner.runChainSims(300, 8, Math.log10(1) + 500
-        ,Math.log10(1.09) + 600, "strategy=first");
+        //SimRunner.runChainSims(300, 3, Math.log10(1) + 600
+        //,Math.log10(2.14) + 670, "strategy=first");
         
 
 

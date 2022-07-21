@@ -22,7 +22,7 @@ public class Theory6 extends Theory {
 
     public double coastingPub = 15.5;
 
-    public double[] variableWeights = { 11, 10.0, 10.5, 9.8, 11, 10, 1000, 1000, 10 };
+    public double[] variableWeights = { 11, 10.0, 10.7, 10.0, 11, 10, 1000, 1000, 10 };
     public String strategyType = "";
     // public double[] variableWeights = {10,10.0,10.0,10,100,100,1000,1000,10};
 
@@ -405,22 +405,25 @@ public class Theory6 extends Theory {
 
             if (this.strategy.name.equalsIgnoreCase("T6Play")) {
                 // variableWeights = { 11, 10.0, 10.5, 9.8, 11, 10, 1000, 1000, 10 };
+                this.variables[6].deactivate();
+                this.variables[7].deactivate();
 
-                if (this.maxRho < this.publicationMark * 0.981) {
-                    this.variableWeights[4] = 11;
-                    this.variableWeights[5] = 10;
+                if (this.maxRho < this.publicationMark * 0.982) {
+                    this.variableWeights[4] = 11.2;
+                    this.variableWeights[5] = 10.2;
                     this.variableWeights[8] = 10000;
-                } else if (this.maxRho < this.publicationMark * 0.988) {
-                    this.variableWeights[4] = 11;
-                    this.variableWeights[5] = 10;
-                    this.variableWeights[8] = 10;
+                } else if (this.maxRho < this.publicationMark * 0.9905) {
+                    this.variableWeights[4] = 11.2;
+                    this.variableWeights[5] = 10.2;
+                    this.variableWeights[8] = 10.2;
                 } else {
-                    this.variableWeights[4] = 12.5 + (0.022 * (this.variables[0].level % 10) - 0.12);
-                    this.variableWeights[5] = 11.5;
-                    this.variableWeights[8] = 10;
+                    this.variableWeights[4] = 12.8 + (0.022 * (this.variables[0].level % 10) - 0.12);
+                    this.variableWeights[5] = 11.8;
+                    this.variableWeights[8] = 10.05;
+                    this.variableWeights[1] = 10.01;
                 }
 
-                this.variableWeights[0] = 10.9 + (0.022 * (this.variables[0].level % 10) - 0.12);
+                this.variableWeights[0] = 10.8 + (0.031 * (this.variables[0].level % 10));
 
             } else if (this.strategy.name.equalsIgnoreCase("T6C5d")) {
                 this.variableWeights[0] = 11 + (0.018 * (this.variables[0].level % 10) - 0.11);
@@ -484,7 +487,9 @@ public class Theory6 extends Theory {
                     this.variableWeights[8] = 15;
                 }
             }
-            if (this.publicationMultiplier > this.coastingPubs[5]) {
+
+            
+            if (this.readyToCoast(5.45)) {
                 for (int j = 0; j < this.variables.length; j++) {
                     this.variables[j].deactivate(); // autobuy for the variable off.
                     this.isCoasting = true;

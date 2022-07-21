@@ -75,6 +75,8 @@ public class Theory2 extends Theory {
 
         super.moveTick();
 
+        
+        
         this.publicationMultiplier = Math.pow(10, 0.198 * (this.maxRho - this.publicationMark));
 
     }
@@ -455,15 +457,16 @@ public class Theory2 extends Theory {
 
                 this.variableWeights[i] = 10 + (0.031 * (this.variables[i].level % 10));
 
-                if(this.publicationMultiplier > 520) {
+                if(this.readyToCoast(1100)) {
                     this.variables[3].deactivate();
                     this.variables[7].deactivate();
+                    
                 }
-                if(this.publicationMultiplier> 530) {
+                if(this.readyToCoast(2250)) {
                     this.variables[2].deactivate();
                     this.variables[6].deactivate();
                 }
-                if(this.publicationMultiplier> 555) {
+                if(this.readyToCoast(2900)) {
                     this.variables[1].deactivate();
                     this.variables[5].deactivate();
                 }
@@ -482,7 +485,7 @@ public class Theory2 extends Theory {
 
         
 
-        if (this.publicationMultiplier > 580) {
+        if (this.readyToCoast(4650)) {
           
             for (int j = 0; j < this.variables.length; j++) {
                 this.variables[j].deactivate(); // autobuy for the variable off.
