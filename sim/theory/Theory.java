@@ -612,12 +612,15 @@ public class Theory implements ITheory {
         }
 
         private void updateStatisticsSummary() {
-                this.maxTauPerHour = (this.maxRho - this.publicationMark) / (this.seconds / 3600.0);
+                if((this.maxRho - this.publicationMark) / (this.seconds / 3600.0) > this.maxTauPerHour) {
+                        this.maxTauPerHour = (this.maxRho - this.publicationMark) / (this.seconds / 3600.0);
                                 this.bestPubMulti = this.publicationMultiplier;
                                 this.bestPubTime = this.seconds / 3600.0;
                                 this.bestTauGain = this.maxRho - this.publicationMark;
                                 this.bestRecoveryTime = this.recoveryTime;
                                 this.bestCoastStart = this.coastStart;
+                }
+                
         }
 
         public void loadTheoryRates() {

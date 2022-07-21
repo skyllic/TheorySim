@@ -44,11 +44,11 @@ public class SimRunner {
     SimRunner.strategies.add(new Strategy("T4PlaySpqcey", 4, "active"));
     SimRunner.strategies.add(new Strategy("T4SolC", 4, "active"));
     SimRunner.strategies.add(new Strategy("T4Sol2", 4, "active"));
+    SimRunner.strategies.add(new Strategy("T4Baby", 4, "active"));
     SimRunner.strategies.add(new Strategy("T4Solar", 4, "active"));
     SimRunner.strategies.add(new Strategy("T4Gold", 4, "active"));
     SimRunner.strategies.add(new Strategy("T4C3d", 4, "active"));
     SimRunner.strategies.add(new Strategy("T4C3", 4, "idle"));
-    SimRunner.strategies.add(new Strategy("T4Baby", 4, "active"));
     SimRunner.strategies.add(new Strategy("T4NoMS", 4, "active"));
 
     SimRunner.strategies.add(new Strategy("T5Play", 5, "active"));
@@ -223,9 +223,9 @@ public class SimRunner {
   
     double bestTotalTime = 2222222220.0;
     
-    for(double i = 100; i < 800; i = i + 100) {
-      for(double j = i + 50; j < i + 300; j = j + 50) {
-        for(double k = j + 50; k < j + 400; k = k + 80) {
+    for(double i = 10; i < 90; i = i + 100.0) {
+      for(double j = 0.7; j < 0.9; j = j + 10.04) {
+        for(double k = 0.5; k < 1.5; k = k + 100) {
           for(double m = k + 50; m < k + 600; m = m + 100) {
             Theory.K_value[0] = i;
         Theory.K_value[1] = j;

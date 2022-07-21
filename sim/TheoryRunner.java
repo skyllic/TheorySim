@@ -76,19 +76,18 @@ public class TheoryRunner {
         double[] dist2 = new double[] {671, 620, 681, 776, 987, 1211, 628, 535}; // gen
         double[] dist1 = new double[] {672, 607, 680, 779, 1000, 1184, 636, 550}; //wind
       
-        SimRunner.runDistributionComparison(dist1, dist2, 322, 322);
+        //SimRunner.runDistributionComparison(dist1, dist2, 322, 322);
         //Theory theory = new Theory(1, 610);
         
         
-        //SimRunner.runChainSims(300, 3, Math.log10(1) + 600
-        //,Math.log10(2.14) + 670, "strategy=first");
+        SimRunner.runChainSims(35, 4, Math.log10(1) + 10
+        ,Math.log10(1) + 150, "strategy=fourth");
         
-
-
+        //SimRunner.runIntervalSim(30, 4, 10, 150, 1, "strategy=fourth");
         /**for(int i = 0; i < 150; i++) {
             SimRunner.runChainSims(315, 14, i,i+1, "strategy=first");
         }*/
-        //SimRunner.runStrategicSim(300, 14, 0, 50, "print=true,strategy=first");
+        //SimRunner.runStrategicSim(30, 4, 10, 150, "print=true,strategy=fourth");
         //SimRunner.runDetailedSim(300, 1, 600 + Math.log10(6.22),
         // true, "strategy=frst");
        //double totalTime = SimRunner.runChainSims(300, 1, 600, 700, 
