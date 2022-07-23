@@ -83,7 +83,7 @@ public class Theory2 extends Theory {
 
     public void milestoneSwapCheck() {
         
-        if(this.strategy.name == "T2MS") {
+        if(this.strategy.name.equalsIgnoreCase("T2MS")) {
             if(this.maxRho < 25 && this.publicationMark < 25) {
                 this.milestoneLevels[0] = 0;
                 this.milestoneLevels[1] = 0;
@@ -157,7 +157,7 @@ public class Theory2 extends Theory {
                     this.milestoneLevels[3] = 0;
                 }
             } else if(this.maxRho < 125 && this.publicationMark < 125) {
-                if(this.tickCount % 100 < 90) {
+                if(this.tickCount % 100 < 86) {
                     this.milestoneLevels[0] = 2;
                     this.milestoneLevels[1] = 2;
                     this.milestoneLevels[2] = 0;
@@ -169,7 +169,7 @@ public class Theory2 extends Theory {
                     this.milestoneLevels[3] = 1;
                 } 
             } else if(this.maxRho < 150 && this.publicationMark < 150) {
-                if(this.tickCount % 100 < 90) {
+                if(this.tickCount % 100 < 74) {
                     this.milestoneLevels[0] = 2;
                     this.milestoneLevels[1] = 2;
                     this.milestoneLevels[2] = 1;
@@ -181,7 +181,7 @@ public class Theory2 extends Theory {
                     this.milestoneLevels[3] = 2;
                 } 
             } else if(this.maxRho < 175 && this.publicationMark < 175) {
-                if(this.tickCount % 100 < 90) {
+                if(this.tickCount % 100 < 80) {
                     this.milestoneLevels[0] = 2;
                     this.milestoneLevels[1] = 2;
                     this.milestoneLevels[2] = 2;
@@ -205,7 +205,7 @@ public class Theory2 extends Theory {
                     this.milestoneLevels[3] = 3;
                 } 
             } else if(this.maxRho < 225 && this.publicationMark < 225) {
-                if(this.tickCount % 100 < 80) {
+                if(this.tickCount % 100 < 72) {
                     this.milestoneLevels[0] = 2;
                     this.milestoneLevels[1] = 2;
                     this.milestoneLevels[2] = 3;
@@ -217,7 +217,7 @@ public class Theory2 extends Theory {
                     this.milestoneLevels[3] = 3;
                 } 
             } else if(this.maxRho < 250 && this.publicationMark < 250) {
-                if(this.tickCount % 100 < 80) {
+                if(this.tickCount % 100 < 66) {
                     this.milestoneLevels[0] = 2;
                     this.milestoneLevels[1] = 2;
                     this.milestoneLevels[2] = 3;
@@ -485,7 +485,7 @@ public class Theory2 extends Theory {
 
         
 
-        if (this.readyToCoast(4650)) {
+        if (this.readyToCoast(1000)) {
           
             for (int j = 0; j < this.variables.length; j++) {
                 this.variables[j].deactivate(); // autobuy for the variable off.

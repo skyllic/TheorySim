@@ -80,14 +80,14 @@ public class TheoryRunner {
         //Theory theory = new Theory(1, 610);
         
         
-        SimRunner.runChainSims(35, 4, Math.log10(1) + 10
-        ,Math.log10(1) + 150, "strategy=fourth");
+        SimRunner.runChainSims(35, 8, Math.log10(1) + 10
+        ,Math.log10(1) + 40, "strategy=fourth");
         
         //SimRunner.runIntervalSim(30, 4, 10, 150, 1, "strategy=fourth");
         /**for(int i = 0; i < 150; i++) {
             SimRunner.runChainSims(315, 14, i,i+1, "strategy=first");
         }*/
-        //SimRunner.runStrategicSim(30, 4, 10, 150, "print=true,strategy=fourth");
+        //SimRunner.runStrategicSim(30, 2, 10, 250, "print=true,strategy=fourth");
         //SimRunner.runDetailedSim(300, 1, 600 + Math.log10(6.22),
         // true, "strategy=frst");
        //double totalTime = SimRunner.runChainSims(300, 1, 600, 700, 

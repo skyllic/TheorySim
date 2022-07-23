@@ -528,7 +528,7 @@ public class Theory8 extends Theory {
         }
         if(this.strategy.name.equalsIgnoreCase("T8baby")) {
             if(this.publicationMultiplier < 60) {
-                if (this.readyToCoast(2.35)) {
+                if (this.readyToCoast(4.35)) {
                     for (int j = 0; j < this.variables.length; j++) {
                         this.variables[j].deactivate(); // autobuy for the variable off.
                         this.isCoasting = true;

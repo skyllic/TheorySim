@@ -26,14 +26,14 @@ public class SimRunner {
   public static void addAllKnownStrategies() {
     SimRunner.strategies.add(new Strategy("T1Play", 1, "active"));
     SimRunner.strategies.add(new Strategy("T1Play2", 1, "active"));
-    SimRunner.strategies.add(new Strategy("T1Baby", 1, "active"));
     SimRunner.strategies.add(new Strategy("T1C34", 1, "idle"));
+    SimRunner.strategies.add(new Strategy("T1Baby", 1, "active"));
     SimRunner.strategies.add(new Strategy("T1C4", 1, "idle"));
 
     SimRunner.strategies.add(new Strategy("T2AI", 2, "active"));
-    SimRunner.strategies.add(new Strategy("T2MS", 2, "active"));
     SimRunner.strategies.add(new Strategy("T2NoMS", 2, "idle"));
     SimRunner.strategies.add(new Strategy("T2", 2, "idle"));
+    SimRunner.strategies.add(new Strategy("T2MS", 2, "active"));
 
     SimRunner.strategies.add(new Strategy("T3Play2", 3, "active"));
     SimRunner.strategies.add(new Strategy("T3PlayX", 3, "active"));
@@ -223,7 +223,7 @@ public class SimRunner {
   
     double bestTotalTime = 2222222220.0;
     
-    for(double i = 10; i < 90; i = i + 100.0) {
+    for(double i = 10; i < 90; i = i + 2.0) {
       for(double j = 0.7; j < 0.9; j = j + 10.04) {
         for(double k = 0.5; k < 1.5; k = k + 100) {
           for(double m = k + 50; m < k + 600; m = m + 100) {
