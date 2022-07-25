@@ -93,29 +93,67 @@ public class Theory1 extends Theory {
                     this.milestoneLevels[2] = 2;
                 }
             } else if (this.maxRho < 100 && this.publicationMark < 100) {
-                if (this.tickCount % 100 < 100) {
                     this.milestoneLevels[0] = 0;
                     this.milestoneLevels[1] = 1;
                     this.milestoneLevels[2] = 1;
                     this.milestoneLevels[3] = 1;
+                    double tempRhodot1 = this.calculateRhodot();
 
-                } else if (this.tickCount % 100 < 100) {
                     this.milestoneLevels[0] = 1;
                     this.milestoneLevels[1] = 1;
                     this.milestoneLevels[2] = 1;
+                    this.milestoneLevels[3] = 0;
+                    double tempRhodot2 = this.calculateRhodot();
 
-                }
+                    this.milestoneLevels[0] = 2;
+                    this.milestoneLevels[1] = 1;
+                    this.milestoneLevels[2] = 0;
+                    this.milestoneLevels[3] = 0;
+                    double tempRhodot3 = this.calculateRhodot();
+
+                    this.milestoneLevels[0] = 3;
+                    this.milestoneLevels[1] = 0;
+                    this.milestoneLevels[2] = 0;
+                    this.milestoneLevels[3] = 0;
+                    double tempRhodot4 = this.calculateRhodot();
+
+                    int maxIndex = this.findMaxIndex(new double[]{tempRhodot1, tempRhodot2, tempRhodot3, tempRhodot4});
+
+                    if(maxIndex == 0) {
+                        this.milestoneLevels[0] = 0;
+                    this.milestoneLevels[1] = 1;
+                    this.milestoneLevels[2] = 1;
+                    this.milestoneLevels[3] = 1;
+                    } else if(maxIndex == 1) {
+                        this.milestoneLevels[0] = 1;
+                    this.milestoneLevels[1] = 1;
+                    this.milestoneLevels[2] = 1;
+                    this.milestoneLevels[3] = 0;
+                    } else if(maxIndex == 2) {
+                        this.milestoneLevels[0] = 2;
+                    this.milestoneLevels[1] = 1;
+                    this.milestoneLevels[2] = 0;
+                    this.milestoneLevels[3] = 0;
+                    } else {
+                        this.milestoneLevels[0] = 3;
+                    this.milestoneLevels[1] = 0;
+                    this.milestoneLevels[2] = 0;
+                    this.milestoneLevels[3] = 0;
+                    }
+
+                
             } else if (this.maxRho < 125 && this.publicationMark < 125) {
-                if (this.tickCount % 100 < 100) {
+                if (this.variables[5].nextCost - this.rho > 0 && !(this.variables[5].nextCost - this.rho  < 2)) {
                     this.milestoneLevels[0] = 1;
                     this.milestoneLevels[1] = 1;
                     this.milestoneLevels[2] = 1;
                     this.milestoneLevels[3] = 1;
 
                 } else {
-                    this.milestoneLevels[0] = 0;
+                    this.milestoneLevels[0] = 2;
                     this.milestoneLevels[1] = 1;
-                    this.milestoneLevels[2] = 3;
+                    this.milestoneLevels[2] = 1;
+                    this.milestoneLevels[3] = 0;
 
                 }
             } else if (this.maxRho < 150 && this.publicationMark < 150) {
@@ -477,63 +515,78 @@ public class Theory1 extends Theory {
             this.variables[4].deactivate();
             this.variableWeights[5] = 10.0;
         } else if (this.strategy.name.equalsIgnoreCase("T1Baby")) {
-            if (this.maxRho < 25 && this.publicationMark < 25) {
-                this.variableWeights[0] = 11.0;
-                this.variableWeights[1] = 10.0;
-                this.variableWeights[2] = 11.0;
-                this.variableWeights[3] = 10.0;
-                this.variableWeights[4] = 10.0;
-                this.variableWeights[5] = 10.0;
+            double rhoDotOld = this.calculateRhodot();
+            this.variables[i].level += 1;
+            this.variables[i].update();
+            double rhoDotNew = this.calculateRhodot();
+            this.variables[i].level -= 1;
+            this.variables[i].update();
 
-            } else if (this.maxRho < 50 && this.publicationMark < 50) {
-                this.variableWeights[0] = 11.0;
-                this.variableWeights[1] = 10.0;
-                this.variableWeights[2] = 11.0;
-                this.variableWeights[3] = 10.0;
-                this.variableWeights[4] = 10.0;
-                this.variableWeights[5] = 10.0;
+            double rhoDotDiff = rhoDotNew - rhoDotOld;
 
-            } else if (this.maxRho < 75 && this.publicationMark < 75) {
-
-                this.variableWeights[0] = 11.0;
-                this.variableWeights[1] = 10.0;
-                this.variableWeights[2] = 11.0;
-                this.variableWeights[3] = 10.0;
-                this.variableWeights[4] = 10.0;
-                this.variableWeights[5] = 10.0;
-            } else if (this.maxRho < 100 && this.publicationMark < 100) {
-
-                this.variableWeights[0] = 11.0;
-                this.variableWeights[1] = 10.0;
-                this.variableWeights[2] = 11.0;
-                this.variableWeights[3] = 10.0;
-                this.variableWeights[4] = 10.0;
-                this.variableWeights[5] = 10.0;
-            } else if (this.maxRho < 125 && this.publicationMark < 125) {
-
-                this.variableWeights[0] = 11.0;
-                this.variableWeights[1] = 10.0;
-                this.variableWeights[2] = 11.0;
-                this.variableWeights[3] = 10.0;
-                this.variableWeights[4] = 10.0;
-                this.variableWeights[5] = 10.0;
-            } else if (this.maxRho < 150 && this.publicationMark < 150) {
-
-                this.variableWeights[0] = 11.0;
-                this.variableWeights[1] = 10.0;
-                this.variableWeights[2] = 11.0;
-                this.variableWeights[3] = 10.0;
-                this.variableWeights[4] = 10.0;
-                this.variableWeights[5] = 10.0;
-            } else {
-
-                this.variableWeights[0] = 11.0;
-                this.variableWeights[1] = 10.0;
-                this.variableWeights[2] = 11.0;
-                this.variableWeights[3] = 10.0;
-                this.variableWeights[4] = 10.0;
-                this.variableWeights[5] = 10.0;
-            }
+            double rhodotMultiplier = Math.pow(10, rhoDotDiff);
+            double coefficient = rhodotMultiplier * (1.6 - 1) / (1.6 * (rhodotMultiplier - 1));
+            coefficient = Math.log10(coefficient);
+            this.variableWeights[i] = 10 + 1.2 * coefficient;
+            /**
+             * if (this.maxRho < 25 && this.publicationMark < 25) {
+             * this.variableWeights[0] = 11.0;
+             * this.variableWeights[1] = 10.0;
+             * this.variableWeights[2] = 11.0;
+             * this.variableWeights[3] = 10.0;
+             * this.variableWeights[4] = 100.0;
+             * this.variableWeights[5] = 100.0;
+             * 
+             * } else if (this.maxRho < 50 && this.publicationMark < 50) {
+             * this.variableWeights[0] = 11.0;
+             * this.variableWeights[1] = 10.0;
+             * this.variableWeights[2] = 11.0;
+             * this.variableWeights[3] = 10.0;
+             * this.variableWeights[4] = 10.0;
+             * this.variableWeights[5] = 10.0;
+             * 
+             * } else if (this.maxRho < 75 && this.publicationMark < 75) {
+             * 
+             * this.variableWeights[0] = 11.0;
+             * this.variableWeights[1] = 10.0;
+             * this.variableWeights[2] = 11.0;
+             * this.variableWeights[3] = 10.0;
+             * this.variableWeights[4] = 10.0;
+             * this.variableWeights[5] = 10.0;
+             * } else if (this.maxRho < 100 && this.publicationMark < 100) {
+             * 
+             * this.variableWeights[0] = 11.0;
+             * this.variableWeights[1] = 10.0;
+             * this.variableWeights[2] = 11.0;
+             * this.variableWeights[3] = 10.0;
+             * this.variableWeights[4] = 10.0;
+             * this.variableWeights[5] = 10.0;
+             * } else if (this.maxRho < 125 && this.publicationMark < 125) {
+             * 
+             * this.variableWeights[0] = 11.0;
+             * this.variableWeights[1] = 10.0;
+             * this.variableWeights[2] = 11.0;
+             * this.variableWeights[3] = 10.0;
+             * this.variableWeights[4] = 10.0;
+             * this.variableWeights[5] = 10.0;
+             * } else if (this.maxRho < 150 && this.publicationMark < 150) {
+             * 
+             * this.variableWeights[0] = 11.0;
+             * this.variableWeights[1] = 10.0;
+             * this.variableWeights[2] = 11.0;
+             * this.variableWeights[3] = 10.0;
+             * this.variableWeights[4] = 10.0;
+             * this.variableWeights[5] = 10.0;
+             * } else {
+             * 
+             * this.variableWeights[0] = 11.0;
+             * this.variableWeights[1] = 10.0;
+             * this.variableWeights[2] = 11.0;
+             * this.variableWeights[3] = 10.0;
+             * this.variableWeights[4] = 10.0;
+             * this.variableWeights[5] = 10.0;
+             * }
+             */
         }
 
         if (this.publicationMultiplier > 7) {
@@ -543,6 +596,18 @@ public class Theory1 extends Theory {
             }
         }
 
+    }
+
+    public int findMaxIndex(double[] array) {
+
+        int tempMaxIndex = 0;
+        double tempMaxValue = 0;
+        for (int i = 0; i < array.length; i++) {
+            if (array[i] > tempMaxValue) {
+                tempMaxIndex = i;
+            }
+        }
+        return tempMaxIndex;
     }
 
     /** Idles the input theory until its rho exceeds the input rho */

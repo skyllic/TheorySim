@@ -465,6 +465,9 @@ public class Theory6 extends Theory {
                 this.variables[6].deactivate();
                 this.variables[7].deactivate();
             } else if (this.strategy.name.equalsIgnoreCase("T6Baby")) {
+                
+              
+
                 this.variableWeights[0] = 11;
                 this.variableWeights[1] = 10;
                 this.variableWeights[2] = 11;

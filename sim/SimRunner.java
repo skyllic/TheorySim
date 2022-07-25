@@ -58,9 +58,10 @@ public class SimRunner {
     SimRunner.strategies.add(new Strategy("T6Play", 6, "active"));
     SimRunner.strategies.add(new Strategy("T6C5d", 6, "active"));
     SimRunner.strategies.add(new Strategy("T6C125d", 6, "active"));
+    SimRunner.strategies.add(new Strategy("T6Baby", 6, "active"));
     SimRunner.strategies.add(new Strategy("T6C5", 6, "idle"));
     SimRunner.strategies.add(new Strategy("T6C125", 6, "idle"));
-    SimRunner.strategies.add(new Strategy("T6Baby", 6, "active"));
+    
 
     SimRunner.strategies.add(new Strategy("T7PlaySpqcey", 7, "active"));
     SimRunner.strategies.add(new Strategy("T7Play", 7, "active"));
