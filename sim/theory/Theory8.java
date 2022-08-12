@@ -455,7 +455,7 @@ public class Theory8 extends Theory {
                 this.variableWeights[4] = 10.0;
             }
             else if(this.strategy.name.equalsIgnoreCase("T8Baby")) {
-                this.variableWeights[0] = 10.0;
+                this.variableWeights[0] = 10.8;
                 this.variableWeights[1] = 10.0;
                 this.variableWeights[2] = 10.0;
                 this.variableWeights[3] = 10.0;
@@ -464,9 +464,9 @@ public class Theory8 extends Theory {
                 if(this.maxRho < 20 && this.publicationMark < 20) {
                     this.variableWeights[0] = 10.9 + (0.030 * (this.variables[0].level % 10) - 0.11);
                     this.variableWeights[1] = 10.0;
-                    this.variableWeights[2] = 10.0;
-                    this.variableWeights[3] = 10.0;
-                    this.variableWeights[4] = 10.0; 
+                    this.variableWeights[2] = 14.0;
+                    this.variableWeights[3] = 10.5;
+                    this.variableWeights[4] = 9.8; 
                 } else if(this.maxRho < 40 && this.publicationMark < 40) {
                     this.variableWeights[0] = 10.9 + (0.030 * (this.variables[0].level % 10) - 0.11);
                     this.variableWeights[1] = 10.0;

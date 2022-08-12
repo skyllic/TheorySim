@@ -54,6 +54,7 @@ public class SimRunner {
     SimRunner.strategies.add(new Strategy("T5Play", 5, "active"));
     SimRunner.strategies.add(new Strategy("T5", 5, "idle"));
     SimRunner.strategies.add(new Strategy("T5PlayI", 5, "idle"));
+    SimRunner.strategies.add(new Strategy("T5Baby", 5, "active"));
 
     SimRunner.strategies.add(new Strategy("T6Play", 6, "active"));
     SimRunner.strategies.add(new Strategy("T6C5d", 6, "active"));

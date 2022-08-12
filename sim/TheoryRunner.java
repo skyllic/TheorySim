@@ -5,7 +5,7 @@ import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.Map;
 
-import javafx.stage.Stage;
+
 import sim.data.DataGenerator;
 import sim.theory.Convergence_Square_Root;
 import sim.theory.Euler_Formula;
@@ -80,18 +80,16 @@ public class TheoryRunner {
         //Theory theory = new Theory(1, 610);
         
         
-        SimRunner.runChainSims(35, 1, Math.log10(1) + 10
-        ,Math.log10(1) + 150, "strategy=fourth");
+        //SimRunner.runChainSims(35, 8, Math.log10(1) + 10
+        //,Math.log10(1) + 150, "strategy=fourth");
 
         
         
-        //SimRunner.runIntervalSim(30, 4, 10, 175, 1, "strategy=fourth");
-        /**for(int i = 0; i < 150; i++) {
-            SimRunner.runChainSims(315, 14, i,i+1, "strategy=first");
-        }*/
+        //SimRunner.runIntervalSim(30, 2, 10, 250, 1, "strategy=fourth,pubmulti");
+        
         //SimRunner.runStrategicSim(30, 2, 10, 250, "print=true,strategy=fourth");
-        //SimRunner.runDetailedSim(300, 1, 600 + Math.log10(6.22),
-        // true, "strategy=frst");
+        SimRunner.runDetailedSim(840, 3, 2000 + Math.log10(1),
+         true, "strategy=frst");
        //double totalTime = SimRunner.runChainSims(300, 1, 600, 700, 
        //"print=true,strategy=second")[0];
        

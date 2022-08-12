@@ -20,6 +20,8 @@ public class Theory5 extends Theory {
 
     public double coastingPub = 6.0;
 
+    public int[] milestoneLevels = new int[3];
+
     public double[] variableWeights = { 10, 10, 10, 10, 10 };
     // public double[] variableWeights = {10,10,10,10,10,10,11,10};
 
@@ -37,6 +39,12 @@ public class Theory5 extends Theory {
         this.isCoasting = false;
 
         this.variables = new Variable[5];
+
+        // Default all milestones.
+        this.milestoneLevels[0] = 3;
+        this.milestoneLevels[1] = 1;
+        this.milestoneLevels[2] = 2;
+        
         
 
         // Order of variable is q1, q2, r1, r2, c1, c2, c3, c4, c5 (same as in game when
@@ -61,10 +69,99 @@ public class Theory5 extends Theory {
 
         this.updateEquation();
 
+        this.milestoneSwapCheck();
+
+        
+
         super.moveTick();
 
         this.publicationMultiplier = Math.pow(10, 0.159 * (this.maxRho - this.publicationMark));
 
+    }
+
+    public void milestoneSwapCheck() {
+        
+        if(this.strategy.name.equalsIgnoreCase("T5Baby")) {
+            if(this.maxRho < 25 && this.publicationMark < 25) {
+                this.milestoneLevels[0] = 0;
+                this.milestoneLevels[1] = 0;
+                this.milestoneLevels[2] = 0;
+                
+            } else if(this.maxRho < 50 && this.publicationMark < 50) {
+                if(this.tickCount % 100 < 100) {
+                    this.milestoneLevels[0] = 0;
+                    this.milestoneLevels[1] = 1;
+                    this.milestoneLevels[2] = 0;
+                
+                } 
+                
+            } else if(this.maxRho < 75 && this.publicationMark < 75) {
+                if(this.tickCount % 100 < 100) {
+                    this.milestoneLevels[0] = 1;
+                    this.milestoneLevels[1] = 1;
+                    this.milestoneLevels[2] = 0;
+                    
+                } else if(this.tickCount % 100 < 55) {
+                    this.milestoneLevels[0] = 0;
+                    this.milestoneLevels[1] = 0;
+                    this.milestoneLevels[2] = 2;
+                    this.milestoneLevels[3] = 0;
+                } else if(this.tickCount % 100 < 95) {
+                    this.milestoneLevels[0] = 0;
+                    this.milestoneLevels[1] = 2;
+                    this.milestoneLevels[2] = 0;
+                    this.milestoneLevels[3] = 0;
+                } else {
+                    this.milestoneLevels[0] = 0;
+                    this.milestoneLevels[1] = 0;
+                    this.milestoneLevels[2] = 2;
+                    this.milestoneLevels[3] = 0;
+                }
+            } else if(this.maxRho < 100 && this.publicationMark < 100) {
+
+                this.milestoneLevels[0] = 2;
+                this.milestoneLevels[1] = 1;
+                this.milestoneLevels[2] = 0;
+                
+               
+            } else if(this.maxRho < 125 && this.publicationMark < 125) {
+                if(this.tickCount % 100 < 100) {
+                    this.milestoneLevels[0] = 3;
+                    this.milestoneLevels[1] = 1;
+                    this.milestoneLevels[2] = 0;
+                    
+                } else {
+                    this.milestoneLevels[0] = 0;
+                    this.milestoneLevels[1] = 0;
+                    this.milestoneLevels[2] = 3;
+                    this.milestoneLevels[3] = 1;
+                } 
+            } else if(this.maxRho < 150 && this.publicationMark < 150) {
+                if(this.tickCount % 100 < 100) {
+                    this.milestoneLevels[0] = 3;
+                    this.milestoneLevels[1] = 1;
+                    this.milestoneLevels[2] = 1;
+                    
+                } else {
+                    this.milestoneLevels[0] = 0;
+                    this.milestoneLevels[1] = 0;
+                    this.milestoneLevels[2] = 3;
+                    this.milestoneLevels[3] = 2;
+                } 
+            
+            } else {
+                    this.milestoneLevels[0] = 3;
+                    this.milestoneLevels[1] = 1;
+                    this.milestoneLevels[2] = 2;
+                
+            }
+        }
+        if(this.q + Math.log10(3/2.0) < this.qMax) {
+            this.variableWeights[3] = 13.0;
+        } else {
+            this.variableWeights[2] = 13.0;
+        }
+        
     }
 
     /**
@@ -73,19 +170,54 @@ public class Theory5 extends Theory {
      */
     public void updateEquation() {
 
-        if (this.variables[4].value * 1.1 < this.q - this.variables[3].value) {
-            this.q = this.variables[4].value * 1.1 + this.variables[3].value;
+      
+        if(this.milestoneLevels[1] == 0) {
+            this.variables[4].value = 0;
+            this.qMax = this.variables[3].value;
+        } else {
+            this.qMax = this.variables[4].value * (1 + 0.05 * this.milestoneLevels[2]) + this.variables[3].value;
+        }
+
+        if (this.variables[4].value * (1 + 0.05 * this.milestoneLevels[2]) < this.q - this.variables[3].value) {
+            this.q = this.variables[4].value * (1 + 0.05 * this.milestoneLevels[2]) + this.variables[3].value;
+            this.qMax = this.variables[4].value * (1 + 0.05 * this.milestoneLevels[2]) + this.variables[3].value;
         }
 
         this.qdot = this.variables[2].value - this.variables[3].value + this.q +
-                Variable.subtract(this.variables[4].value * 1.1, this.q - this.variables[3].value) +
+                Variable.subtract(this.variables[4].value * (1 + 0.05 * this.milestoneLevels[2]), this.q - this.variables[3].value) +
                 Math.log10(Theory.adBonus) + Math.log10(this.tickFrequency);
 
         this.q = Variable.add(this.q, Math.max(this.qdot, -Double.MAX_VALUE));
-        this.q = Math.min(q, this.variables[4].value * 1.1 + this.variables[3].value);
-        this.rhodot = this.variables[0].value * 1.15 + this.variables[1].value + this.q +
+        this.q = Math.min(q, this.variables[4].value * (1 + 0.05 * this.milestoneLevels[2]) + this.variables[3].value);
+        this.rhodot = this.variables[0].value * (1 + 0.05 * this.milestoneLevels[0]) + this.variables[1].value + this.q +
                 Math.log10(this.tickFrequency) + Math.log10(Theory.adBonus) + this.totalMultiplier;
         this.rho = Variable.add(this.rho, this.rhodot);
+
+    }
+
+    /**
+     * Part of the moveTick() method. Updates equation values such as rho, rhodot,
+     * q, qdot etc.
+     */
+    public void updateEquation(String flag) {
+
+      
+        if(this.milestoneLevels[1] == 0) {
+            this.variables[4].value = 0;
+        }
+
+        if (this.variables[4].value * (1 + 0.05 * this.milestoneLevels[2]) < this.q - this.variables[3].value) {
+            this.q = this.variables[4].value * (1 + 0.05 * this.milestoneLevels[2]) + this.variables[3].value;
+        }
+
+        this.qdot = this.variables[2].value - this.variables[3].value + this.q +
+                Variable.subtract(this.variables[4].value * (1 + 0.05 * this.milestoneLevels[2]), this.q - this.variables[3].value) +
+                Math.log10(Theory.adBonus) + Math.log10(this.tickFrequency);
+
+       
+        this.rhodot = this.variables[0].value * (1 + 0.05 * this.milestoneLevels[0]) + this.variables[1].value + this.q +
+                Math.log10(this.tickFrequency) + Math.log10(Theory.adBonus) + this.totalMultiplier;
+        
 
     }
 
@@ -146,6 +278,9 @@ public class Theory5 extends Theory {
         }
 
         int bestVarIndex = this.findBestVarToBuy();
+        if(this.publicationMark > 75) {
+            int x = 0;
+        }
         if (!isCoasting) {
             this.idleUntil(this, this.variables[bestVarIndex].nextCost);
             this.buyVariable(bestVarIndex);
@@ -165,10 +300,11 @@ public class Theory5 extends Theory {
         for (int i = 0; i < this.variables.length; i++) {
             this.variables[i].update();
             if (this.variables[i].isActive == 1) {
-                while (this.variables[i].cost < this.publicationMark * 0.95) {
+                while (this.variables[i].cost < this.publicationMark * 0.60) {
                     this.variables[i].level += 1;
                     this.variables[i].update();
-                    this.q = this.variables[4].value * 1.1 + this.variables[3].value;
+                    this.q = this.variables[4].value * (1 + 0.05 * this.milestoneLevels[2]) + this.variables[3].value;
+                    this.qMax = this.q;
                 }
 
             }
@@ -275,16 +411,32 @@ public class Theory5 extends Theory {
                     this.variableWeights[2] = 1000.0;
                 }
                 
+            } else if(this.strategy.name.equalsIgnoreCase("T5Baby")) {
+                this.variableWeights[0] = 10.7 + (0.031 * (this.variables[i].level % 10));
+                this.variableWeights[1] = 10.0;
+                this.variableWeights[2] = 10.8;
+                this.variableWeights[3] = 10.0;
+                this.variableWeights[4] = 10.0;
+
+                if(this.q + Math.log10(3/2.0) < this.qMax) {
+                    this.variableWeights[3] = 13.0;
+                } else {
+                    this.variableWeights[2] = 13.0;
+                }
             }
 
         }
 
-        if (this.publicationMultiplier > 2) {
+        if (this.publicationMultiplier > 9) {
             for (int j = 0; j < this.variables.length; j++) {
                 this.variables[j].deactivate(); // autobuy for the variable off.
                 this.isCoasting = true;
             }
         }
+
+    }
+
+    private void generateWeights() {
 
     }
 
