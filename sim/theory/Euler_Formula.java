@@ -492,7 +492,7 @@ public class Euler_Formula extends Theory {
         }
         
         
-        if (this.publicationMultiplier > 1.6/**this.seconds > 10000000*/) {
+        if (this.publicationMultiplier > 1.6) {
             for (int j = 0; j < this.variables.length; j++) {
                 this.variables[j].deactivate(); // autobuy for the variable off.
                 this.isCoasting = true;

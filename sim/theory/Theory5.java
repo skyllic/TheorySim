@@ -427,7 +427,7 @@ public class Theory5 extends Theory {
 
         }
 
-        if (this.publicationMultiplier > 9) {
+        if (this.publicationMultiplier > 9 && this.seconds > 10000000) {
             for (int j = 0; j < this.variables.length; j++) {
                 this.variables[j].deactivate(); // autobuy for the variable off.
                 this.isCoasting = true;

@@ -13,7 +13,7 @@ public class OverpushComparison {
         double p2Sum = getSum(p2Dist);
 
         double[] p1OverPushRatios = new double[] { 1, 1, 1, 1, 1, 1, 1, 1 };
-        double[] p2OverPushRatios = new double[] { 1, 10.2, 1, 1.5, 1, 3, 1, 1 };
+        double[] p2OverPushRatios = new double[] { 1, 3, 1, 1, 1, 1, 1, 1 };
 
     
         

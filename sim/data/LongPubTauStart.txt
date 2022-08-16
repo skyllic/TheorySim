@@ -1,0 +1,13 @@
+Best publication mark to start long pub multi saves: (10 million seconds)
+T1: e1 rho, 52.5 rho increase
+T2: e1 rho, 224.5 rho increase
+T3:
+T4:
+T5: e1 rho, 52.3 rho increase
+T6: e10 rho, 91 rho increase
+T7:
+T8:
+WSP:
+SL:
+EF: e36 rho, 26.9 rho increase
+CSR2: e72 rho, 24.0 rho increase

@@ -47,11 +47,10 @@ public class Theory6 extends Theory {
         this.qdot = -Double.MAX_VALUE;
         this.rdot = -Double.MAX_VALUE;
         this.variables = new Variable[9];
-        
+
         this.usedMoney = -Double.MAX_VALUE;
         this.c = -Double.MAX_VALUE;
 
-        
         this.milestoneLevels[0] = 1;
         this.milestoneLevels[1] = 1;
         this.milestoneLevels[2] = 1;
@@ -76,7 +75,7 @@ public class Theory6 extends Theory {
 
     public void milestoneSwapCheck() {
 
-        if (this.strategy.name == "T6Baby") {
+        if (this.strategy.name.equalsIgnoreCase("T6Baby")) {
             if (this.maxRho < 25 && this.publicationMark < 25) {
                 this.milestoneLevels[0] = 0;
                 this.milestoneLevels[1] = 0;
@@ -320,7 +319,7 @@ public class Theory6 extends Theory {
     @Override
     public void buyVariable(int variableNumber) {
 
-        if(this.variableWeights[variableNumber] < 10.11) {
+        if (this.variableWeights[variableNumber] < 10.11) {
 
         } else {
             this.resetIdlePeriod(variableNumber);
@@ -342,7 +341,7 @@ public class Theory6 extends Theory {
     }
 
     public void runUntilPublish() {
-        while(this.finishCoasting == false) {
+        while (this.finishCoasting == false) {
             this.runEpoch();
         }
     }
@@ -366,7 +365,6 @@ public class Theory6 extends Theory {
 
     }
 
-    
     public int findBestVarToBuy() {
         for (int i = 0; i < this.variables.length; i++) {
             this.variables[i].update();
@@ -465,8 +463,6 @@ public class Theory6 extends Theory {
                 this.variables[6].deactivate();
                 this.variables[7].deactivate();
             } else if (this.strategy.name.equalsIgnoreCase("T6Baby")) {
-                
-              
 
                 this.variableWeights[0] = 11;
                 this.variableWeights[1] = 10;
@@ -478,21 +474,33 @@ public class Theory6 extends Theory {
                 this.variableWeights[7] = 10;
                 this.variableWeights[8] = 10;
 
-                if(this.publicationMark < 125 && this.publicationMark >= 100) {
-                    this.variableWeights[0] = 11;
-                    this.variableWeights[1] = 10;
-                    this.variableWeights[2] = 11;
-                    this.variableWeights[3] = 10;
-                    this.variableWeights[4] = 11;
-                    this.variableWeights[5] = 10;
-                    this.variableWeights[6] = 15;
-                    this.variableWeights[7] = 15;
-                    this.variableWeights[8] = 15;
+                if (this.publicationMark < 500 && this.publicationMark >= 100) {
+                    if (this.maxRho < this.publicationMark) {
+                        this.variableWeights[0] = 10.7;
+                        this.variableWeights[1] = 10;
+                        this.variableWeights[2] = 11;
+                        this.variableWeights[3] = 10;
+                        this.variableWeights[4] = 11;
+                        this.variableWeights[5] = 10;
+                        this.variableWeights[6] = 15;
+                        this.variableWeights[7] = 15;
+                        this.variableWeights[8] = 15;
+                    } else {
+                        this.variableWeights[0] = 11.0;
+                        this.variableWeights[1] = 10;
+                        this.variableWeights[2] = 11;
+                        this.variableWeights[3] = 10;
+                        this.variableWeights[4] = 11;
+                        this.variableWeights[5] = 10;
+                        this.variableWeights[6] = 15;
+                        this.variableWeights[7] = 15;
+                        this.variableWeights[8] = 10;
+                    }
+
                 }
             }
 
-            
-            if (this.readyToCoast(5.45)) {
+            if (this.readyToCoast(16.45)) {
                 for (int j = 0; j < this.variables.length; j++) {
                     this.variables[j].deactivate(); // autobuy for the variable off.
                     this.isCoasting = true;

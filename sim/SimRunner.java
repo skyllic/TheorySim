@@ -96,9 +96,10 @@ public class SimRunner {
     SimRunner.strategies.add(new Strategy("BTd", 13, "active"));
     SimRunner.strategies.add(new Strategy("BT", 13, "idle"));
 
-    SimRunner.strategies.add(new Strategy("EFBaby", 14,"active"));
     SimRunner.strategies.add(new Strategy("EF", 14,"idle"));
     SimRunner.strategies.add(new Strategy("EFd", 14,"active"));
+    SimRunner.strategies.add(new Strategy("EFAI", 14,"active"));
+    SimRunner.strategies.add(new Strategy("EFBaby", 14,"active"));
     
   }
 

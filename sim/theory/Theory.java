@@ -124,6 +124,7 @@ public class Theory implements ITheory {
         public final static double adBonus = 1.5;
         public static int theoryNumber; // First Custom Theory = theory10.
         public double tauEfficiency; // Defined as maxRho divided by tickNumber.
+        public double longTauGain;
 
         public Strategy strategy;
 
@@ -586,6 +587,7 @@ public class Theory implements ITheory {
                 // can print them
                 // to the user later.
                 if (!isCoasting) {
+                        this.longTauGain = this.maxRho - this.publicationMark;
                         if ((this.maxRho - this.publicationMark) / (this.seconds / 3600.0) > this.maxTauPerHour
                         /** this.seconds > 10000000 */
                         ) {
@@ -595,8 +597,10 @@ public class Theory implements ITheory {
                                 this.bestTauGain = this.maxRho - this.publicationMark;
                                 this.bestRecoveryTime = this.recoveryTime;
                                 this.bestCoastStart = this.coastStart;
+                                
                         }
                 } else {
+                        this.longTauGain = this.maxRho - this.publicationMark;
                         if ((this.maxRho - this.publicationMark) / (this.seconds / 3600.0) > this.maxTauPerHour
                         /** this.seconds > 10000000 */
                         ) {
@@ -606,6 +610,8 @@ public class Theory implements ITheory {
                                 this.bestTauGain = this.maxRho - this.publicationMark;
                                 this.bestRecoveryTime = this.recoveryTime;
                                 this.bestCoastStart = this.coastStart;
+                                this.longTauGain = this.maxRho - this.publicationMark;
+                                
                         }
                 }
 
@@ -619,6 +625,8 @@ public class Theory implements ITheory {
                                 this.bestTauGain = this.maxRho - this.publicationMark;
                                 this.bestRecoveryTime = this.recoveryTime;
                                 this.bestCoastStart = this.coastStart;
+                                
+                                
                 }
                 
         }
@@ -827,6 +835,7 @@ public class Theory implements ITheory {
 
                         }
                 } else {
+                        
                         while (this.tauPerHour <= tauRate) {
 
                                 this.tauPerHour = tauRate;
@@ -886,6 +895,7 @@ public class Theory implements ITheory {
 
         public void publish() {
                 this.readyToPublish = true;
+                
 
         }
 
@@ -906,7 +916,8 @@ public class Theory implements ITheory {
                                 this.strategy.name, this.strategy.type,
                                 this.bestPubTime, this.bestRecoveryTime, this.bestTauGain, this.coastStart,
                                 this.variables,
-                                this.longestIdlePeriod / 3600.0, this.name, this.publicationMark, Theory.studentNumber);
+                                this.longestIdlePeriod / 3600.0, this.name, this.publicationMark, Theory.studentNumber, 
+                                this.longTauGain);
 
                 return summary;
         }

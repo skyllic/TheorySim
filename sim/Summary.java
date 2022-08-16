@@ -15,6 +15,7 @@ public class Summary {
   public double tauGain;
   public double coastStart;
   public double longestIdlePeriod;
+  public double longTauGain;
 
   public String name;
   public double publicationMark;
@@ -24,7 +25,7 @@ public class Summary {
 
   public Summary(int theoryNumber, double tauPerHour, double pubMulti, String strategy, String strategyType, 
   double pubTime, double recoveryTime, double tauGain, double coastStart, Variable[] variables, 
-    double longestIdlePeriod, String name, double publicationMark, int studentNumber) {
+    double longestIdlePeriod, String name, double publicationMark, int studentNumber, double longTauGain) {
 
     if(longestIdlePeriod / 3600.0 > pubTime) {
       this.longestIdlePeriod = pubTime * 3600.0;
@@ -46,6 +47,7 @@ public class Summary {
     this.studentNumber = studentNumber;
 
     this.variables = variables;
+    this.longTauGain = longTauGain;
     
   }
 
