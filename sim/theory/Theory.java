@@ -85,7 +85,7 @@ public class Theory implements ITheory {
         public boolean finishCoasting = false;
 
         /** */
-        public double[] coastingPubs = { 4.5, 800, 2.5, 6.0, 6, 18.0, 3, 1.8, 0, 10.5, 9.5, 6, 4.0, 6 };
+        public double[] coastingPubs = { 4.5, 800, 2.5, 6.0, 6, 18.0, 2.5, 1.8, 0, 10.5, 9.5, 6, 4.0, 6 };
         public int coastingNumber = 0;
 
         /** Maximum tau per hour during publication. (log format) */
@@ -176,7 +176,7 @@ public class Theory implements ITheory {
                 } else if (this.publicationMark < 600) {
                         this.tickFrequency = 1.0;
                 } else {
-                        this.tickFrequency = 1.0;
+                        this.tickFrequency = 100.0;
                 }
                 if (theoryNumber == 2) {
                         if (this.publicationMark < 250) {
@@ -537,7 +537,7 @@ public class Theory implements ITheory {
 
                 this.seconds += this.tickFrequency;
                 this.tickCount += 1;
-                this.tickFrequency *= 1.0001;
+                this.tickFrequency *= 1.000;
 
                 this.updateStatistics();
                 this.collectStatistics();
@@ -771,7 +771,13 @@ public class Theory implements ITheory {
                         pubMulti = Math.pow(Math.pow(10, 0.147), temp);
                 } else if(Theory.theoryNumber == 6) {
                         pubMulti = Math.pow(Math.pow(10, 0.196), temp);
-                } 
+                } else if(Theory.theoryNumber == 7) {
+                        pubMulti = Math.pow(Math.pow(10, 0.152), temp);
+                } else if(Theory.theoryNumber == 12) {
+                        pubMulti = Math.pow(Math.pow(10, 0.2203), temp);
+                } else if(Theory.theoryNumber == 14) {
+                        pubMulti = Math.pow(Math.pow(10, 0.1548), temp);
+                }
                 else {
                         pubMulti = 1;
                 }
@@ -783,9 +789,13 @@ public class Theory implements ITheory {
                
                     
                 for(int i = 0; i < this.variables.length; i++) {
+                        if(Theory.theoryNumber == 14 && i == 0) {
+                                continue;
+                        }
                         if(this.variables[i].isActive == 0) {
                                 continue;
                         }
+                        
                     if(this.convertCostToPubMulti(this.variables[i].nextCost + this.variableWeights[i] - 10)
                      > coastMulti) {
         

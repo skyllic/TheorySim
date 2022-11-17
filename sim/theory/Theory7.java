@@ -86,17 +86,39 @@ public class Theory7 extends Theory {
         this.rho1 = Variable.add(this.rho1, this.rho1dot);
         this.rho2 = Variable.add(this.rho2, this.rho2dot);
 
+        if(this.strategy.name.toLowerCase().equals("t7...")) {
+            if(this.rho2 - this.rho1 > 1.0) {
+                this.tickFrequency = 2.0;
+            } else if(this.rho2 - this.rho1 > 0.7) {
+                this.tickFrequency = 1.0;
+            } else {
+                this.tickFrequency = 0.1;
+            }
+            if(this.publicationMultiplier < 0.1) {
+                this.tickFrequency = 1.0;
+            }
+    
+            if(this.isCoasting == true) {
+                this.tickFrequency = 0.1;
+            } 
+        } else {
+            this.tickFrequency = 0.1;
+        }
+        
+        
+        
+
         this.rho1dotTerm1 = this.variables[1].value * 1.15 + this.variables[2].value;
 
         this.rho1dotTerm2 = this.variables[3].value + Math.log10(1.5) + 0.5 * this.rho1;
 
         this.rho1dotTerm5 = Math.min(this.rho1 + Math.log10(100),
-                this.variables[6].value + Math.log10(0.5) + 0.5 * (Math.min(this.rho2 - this.rho1, 12.0)));
+                this.variables[6].value + Math.log10(0.5) + 0.5 * (this.rho2 - this.rho1));
 
         this.rho2dotTerm3 = this.variables[4].value;
         this.rho2dotTerm4 = this.variables[5].value + Math.log10(1.5) + 0.5 * this.rho2;
         this.rho2dotTerm5 = Math.min(this.rho2 + Math.log10(100),
-                this.variables[6].value + Math.log10(0.5) + 0.5 * Math.min((this.rho1 - this.rho2), 12.0));
+                this.variables[6].value + Math.log10(0.5) + 0.5 * (this.rho1 - this.rho2));
 
         double sumRho1 = Variable.add(rho1dotTerm5, Variable.add(rho1dotTerm1, rho1dotTerm2));
         double sumRho2 = Variable.add(rho2dotTerm3, Variable.add(rho2dotTerm4, rho2dotTerm5));
@@ -208,29 +230,34 @@ public class Theory7 extends Theory {
 
             // variableWeights = {10.6,10,10,10,11.0,10.6,10.0};
             if (this.strategy.name.equalsIgnoreCase("T7Play")) {
-                this.variableWeights[0] = 10.6 + (0.018 * (this.variables[0].level % 10) - 0.11);
+                this.variableWeights[0] = 10.6 + (0.028 * (this.variables[0].level % 10) - 0.11);
                 this.variables[1].deactivate();
                 this.variables[2].deactivate();
                 this.variables[3].deactivate();
-                if(this.variables[4].cost + 1 < this.rho1) {
-                    this.variableWeights[4] = 10.0;
-                } else {
-                    this.variableWeights[4] = 11.0;
-                }
-                //this.variableWeights[4] = 11.0;
+                this.variableWeights[4] = 11.0;
                 this.variableWeights[5] = 10.6;
-                this.variableWeights[6] = 10.0;
+                this.variableWeights[6] = 10.0;   
 
-                
-
-            } else if(this.strategy.name.equalsIgnoreCase("T7PlaySpqcey")) {
-                this.variableWeights[0] = 10.6 + (0.028 * (this.variables[0].level % 10) - 0.11);
+            } else if(this.strategy.name.equalsIgnoreCase("T7PlaySpqcey")
+             || this.strategy.name.equalsIgnoreCase("T7...")) {
+                this.variableWeights[0] = 10.5 + (0.028 * (this.variables[0].level % 10) - 0.014);
                 this.variables[1].deactivate();
                 this.variables[2].deactivate();
                 this.variableWeights[3] = 11.0;
                 this.variableWeights[4] = 11.0;
-                this.variableWeights[5] = 10.6;
+                this.variableWeights[5] = 10.5;
                 this.variableWeights[6] = 10.0;
+
+                if(this.variables[5].nextCost - this.variables[4].nextCost < 0.3 && 
+                    this.variables[5].nextCost - this.variables[4].nextCost > 0) {
+                        this.variableWeights[4] = 11.0;
+                }
+                if(this.variables[5].nextCost - this.variables[4].nextCost > 1.5 && 
+                    this.variables[5].nextCost - this.variables[4].nextCost > 0) {
+                        this.variableWeights[4] = 11.0;
+                }
+
+                //System.out.println(this.rho2 + "\t" + this.rho1);
 
             } else if(this.strategy.name.equalsIgnoreCase("T7C456")) {
                 this.variableWeights[0] = 10.0;
@@ -241,10 +268,11 @@ public class Theory7 extends Theory {
                 this.variableWeights[5] = 10.0;
                 this.variableWeights[6] = 10.0;
             }
-
+            
         }
 
-        if (this.publicationMultiplier > this.coastingPubs[6]) {
+        if (this.readyToCoast(1.95)) {
+            
             for (int j = 0; j < this.variables.length; j++) {
                 this.variables[j].deactivate(); // autobuy for the variable off.
                 this.isCoasting = true;

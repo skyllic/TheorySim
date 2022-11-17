@@ -1,8 +1,17 @@
 {
 	"folders": [
 		{
-			"path": ".."
+			"name": "TheorySim",
+			"path": "."
+		},
+		{
+			"path": "../exponential-idle-guides"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"java.project.referencedLibraries": [
+			"lib/**/*.jar",
+			"junit-4.13.2.jar"
+		]
+	}
 }

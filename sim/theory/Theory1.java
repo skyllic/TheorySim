@@ -629,7 +629,7 @@ public class Theory1 extends Theory {
             
         }
 
-        if (this.publicationMultiplier > 7) {
+        if (this.readyToCoast(1.3)) {
             for (int j = 0; j < this.variables.length; j++) {
                 this.variables[j].deactivate(); // autobuy for the variable off.
                 this.isCoasting = true;

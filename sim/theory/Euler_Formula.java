@@ -28,7 +28,7 @@ public class Euler_Formula extends Theory {
 
     
 
-    public int[] milestoneLevels = new int[4];
+    public int[] milestoneLevels = new int[6];
     
 
     
@@ -55,6 +55,9 @@ public class Euler_Formula extends Theory {
         this.milestoneLevels[1] = 1;
         this.milestoneLevels[2] = 5;
         this.milestoneLevels[3] = 2;
+        this.milestoneLevels[4] = 0;
+        this.milestoneLevels[5] = 0;
+        
 
         this.seconds = 0;
         this.tickCount = 0;
@@ -158,6 +161,8 @@ public class Euler_Formula extends Theory {
         this.milestoneLevels[1] = 1;
         this.milestoneLevels[2] = 5;
         this.milestoneLevels[3] = 2;
+        this.milestoneLevels[4] = 2;
+        this.milestoneLevels[5] = 2;
       }
     }
 
@@ -174,6 +179,9 @@ public class Euler_Formula extends Theory {
       } else {
         sqrtTerm = 0.5 * Variable.add(2 * this.I, Variable.add(Math.log10(Math.abs(this.t)) + 2 * this.q, 2 * this.R));
       }
+      this.variables[4].value = Math.log10(Math.pow(1.12,this.variables[4].level));
+      this.variables[6].value = Math.log10(Math.pow(1.125,this.variables[6].level));
+      
 
       this.Rdot = 2 * (this.variables[3].value + this.variables[4].value + Math.log10(Math.abs(Math.cos(this.t)))) 
       + Math.log10(Theory.adBonus) + Math.log10(this.tickFrequency) + this.totalMultiplier;
@@ -413,7 +421,19 @@ public class Euler_Formula extends Theory {
                 for(int j = 0; j < this.variableWeights.length; j++) {
                     this.variableWeights[j] = 10.0;
                 }
-            } else if(this.strategy.name.equalsIgnoreCase("EFd")) {
+            } else if(this.strategy.name.equalsIgnoreCase("EFai")) {
+                this.variableWeights[0] = 10.0;
+                this.variableWeights[1] = 10.8 + (0.030 * (this.variables[i].level % 10) - 0.16);;
+                this.variableWeights[2] = 10.0;
+                this.variableWeights[3] = 10.8 + (0.030 * (this.variables[i].level % 10) - 0.16);;
+                this.variableWeights[4] = 10.5;
+                this.variableWeights[5] = 10.5;
+                this.variableWeights[6] = 10.5;
+                this.variableWeights[7] = 10.6 + (0.030 * (this.variables[i].level % 10) - 0.16);;
+                this.variableWeights[8] = 10.2 + (0.15 * (this.variables[i].level % 10) - 0.75);;
+                this.variableWeights[9] = 10.0;
+            } 
+            else if(this.strategy.name.equalsIgnoreCase("EFd")) {
                 this.variableWeights[0] = 10.0;
                 this.variableWeights[1] = 10.8 + (0.030 * (this.variables[i].level % 10) - 0.16);;
                 this.variableWeights[2] = 10.0;
@@ -492,7 +512,7 @@ public class Euler_Formula extends Theory {
         }
         
         
-        if (this.publicationMultiplier > 1.6) {
+        if (this.readyToCoast(2.0)) {
             for (int j = 0; j < this.variables.length; j++) {
                 this.variables[j].deactivate(); // autobuy for the variable off.
                 this.isCoasting = true;

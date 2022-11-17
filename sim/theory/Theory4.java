@@ -113,14 +113,14 @@ public class Theory4 extends Theory {
                     this.milestoneLevels[1] = 1;
                     this.milestoneLevels[2] = 0;
                 } else {
-                    while(this.variables[3].nextCost < this.rho) {
-                        this.buyVariable(3);
-                    }
                     while(this.variables[7].nextCost < this.rho) {
                         this.buyVariable(7);
                     }
                     while(this.variables[6].nextCost < this.rho) {
                         this.buyVariable(6);
+                    }
+                    while(this.variables[3].nextCost < this.rho) {
+                        this.buyVariable(3);
                     }
                     if (this.tickCount % 100 < 50) {
                         this.milestoneLevels[0] = 3;
@@ -141,14 +141,14 @@ public class Theory4 extends Theory {
                     this.milestoneLevels[1] = 1;
                     this.milestoneLevels[2] = 0;
                 } else {
-                    while(this.variables[3].nextCost < this.rho) {
-                        this.buyVariable(3);
-                    }
                     while(this.variables[7].nextCost < this.rho) {
                         this.buyVariable(7);
                     }
                     while(this.variables[6].nextCost < this.rho) {
                         this.buyVariable(6);
+                    }
+                    while(this.variables[3].nextCost < this.rho) {
+                        this.buyVariable(3);
                     }
                     if (this.tickCount % 100 < 30 && 
                     !(this.rho - this.variables[5].nextCost < 0 && this.rho - this.variables[5].nextCost > -0.5)) {
@@ -169,14 +169,14 @@ public class Theory4 extends Theory {
                     this.milestoneLevels[1] = 1;
                     this.milestoneLevels[2] = 1;
                 } else {
-                    while(this.variables[3].nextCost < this.rho) {
-                        this.buyVariable(3);
-                    }
                     while(this.variables[7].nextCost < this.rho) {
                         this.buyVariable(7);
                     }
                     while(this.variables[6].nextCost < this.rho) {
                         this.buyVariable(6);
+                    }
+                    while(this.variables[3].nextCost < this.rho) {
+                        this.buyVariable(3);
                     }
                     if (this.tickCount % 100 < 30 && 
                     !(this.rho - this.variables[5].nextCost < 0 && this.rho - this.variables[5].nextCost > -1.0)) {
@@ -752,7 +752,7 @@ public class Theory4 extends Theory {
                     }
 
                 } else {
-                    if(this.maxRho < this.publicationMark * switchMSRatio[2]) {
+                    if(this.maxRho < this.publicationMark * 0.9) {
                         this.variableWeights[0] = 10.9;
                         this.variableWeights[1] = 10.0;
                         this.variableWeights[2] = 100.8;

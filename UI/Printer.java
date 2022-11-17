@@ -21,7 +21,7 @@ public class Printer {
   }
 
   private static void printSummaryBody(Summary summary) {
-    System.out.print(String.format("%.2f",
+    System.out.print(String.format("%.4f",
                 summary.tauPerHour));
         System.out.print("\t\t" + String.format("%.2f", summary.pubMulti) + "\t\t\t");
         if (summary.strategy.length() > 7) {

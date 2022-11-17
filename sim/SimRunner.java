@@ -64,6 +64,7 @@ public class SimRunner {
     SimRunner.strategies.add(new Strategy("T6C125", 6, "idle"));
     
 
+    SimRunner.strategies.add(new Strategy("T7...", 7, "active"));
     SimRunner.strategies.add(new Strategy("T7PlaySpqcey", 7, "active"));
     SimRunner.strategies.add(new Strategy("T7Play", 7, "active"));
     SimRunner.strategies.add(new Strategy("T7C456", 7, "idle"));
@@ -226,8 +227,8 @@ public class SimRunner {
   
     double bestTotalTime = 2222222220.0;
     
-    for(double i = 10; i < 90; i = i + 2.0) {
-      for(double j = 0.7; j < 0.9; j = j + 10.04) {
+    for(double i = 0; i < 0.5; i = i + 0.05) {
+      for(double j = 0; j < 0.5; j = j + 0.05) {
         for(double k = 0.5; k < 1.5; k = k + 100) {
           for(double m = k + 50; m < k + 600; m = m + 100) {
             Theory.K_value[0] = i;
@@ -315,7 +316,9 @@ public class SimRunner {
     }
     else if(flag.contains("strategy=fourth")) {
       tempStrategy.add(strategies.get(3));
-    }else {
+    }else if(flag.contains("strategy=fifth")) {
+      tempStrategy.add(strategies.get(4));
+    } else {
       tempStrategy = strategies;
     }
     Summary currentBestSummary = new Summary();

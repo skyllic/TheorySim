@@ -407,18 +407,18 @@ public class Theory6 extends Theory {
                 this.variables[7].deactivate();
 
                 if (this.maxRho < this.publicationMark * 0.982) {
-                    this.variableWeights[4] = 11.2;
+                    this.variableWeights[4] = 11.0 + (0.022 * (this.variables[0].level % 10) - 0.12);
                     this.variableWeights[5] = 10.2;
                     this.variableWeights[8] = 10000;
-                } else if (this.maxRho < this.publicationMark * 0.9905) {
+                } else if (this.maxRho < this.publicationMark * 0.9895) {
                     this.variableWeights[4] = 11.2;
                     this.variableWeights[5] = 10.2;
                     this.variableWeights[8] = 10.2;
                 } else {
-                    this.variableWeights[4] = 12.8 + (0.022 * (this.variables[0].level % 10) - 0.12);
-                    this.variableWeights[5] = 11.8;
+                    this.variableWeights[4] = 13.8 + (0.022 * (this.variables[0].level % 10) - 0.12);
+                    this.variableWeights[5] = 12.8;
                     this.variableWeights[8] = 10.05;
-                    this.variableWeights[1] = 10.01;
+                    this.variableWeights[1] = 10.05;
                 }
 
                 this.variableWeights[0] = 10.8 + (0.031 * (this.variables[0].level % 10));
@@ -500,7 +500,7 @@ public class Theory6 extends Theory {
                 }
             }
 
-            if (this.readyToCoast(16.45)) {
+            if (this.readyToCoast(14.45)) {
                 for (int j = 0; j < this.variables.length; j++) {
                     this.variables[j].deactivate(); // autobuy for the variable off.
                     this.isCoasting = true;

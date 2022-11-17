@@ -421,11 +421,11 @@ public class Convergence_Square_Root extends Theory {
                 variableWeights[4] = 9.8;
             } else if (this.strategy.name.equalsIgnoreCase("CSR2MS")
                     || this.strategy.name.equalsIgnoreCase("CSR2MST")) {
-                variableWeights[0] = 10.9 + (0.028 * (this.variables[0].level % 10) - 0.11);
-                variableWeights[1] = 10.0;
-                variableWeights[2] = 10.9 + (0.028 * (this.variables[2].level % 10) - 0.11);
-                variableWeights[3] = 9.8;
-                variableWeights[4] = 9.8;
+                variableWeights[0] = 11.1 + (0.028 * (this.variables[0].level % 10) - 0.11);
+                variableWeights[1] = 10.2;
+                variableWeights[2] = 11.1 + (0.028 * (this.variables[2].level % 10) - 0.11);
+                variableWeights[3] = 10.0;
+                variableWeights[4] = 10.0;
 
                 if(this.publicationMark >= 500) {
                     variableWeights[0] = 10.9 + (0.028 * (this.variables[0].level % 10) - 0.11);
@@ -437,7 +437,7 @@ public class Convergence_Square_Root extends Theory {
                 
             }
 
-            if (this.publicationMultiplier > 1.8) {
+            if (this.readyToCoast(2.0)) {
                 for (int j = 0; j < this.variables.length; j++) {
                     this.variables[j].deactivate(); // autobuy for the variable off.
                     this.isCoasting = true;

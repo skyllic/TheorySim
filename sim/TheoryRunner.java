@@ -24,6 +24,8 @@ public class TheoryRunner {
 
     public static void main(String[] args) throws IOException {
 
+        
+
         if (args.length == 3) {
             try {
                 int studentNumber = Integer.parseInt(args[0]);
@@ -80,26 +82,18 @@ public class TheoryRunner {
         //Theory theory = new Theory(1, 610);
         
         
-        //SimRunner.runChainSims(100, 12, Math.log10(1) + 45
-        //,Math.log10(1) + 45.1, "strategy=fourth");
+        SimRunner.runChainSims(300, 7, Math.log10(1) + 630
+        ,Math.log10(1) + 632, "strategy=firs");
+        //SimRunner.runStrategicSim(300, 7, 600, 650, "print=true,strategy=second");
+
+        //SimRunner.runDetailedSim(330, 7, 640, true, "strategy=first");
 
         
         
         //SimRunner.runIntervalSim(30, 2, 10, 250, 1, "strategy=fourth,pubmulti");
         
         //SimRunner.runStrategicSim(30, 2, 10, 250, "print=true,strategy=fourth");
-        double tempTauGain = 0;
-        for(int i = 10; i < 175; i++) {
-            ArrayList<Summary> summary1 = SimRunner.runDetailedSim(100, 5, i + Math.log10(1),
-            true, "strategy=fourth");
-            
-            if(summary1.get(0).longTauGain > tempTauGain ) {
-                System.out.println(summary1.get(0).longTauGain);
-                tempTauGain = summary1.get(0).longTauGain;
-            }
-            
-       
-        }  //double totalTime = SimRunner.runChainSims(300, 1, 600, 700, 
+         //double totalTime = SimRunner.runChainSims(300, 1, 600, 700, 
        //"print=true,strategy=second")[0];
        
        
